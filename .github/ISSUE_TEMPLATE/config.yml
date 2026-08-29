@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/hraness/sleepyland/security/advisories/new
+    about: Report a vulnerability privately.
+  - name: Product support
+    url: https://sleepy.land/support
+    about: Get browser-audio, privacy, or accessibility support.

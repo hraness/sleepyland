@@ -1,0 +1,50 @@
+{
+  "name": "sleepyland",
+  "version": "1.0.0",
+  "description": "Open-source sleep research and a private-by-design browser sound machine.",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "homepage": "https://sleepy.land",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hraness/sleepyland.git"
+  },
+  "packageManager": "bun@1.3.14",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
+    "start": "next start",
+    "search:notify": "bun scripts/submit-indexnow.ts",
+    "test": "bun test ./app ./lib ./next.config.test.ts",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "check": "bun run test && bun run typecheck && bun run lint && bun run build"
+  },
+  "dependencies": {
+    "@hraness/design-kit": "github:hraness/design-kit#v0.2.1",
+    "@hraness/posthog": "github:hraness/posthog#v0.1.2",
+    "@hraness/site-footer": "github:hraness/site-footer#v0.3.1",
+    "@hraness/ui": "github:hraness/ui#v0.4.10",
+    "@hraness/vercel-delivery": "github:hraness/vercel-delivery#v0.1.2",
+    "@hraness/web-discovery": "github:hraness/web-discovery#v0.2.0",
+    "next": "16.2.12",
+    "react": "19.2.3",
+    "react-aria-components": "1.19.0",
+    "react-dom": "19.2.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.14",
+    "@types/node": "^24.10.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "16.2.12",
+    "fast-check": "^4.8.0",
+    "typescript": "^6.0.3"
+  }
+}

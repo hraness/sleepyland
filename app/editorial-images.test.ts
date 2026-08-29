@@ -1,0 +1,81 @@
+import { describe, expect, test } from "bun:test";
+
+import {
+  EDITORIAL_IMAGE_HEIGHT,
+  EDITORIAL_IMAGE_WIDTH,
+  READING_EDITORIAL_IMAGES,
+  RESEARCH_EDITORIAL_IMAGES,
+  editorialImages,
+} from "./editorial-images";
+import { READING_NOTE_SLUGS } from "./reading-notes";
+import { RESEARCH_SLUGS } from "./research/articles";
+
+function lossyWebpDimensions(bytes: Uint8Array): Readonly<{
+  height: number;
+  width: number;
+}> {
+  const ascii = (offset: number, length: number) =>
+    new TextDecoder().decode(bytes.subarray(offset, offset + length));
+
+  expect(ascii(0, 4)).toBe("RIFF");
+  expect(ascii(8, 4)).toBe("WEBP");
+
+  let offset = 12;
+  while (offset + 8 <= bytes.length) {
+    const kind = ascii(offset, 4);
+    const size = bytes[offset + 4]
+      | (bytes[offset + 5] << 8)
+      | (bytes[offset + 6] << 16)
+      | (bytes[offset + 7] << 24);
+    const data = offset + 8;
+
+    if (kind === "VP8 ") {
+      expect([...bytes.subarray(data + 3, data + 6)]).toEqual([0x9d, 0x01, 0x2a]);
+      return {
+        width: (bytes[data + 6] | (bytes[data + 7] << 8)) & 0x3fff,
+        height: (bytes[data + 8] | (bytes[data + 9] << 8)) & 0x3fff,
+      };
+    }
+
+    offset = data + size + (size % 2);
+  }
+
+  throw new Error("Expected a decoded lossy WebP frame.");
+}
+
+describe("Sleepyland editorial image registry", () => {
+  test("covers every research article and reading note exactly once", () => {
+    expect(Object.keys(RESEARCH_EDITORIAL_IMAGES)).toEqual([...RESEARCH_SLUGS]);
+    expect(Object.keys(READING_EDITORIAL_IMAGES)).toEqual([...READING_NOTE_SLUGS]);
+    expect(editorialImages).toHaveLength(
+      RESEARCH_SLUGS.length + READING_NOTE_SLUGS.length,
+    );
+    expect(new Set(editorialImages.map((image) => image.src)).size).toBe(
+      editorialImages.length,
+    );
+    expect(new Set(editorialImages.map((image) => image.sha256)).size).toBe(
+      editorialImages.length,
+    );
+  });
+
+  test("pins compact, exact 1536 by 864 WebP assets to their content hashes", async () => {
+    for (const image of editorialImages) {
+      const file = Bun.file(new URL(`../public${image.src}`, import.meta.url));
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      const hasher = new Bun.CryptoHasher("sha256");
+      hasher.update(bytes);
+
+      expect(file.type).toBe("image/webp");
+      expect(file.size).toBeGreaterThan(40_000);
+      expect(file.size).toBeLessThan(400_000);
+      expect(lossyWebpDimensions(bytes)).toEqual({
+        height: EDITORIAL_IMAGE_HEIGHT,
+        width: EDITORIAL_IMAGE_WIDTH,
+      });
+      expect(hasher.digest("hex")).toBe(image.sha256);
+      expect(image.alt.length).toBeGreaterThan(30);
+      expect(image.caption.length).toBeGreaterThan(40);
+      expect(image.credit).toContain("Atet");
+    }
+  });
+});

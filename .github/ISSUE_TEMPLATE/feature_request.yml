@@ -1,0 +1,34 @@
+name: Feature request
+description: Propose a focused product, accessibility, or publishing improvement.
+title: "feature: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What concrete listener or reader problem should Sleepyland solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed outcome
+      description: Describe the smallest useful outcome without prescribing the implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence or examples
+      description: Include relevant research, accessibility guidance, recordings, interfaces, or reproducible observations.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues and pull requests.
+          required: true
+        - label: This request makes no medical or guaranteed-outcome claim.
+          required: true

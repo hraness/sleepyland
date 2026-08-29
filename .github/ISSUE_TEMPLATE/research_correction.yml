@@ -1,0 +1,54 @@
+name: Research correction or source
+description: Correct a claim, add stronger evidence, or propose a focused research improvement.
+title: "research: "
+labels:
+  - research
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Sleepyland welcomes evidence-based corrections. Do not use this form for personal medical advice or include private health information.
+  - type: input
+    id: article
+    attributes:
+      label: Article URL
+      placeholder: https://sleepy.land/research/example
+    validations:
+      required: true
+  - type: textarea
+    id: claim
+    attributes:
+      label: Claim or passage
+      description: Quote the shortest passage needed to identify the issue.
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: Proposed correction
+      description: Explain what should change and why. Distinguish direct evidence from mechanism or inference.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Supporting sources
+      description: Link primary studies, systematic reviews, official labels, or public-health guidance and state what each supports.
+    validations:
+      required: true
+  - type: textarea
+    id: conflicts
+    attributes:
+      label: Relevant relationships
+      description: Disclose financial, professional, authorship, product, or advocacy relationships relevant to this correction. Write “None” when applicable.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I read the editorial method and searched existing issues.
+          required: true
+        - label: This contribution does not request individualized medical advice or include private health information.
+          required: true

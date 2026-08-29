@@ -1,0 +1,63 @@
+name: Bug report
+description: Report a reproducible problem in the sound machine or publication.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Sleepyland. Do not include passwords, private browsing history, recordings, medical information, or security exploits.
+  - type: input
+    id: route
+    attributes:
+      label: Page URL
+      placeholder: https://sleepy.land/noise
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: What happened?
+      description: Describe the action, actual behavior, and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Open…
+        2. Select…
+        3. Observe…
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and operating system
+      placeholder: Safari 20 on macOS 17
+    validations:
+      required: true
+  - type: dropdown
+    id: assistive_technology
+    attributes:
+      label: Assistive technology involved?
+      options:
+        - Not applicable
+        - Keyboard only
+        - Screen reader
+        - Voice control
+        - Switch control
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues for this problem.
+          required: true
+        - label: This report contains no sensitive personal or health information.
+          required: true
