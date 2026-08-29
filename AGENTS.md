@@ -5,6 +5,7 @@
 - `styles/` contains the compact sound-machine and publication visual systems.
 - `public/` contains static public assets.
 - `docs/editorial-method.md` defines the public research-review method.
+- `STYLE.md` defines the public and reader-facing prose contract.
 - `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, and `CODE_OF_CONDUCT.md` define the public project and contribution boundaries.
 
 # Guidelines
@@ -15,6 +16,7 @@
 - Keep the sound machine compact, dark, warm, responsive to the visual viewport, and free of document overflow on narrow portrait or short landscape screens.
 - Preserve semantic controls, visible focus, reduced-motion behavior, conservative output gain, and smooth audio fades.
 - Treat sleep and wellness content as health-adjacent. Source material claims, distinguish evidence from mechanism and inference, and never diagnose, prescribe, provide individualized dosing, or guarantee an outcome.
+- Follow `STYLE.md` for public research, product copy, documentation, and README prose.
 - Follow `docs/editorial-method.md` and `CONTRIBUTING.md` for research changes. Update the typed article and source registries rather than generated output.
 - Keep public files self-contained. Never commit credentials, private analytics, personal health information, provider tokens, local absolute paths, or unpublished operational records.
 - Use `apply_patch` for edits. Run focused tests while working and `bun run check` before handoff.
