@@ -30,10 +30,21 @@ describe("Sleepyland search metadata", () => {
       Bun.file(new URL("./globals.css", import.meta.url)).text(),
     ]);
 
-    expect(layout).toContain('from "@hraness/site-footer/react"');
-    expect(layout.indexOf("<HranessSiteFooter />")).toBeGreaterThan(
+    expect(layout).toContain('from "./site-footer"');
+    expect(layout).toContain("mailingList={sleepylandMailingListConfig()}");
+    expect(layout.indexOf("<SleepylandSiteFooter")).toBeGreaterThan(
       layout.indexOf("{children}"),
     );
     expect(styles).toContain('@import "@hraness/site-footer/styles.css"');
+  });
+
+  test("keeps the network footer and its challenge out of the sound studio", async () => {
+    const footer = await Bun.file(
+      new URL("./site-footer.tsx", import.meta.url),
+    ).text();
+
+    expect(footer).toContain('pathname === "/noise"');
+    expect(footer).toContain("return null");
+    expect(footer).toContain("<HranessSiteFooter mailingList={mailingList} />");
   });
 });

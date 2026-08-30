@@ -53,10 +53,6 @@ html body:has(> .noise-app) {
   background: #080604;
 }
 
-body:has(> .noise-app) > .hraness-site-footer {
-  display: none;
-}
-
 .noise-app {
   color-scheme: dark;
   --noise-background: #080604;

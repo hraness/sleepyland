@@ -86,7 +86,7 @@ describe("Sleepyland public product records", () => {
     expect(markup).not.toMatch(/(?:cure|treat insomnia|clinically proven|guaranteed sleep)/iu);
   });
 
-  test("states the local, anonymous analytics, provider, retention, and deletion boundaries", async () => {
+  test("states the local, newsletter, analytics, provider, retention, and deletion boundaries", async () => {
     const privacy = PRODUCT_PAGES.find((page) => page.slug === "privacy");
     if (privacy === undefined) throw new Error("Expected privacy page.");
 
@@ -100,6 +100,12 @@ describe("Sleepyland public product records", () => {
     expect(markup).toContain("categorical fields");
     expect(markup).toContain("Vercel");
     expect(markup).toContain("PostHog");
+    expect(markup).toContain("Hraness Accounts");
+    expect(markup).toContain("Cloudflare Turnstile");
+    expect(markup).toContain("Resend sends a confirmation message from news.hraness.com");
+    expect(markup).toContain("not subscribed until you confirm");
+    expect(markup).toContain("product-specific unsubscribe link");
+    expect(markup).toContain("without unsubscribing the same address from other Hraness products");
     expect(markup).toContain("sender address, message, attachments");
     expect(markup).toContain("Support email has a separate retention and deletion boundary");
     expect(markup).toContain("memory-only persistence");
