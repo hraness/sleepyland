@@ -1,9 +1,9 @@
 import { PostHogAnalytics } from "@hraness/posthog/react";
-import { HranessSiteFooter } from "@hraness/site-footer/react";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
 import { sleepylandPostHogSite } from "./analytics";
+import { sleepylandMailingListConfig } from "./mailing-config";
 import {
   defaultSocialImage,
   organizationJsonLd,
@@ -13,6 +13,7 @@ import {
 import { RESEARCH_FEED_PATH } from "./search-discovery";
 import { SleepylandThemeProvider } from "./providers";
 import { site } from "./site";
+import { SleepylandSiteFooter } from "./site-footer";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.canonicalUrl),
@@ -74,7 +75,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         />
         <SleepylandThemeProvider>
           {children}
-          <HranessSiteFooter />
+          <SleepylandSiteFooter mailingList={sleepylandMailingListConfig()} />
         </SleepylandThemeProvider>
       </body>
     </html>

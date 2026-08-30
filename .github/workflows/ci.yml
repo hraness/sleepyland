@@ -17,6 +17,10 @@ jobs:
   application:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      # Cloudflare's documented always-pass public test key. Production and
+      # Preview use the hostname-restricted key configured in Vercel.
+      NEXT_PUBLIC_HRANESS_MAILING_TURNSTILE_SITEKEY: 1x00000000000000000000AA
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:

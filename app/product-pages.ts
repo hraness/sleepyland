@@ -24,7 +24,7 @@ export type ProductPageDefinition = Readonly<{
   updatedAt: string;
 }>;
 
-export const PRODUCT_PAGE_UPDATED_AT = "2026-08-29";
+export const PRODUCT_PAGE_UPDATED_AT = "2026-08-30";
 export const SUPPORT_EMAIL = "ben@substrate.run";
 export const LAUNCH_DEMO_PATH = "/sleepyland-mode-tune-play.mp4";
 export const LAUNCH_DEMO_SHA256 =
@@ -140,7 +140,7 @@ export const PRODUCT_PAGES = [
       "What Sleepyland keeps on this device, what analytics and support messages can leave it, and where retention and deletion remain provider-controlled.",
     updatedAt: PRODUCT_PAGE_UPDATED_AT,
     intro: [
-      "Sleepyland has no product accounts and does not upload audio. Sound is generated in your browser. Its settings are stored in browser local storage; selected mode and session kind can also appear as categorical fields in the anonymous product events listed below. Those product and reliability events can leave the device on the canonical production site.",
+      "Sleepyland does not require a product account and does not upload audio. Sound is generated in your browser. Its settings are stored in browser local storage; selected mode and session kind can also appear as categorical fields in the anonymous product events listed below. Those product and reliability events can leave the device on the canonical production site. An optional newsletter subscription is a separate Hraness Accounts record.",
     ],
     sections: [
       {
@@ -169,16 +169,19 @@ export const PRODUCT_PAGES = [
           [
             "If you email Sleepyland support, your sender address, message, attachments, and ordinary email transport metadata leave the site and are processed by the sender’s and maintainer’s email services. Do not send medical or other sensitive information.",
           ],
+          [
+            "If you use the footer newsletter form, your email address, the Sleepyland audience identifier, the form source, and a short-lived Cloudflare Turnstile proof are sent to Hraness Accounts at account.hraness.com. Cloudflare verifies the anti-abuse proof. Hraness Accounts records the pending request and Resend sends a confirmation message from news.hraness.com. You are not subscribed until you confirm that message.",
+          ],
         ],
       },
       {
         heading: "Processor and transport boundary",
         paragraphs: [
           [
-            "Vercel is the hosting provider. PostHog is the analytics and error processor. The production application sends allowed analytics events over HTTPS to the configured PostHog ingestion host. The application contains no advertising integration or product-data sale path.",
+            "Vercel is the hosting provider. PostHog is the analytics and error processor. Cloudflare verifies newsletter anti-abuse challenges. Hraness Accounts stores newsletter consent state, and Resend delivers confirmation and newsletter email. The production application sends allowed analytics events over HTTPS to the configured PostHog ingestion host. The application contains no advertising integration or product-data sale path.",
           ],
           [
-            "Cookieless analytics still requires a network request. The receiving providers can process normal transport metadata even though Sleepyland does not create a product account or a persistent PostHog person profile.",
+            "Cookieless analytics still requires a network request. The receiving providers can process normal transport metadata even though Sleepyland does not create a product account or a persistent PostHog person profile. A newsletter record is separate from Sleepyland product use and records consent for the Sleepyland audience only.",
           ],
         ],
       },
@@ -199,6 +202,9 @@ export const PRODUCT_PAGES = [
           [
             "Support email has a separate retention and deletion boundary controlled by the email services and maintainer mailbox. The application does not set that retention period. You can ask support to delete a message, but this page does not promise deletion from provider backups or infrastructure that has not been independently verified.",
           ],
+          [
+            "Every Sleepyland newsletter message includes a product-specific unsubscribe link. Using it ends the Sleepyland subscription without unsubscribing the same address from other Hraness products. Hraness Accounts retains the dated consent and unsubscribe history needed to enforce that choice and avoid resubscribing the address without a new confirmation.",
+          ],
         ],
       },
     ],
@@ -212,7 +218,7 @@ export const PRODUCT_PAGES = [
       "Contact Sleepyland support, report a browser-audio problem, or request help with privacy and accessibility barriers.",
     updatedAt: PRODUCT_PAGE_UPDATED_AT,
     intro: [
-      "Sleepyland is a free browser product without accounts, subscriptions, or billing. Contact the maintainer at ",
+      "Sleepyland is a free browser product without a required product account or billing. Its optional newsletter is separate from product use. Contact the maintainer at ",
       link(SUPPORT_EMAIL, `mailto:${SUPPORT_EMAIL}?subject=Sleepyland%20support`),
       ".",
     ],

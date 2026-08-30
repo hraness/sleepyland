@@ -35,7 +35,7 @@ test("the product palette cannot override gallery themes at the document root", 
   expect(stylesheet).not.toMatch(/\.noise-app\s*\{[^}]*min-height:/su);
   expect(stylesheet).not.toContain("min-width: 320px");
   expect(stylesheet).not.toContain("overflow-x: hidden");
-  expect(stylesheet).toMatch(/body:has\(> \.noise-app\) > \.hraness-site-footer\s*\{[^}]*display:\s*none;/su);
+  expect(stylesheet).not.toContain("body:has(> .noise-app) > .hraness-site-footer");
   expect(stylesheet).toMatch(/\.noise-app\s*\{[^}]*--noise-header-height:\s*calc\(60px \+ var\(--noise-header-inset\)\);/su);
   expect(stylesheet).toMatch(/\.noise-app\s*\{[^}]*grid-template-rows:\s*var\(--noise-header-height\) minmax\(0, 1fr\) auto;/su);
   expect(stylesheet).toMatch(/\.app-header\s*\{[^}]*grid-row:\s*1;/su);
