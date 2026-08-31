@@ -34,14 +34,14 @@ export const READING_NOTES = [
   {
     slug: "good-ideas",
     path: "/reading/good-ideas",
-    heading: "Rest and attention as a condition for new ideas",
-    title: "Rest and attention as a condition for new ideas | Sleepyland",
+    heading: "Rest is a practiced state that keeps unfashionable ideas alive",
+    title: "Rest is a practiced state that keeps unfashionable ideas alive | Sleepyland",
     description:
-      "Henrik and Johanna Karlsson describe a cultivated state of mind where fragile ideas can survive. Sleepyland is a browser sound machine; rest and usable attention are conditions for that work, not treatments.",
+      "Henrik and Johanna Karlsson describe solitude as a practiced state of mind that protects fragile, unfashionable ideas. Sleepyland is a browser sound machine; rest can hold that practice. It is not a habit loop and not a treatment.",
     publishedAt: "2026-08-26",
-    updatedAt: "2026-08-27",
+    updatedAt: "2026-08-31",
     intro: [
-      "Henrik and Johanna Karlsson write that unusually good ideas begin as fragile thoughts, and that those thoughts need a cultivated state of mind rather than a room of peers. Sleepyland does not write the idea. It is a free browser sound machine that can hold a listening state while you rest or work. The claim on this page is narrower: rest and a usable stretch of attention are conditions for that work. They are not treatments, and they do not guarantee insight.",
+      "Henrik and Johanna Karlsson write that unusually good ideas begin as fragile thoughts, and that those thoughts need a cultivated state of mind rather than a room of peers. Sleepyland does not write the idea. It is a free browser sound machine that can hold a listening state while you rest or work. The claim on this page is narrower: rest and solitude are a practiced state that can keep an unfashionable idea alive. They are not treatments, and they do not guarantee insight.",
     ],
     sections: [
       {
@@ -59,7 +59,7 @@ export const READING_NOTES = [
             "They read working notes that were not written for publication. Alexander Grothendieck spent three isolated years at Montpellier reinventing measurement ideas that mathematicians already knew. He later called that isolation the way he learned “the capacity to be alone.” The scarce skill in the essay is not answering fashionable questions. It is lingering in confusion long enough for a more precise question to appear. Ingmar Bergman’s workbooks are the other portrait: an uncensored daily notebook, fixed morning hours, and a private voice that can be commonplace or transgressive before a film exists.",
           ],
           [
-            "The Karlssons are not writing a sleep protocol. They are describing how a person keeps an internal reference for curiosity so later collaboration does not replace it.",
+            "The essay’s point is that this state is practiced. Sitting in a room is not enough. Grothendieck learned solitude by working alone for years. Bergman kept the state from collapsing with a daily workbook and a fixed morning window. The Karlssons also collect techniques that keep the state from collapsing back into fashion: delayed publication, chosen collaborators, and working faster than self-censorship. They are not writing a sleep protocol. They are describing how a person keeps an internal reference for curiosity so later collaboration does not replace it.",
           ],
         ],
       },
@@ -76,22 +76,38 @@ export const READING_NOTES = [
             ". That note compresses the argument into a gist and five ideas: premature consensus as a two-tailed filter, reinvention as attention training, question selection as the scarce skill, solitude as an internal reference point, and embodied practices that keep the state open.",
           ],
           [
-            "This Sleepyland page is a different document. It starts from that essay and from ",
+            "This Sleepyland page is a different document. It is not that Reading digest. It starts from the Karlsson essay and from ",
             link("what Sleepyland is", "/about"),
-            ", then asks what rest and attention have to do with the condition the Karlssons describe. A later ",
-            link("reading take on habit and rest", "/reading/habit-and-rest"),
-            " starts from the next loop: a rest environment is not a habit until the first small act starts.",
+            ", then asks what rest has to do with practicing the solitude they describe.",
           ],
         ],
       },
       {
-        heading: "An earlier filter",
+        heading: "Rest as a practiced state",
         paragraphs: [
           [
-            "The Karlssons’ filter is social. A coworking table, a fashionable problem, or a premature audience can kill a larval idea by making it sound foolish. There is an earlier failure mode that the essay assumes rather than studies: the person never gets a stretch of attention long enough for the larval idea to form.",
+            "The Karlssons’ filter is social. A coworking table, a fashionable problem, or a premature audience can kill a larval idea by making it sound foolish. The practiced state is what keeps that unfashionable idea from dying on first contact. Rest belongs here as one of the embodied practices the essay points at. A night of broken sleep, a day of context switching, or a room that keeps capturing attention leaves no interval in which other people’s opinions can recede. Rest can hold that interval. That sentence is an inference from ordinary working life and from what the product does. It is not a trial result, and it does not diagnose an attention disorder.",
           ],
           [
-            "Rest is part of that condition. A night of broken sleep, a day of context switching, or a room that keeps capturing attention can leave no unused capacity for loose, unjudged noticing. That sentence is an inference from ordinary working life and from what the product does. It is not a trial result, and it does not diagnose an attention disorder.",
+            "This is a different job from ",
+            link(
+              "the reading take on habit and rest",
+              "/reading/habit-and-rest",
+            ),
+            ". That later page starts from James Somers’s 2012 excerpts of William James, which ",
+            link(
+              "Hraness recorded as practical advice on habit",
+              "https://hraness.com/reading/the-best-general-advice-on-earth",
+            ),
+            ": act while the resolve is fresh, and keep effort alive with small unnecessary hard things. The habit page asks when starting a rest environment becomes a habit. This page asks what the practiced state can hold: an unfashionable idea. James on habit does not explain how larval questions survive a fashionable room.",
+          ],
+          [
+            "It is also a different job from ",
+            link(
+              "the reading take on rest as a place where anxiety can become curiosity",
+              "/reading/anger-anxiety-agency",
+            ),
+            ". That later page starts from Armin Ronacher. This page starts from a different essay and a different failure: an unfashionable idea that dies because it sounded foolish too early. Rest can be the practiced state in which that idea stays.",
           ],
           [
             "Sleepyland’s job, if it has one here, is modest. Sleep, Relax, and Focus are listening contexts. They generate local brown, pink, or white noise with procedural waves so a stretch of rest or work can continue in a room that would otherwise keep interrupting. Energy changes movement, not volume. Settings stay on this device. The generator does not produce ideas, score creativity, or promise that a session will yield a question worth keeping.",
@@ -123,7 +139,7 @@ export const READING_NOTES = [
         heading: "What this page does not claim",
         paragraphs: [
           [
-            "Sleepyland is not a medical device. This page is not medical advice. It does not diagnose insomnia, attention problems, or any other condition. It does not recommend supplements or treatment. Sleep, Relax, and Focus name intended listening contexts, not guaranteed outcomes. Silence remains a complete option when the room is already usable.",
+            "Sleepyland is not a medical device. This page is not medical advice. It does not diagnose insomnia, attention problems, or any other condition. It does not recommend supplements or treatment. Sleep, Relax, and Focus name intended listening contexts, not guaranteed outcomes. A practiced stretch of rest can hold solitude. It does not produce ideas, start a habit, or convert anxiety. Silence remains a complete option when the room is already usable.",
           ],
         ],
       },
@@ -141,6 +157,27 @@ export const READING_NOTES = [
             link(
               "Hraness reading note on the same essay",
               "https://hraness.com/reading/cultivating-a-state-of-mind-where-new-ideas-are-born",
+            ),
+            ".",
+          ],
+          [
+            link(
+              "Hraness reading note on Somers’s James excerpts",
+              "https://hraness.com/reading/the-best-general-advice-on-earth",
+            ),
+            ".",
+          ],
+          [
+            link(
+              "Sleepyland reading take on habit and rest",
+              "/reading/habit-and-rest",
+            ),
+            ".",
+          ],
+          [
+            link(
+              "Sleepyland reading take on rest as a place where anxiety can become curiosity",
+              "/reading/anger-anxiety-agency",
             ),
             ".",
           ],
@@ -204,13 +241,13 @@ export const READING_NOTES = [
           [
             "The earlier Sleepyland ",
             link(
-              "reading take on rest and attention as a condition for new ideas",
+              "reading take on rest as a practiced state that keeps unfashionable ideas alive",
               "/reading/good-ideas",
             ),
-            " starts from Henrik and Johanna Karlsson. Their essay is about keeping a stretch of attention in which a fragile idea can survive. That page asks whether rest and unused capacity are part of that condition.",
+            " starts from Henrik and Johanna Karlsson. Their essay is about solitude as a cultivated state of mind in which a fragile, unfashionable idea can survive. That page asks whether rest can hold that practice.",
           ],
           [
-            "This page starts after that condition is available. A quiet room, a listening state, or a plan to rest later is still a maxim if nothing starts. James, through Somers, treats the first acted chance as the training event. The inference on this page is ordinary and limited: an environment you never start does not become a habit. That is not a finding from Sleepyland Research, and it does not explain how ideas form.",
+            "This page starts after that practiced state is available. A quiet room, a listening state, or a plan to rest later is still a maxim if nothing starts. James, through Somers, treats the first acted chance as the training event. The inference on this page is ordinary and limited: an environment you never start does not become a habit. That is not a finding from Sleepyland Research, and it does not explain how ideas form.",
           ],
           [
             "A later ",
@@ -360,10 +397,10 @@ export const READING_NOTES = [
           [
             "This is a different job from ",
             link(
-              "rest and attention as a condition for new ideas",
+              "rest as a practiced state that keeps unfashionable ideas alive",
               "/reading/good-ideas",
             ),
-            ". That earlier take starts from Henrik and Johanna Karlsson and asks whether unused capacity helps keep a fragile thought alive. This page starts from a different essay and a different failure: anxiety that becomes anger because it needs a villain. Starting the environment is a later act, and that loop belongs on the habit page.",
+            ". That earlier take starts from Henrik and Johanna Karlsson and asks whether rest can hold the solitude that keeps an unfashionable idea alive. This page starts from a different essay and a different failure: anxiety that becomes anger because it needs a villain. Starting the environment is a later act, and that loop belongs on the habit page.",
           ],
         ],
       },
