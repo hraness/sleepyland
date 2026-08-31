@@ -84,6 +84,13 @@ export const RESEARCH_EDITORIAL_IMAGES = {
     "Evening screens combine light, attention, and time; filtering one part does not prove better sleep.",
     "12b687d27f40ebe8afa9d0906505cdf4657add60f9e81dfaae916c5cb0be2da5",
   ),
+  "blue-light-scatter-and-visual-detail": image(
+    "research",
+    "blue-light-scatter-and-visual-detail",
+    "Two close points of light smear into a wide blue halo while longer copper wavelengths stay tighter on a dark field.",
+    "Short-wave light spreads more in this editorial metaphor; the image is not a photograph of the UGA apparatus.",
+    "1f5fa10b1faa3566381e536425997a845d753b2f7ad1f52e0e44fe4eeafe3d70",
+  ),
   "z-drugs-zaleplon-zolpidem-eszopiclone": image(
     "research",
     "z-drugs-zaleplon-zolpidem-eszopiclone",

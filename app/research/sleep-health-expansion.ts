@@ -64,6 +64,10 @@ function strong(text: string): InlinePart {
   return { text, emphasis: "strong" };
 }
 
+function emphasis(text: string): InlinePart {
+  return { text, emphasis: "em" };
+}
+
 function link(text: string, href: string): InlinePart {
   return { text, href };
 }
@@ -280,6 +284,40 @@ export const SLEEP_HEALTH_SOURCES = {
     url: "https://pubmed.ncbi.nlm.nih.gov/41121438/",
     note:
       "A nationwide case-control study reporting a nonlinear dose-response association, including signals within strong antihistamines.",
+  },
+  buabengWavelength2026: {
+    title: "Wavelength dependence of fine spatial resolution in human vision",
+    publication: "Attention, Perception, & Psychophysics",
+    year: 2026,
+    url: "https://doi.org/10.3758/s13414-026-03244-5",
+    note:
+      "Open-access 60-person two-point experiment finding poorer short-wave resolution and higher thresholds with lighter irises, attributed to scatter, chromatic aberration, and sampling together.",
+  },
+  ugaBlueLightNews2026: {
+    title: "Blue light has a surprising effect on your eyes, study finds",
+    publication: "UGA Research News",
+    year: 2026,
+    url: "https://research.uga.edu/news/blue-light-has-a-surprising-effect-on-your-eyes-study-finds/",
+    note:
+      "Institutional news report of the Buabeng and Hammond experiment, also quoting the lead author's clinical comments on filtering glasses, macular stress, and diet.",
+  },
+  buabengMacularPigment2025: {
+    title:
+      "The influence of macular pigment on the fine spatial resolution of light of varying wavelengths",
+    publication: "Experimental Eye Research",
+    year: 2025,
+    url: "https://doi.org/10.1016/j.exer.2025.110625",
+    note:
+      "A same-laboratory two-point study in 60 young adults linking higher macular pigment optical density to better short-wave resolution, not a diet or macular-degeneration trial.",
+  },
+  vanDenBergStraylight1991: {
+    title:
+      "Dependence of intraocular straylight on pigmentation and light transmission through the ocular wall",
+    publication: "Vision Research",
+    year: 1991,
+    url: "https://pubmed.ncbi.nlm.nih.gov/1891824/",
+    note:
+      "A classic straylight paper showing that lighter irises transmit more light through the ocular wall and that fundus reflection also contributes to pigmentation-dependent glare.",
   },
   blueGlassesMeta2025: {
     title:
@@ -1007,7 +1045,7 @@ export const SLEEP_HEALTH_ARTICLES = [
     tags: ["sleep", "circadian", "environment", "wellness-claims"],
     evidenceLabel: "Light matters; glasses trials remain small and inconsistent",
     publishedAt: "2026-08-28",
-    updatedAt: "2026-08-28",
+    updatedAt: "2026-08-31",
     sourceIds: [
       "blueGlassesMeta2025",
       "blueGlassesCochrane2023",
@@ -1019,6 +1057,7 @@ export const SLEEP_HEALTH_ARTICLES = [
       "lightTimingReview2019",
     ],
     relatedSlugs: [
+      "blue-light-scatter-and-visual-detail",
       "morning-sunlight-and-sleep",
       "how-to-quiet-a-racing-mind-at-night",
       "why-you-sleep-badly-in-hotels",
@@ -1036,6 +1075,14 @@ export const SLEEP_HEALTH_ARTICLES = [
         "Controlled ",
         link("tablet-light research", SLEEP_HEALTH_SOURCES.tabletLight2018.url),
         " supports a biological effect of evening light exposure, while broader light reviews show that morning and evening timing push the circadian system in different directions. None establishes one universal device curfew for every sleeper.",
+      ),
+      paragraph(
+        "A separate 2026 University of Georgia vision experiment asked whether short-wave light is harder to resolve as two points than other colors. That laboratory task measured optical blur and iris-color differences, not melatonin or sleep. The companion article on ",
+        link(
+          "blue-light scatter and visual detail",
+          "/research/blue-light-scatter-and-visual-detail",
+        ),
+        " explains what those two-point thresholds can support and why they do not replace a screen-free wind-down.",
       ),
       heading("What a 30-minute screen break can and cannot prove"),
       paragraph(
@@ -1096,6 +1143,160 @@ export const SLEEP_HEALTH_ARTICLES = [
       ),
       paragraph(
         "Strong amber or red lenses distort color and reduce visual information. Do not drive or operate hazardous equipment in them. If screens are unavoidable, glasses are a light-control tool, not permission to keep doing the most activating possible activity until the second the lights go out.",
+      ),
+    ],
+  },
+  {
+    slug: "blue-light-scatter-and-visual-detail",
+    title: "Why Blue Light Blurs Fine Detail More Than Other Colors",
+    dek:
+      "A 2026 University of Georgia experiment found short-wave light hardest to resolve as two points. The result is about optical blur and glare, not a new proof that evening screens ruin sleep.",
+    seoDescription:
+      "A 2026 UGA experiment found blue light hardest to resolve as two points. Review scatter, iris color, limits, and what that does not prove about night screens.",
+    focusPhrase: "why blue light blurs fine detail",
+    keywords: [
+      "blue light scatter",
+      "two-point resolution",
+      "iris color glare",
+      "UGA blue light study",
+      "blue light fine detail",
+    ],
+    tags: ["sleep", "environment", "wellness-claims"],
+    evidenceLabel: "Wavelength-dependent blur in young adults; not a sleep trial",
+    publishedAt: "2026-08-31",
+    updatedAt: "2026-08-31",
+    sourceIds: [
+      "buabengWavelength2026",
+      "ugaBlueLightNews2026",
+      "buabengMacularPigment2025",
+      "vanDenBergStraylight1991",
+      "blueGlassesMeta2025",
+      "blueGlassesCochrane2023",
+      "tabletLight2018",
+      "lightTimingReview2019",
+    ],
+    relatedSlugs: [
+      "screens-blue-light-glasses-and-sleep",
+      "morning-sunlight-and-sleep",
+    ],
+    body: [
+      callout(
+        "The short answer",
+        "In a 2026 University of Georgia laboratory experiment, 60 young adults needed more space between two points of short-wave (blue) light than between green, yellow, red, or broadband points before they could tell the points apart. Lighter irises, especially blue, showed higher thresholds. The published paper treats that pattern as a mix of scatter, chromatic aberration, and photoreceptor sampling. It is not a trial of phones, sleep, age-related macular degeneration, or filtering glasses.",
+      ),
+      heading("What the 2026 experiment measured"),
+      paragraph(
+        "Yaw Buabeng, OD, MS, a University of Georgia psychology doctoral candidate and former optometrist, is the lead author. Billy R. Hammond is the corresponding author. Their paper, ",
+        emphasis("Wavelength dependence of fine spatial resolution in human vision"),
+        ", appeared open access in ",
+        emphasis("Attention, Perception, & Psychophysics"),
+        " on 29 May 2026. UGA Research later summarized the work for a general audience. That ",
+        link("news report", SLEEP_HEALTH_SOURCES.ugaBlueLightNews2026.url),
+        " is useful for the authors' later comments on glasses, macular stress, and diet. It is not a substitute for the journal paper's protocol, statistics, or stated limits.",
+      ),
+      paragraph(
+        "The ",
+        link("published experiment", SLEEP_HEALTH_SOURCES.buabengWavelength2026.url),
+        " tested 60 healthy adults aged 18 to 30 years (mean age 22.7). Participants had unaided acuity better than 20/40, reported normal color vision, and did not wear glasses or contact lenses during testing. A 1,000-watt xenon lamp and narrowband interference filters produced peaks at 420, 460, 500, 540, 580, 620, and 660 nm, plus a broadband white condition. Energy at the apertures was matched at 628 microwatts. Two 2 mm apertures started together and were separated until the viewer reported two points. Each wavelength was tested three times with an ascending adjustment method. Viewing distance was 67 inches (about 1.7 m) in a darkened room.",
+      ),
+      paragraph(
+        "Thresholds differed by wavelength. Short-wave light at 420 nm produced poorer two-point resolution than long-wave light at 660 nm. Broadband white needed less separation than any narrowband condition. The authors report a Friedman test of χ²(7, N = 60) = 243.84, p < 0.001. Those numbers describe this task and this sample. They are not a percentage of everyday visual loss on a phone.",
+      ),
+      heading("Why short-wave light is harder to resolve"),
+      paragraph(
+        "When light spreads on the retina, two sources must sit farther apart before they look separate. That is a mechanism story with several contributors. The paper's discussion says a Rayleigh-type curve fitted the thresholds well, but ocular media are not the atmosphere, and longitudinal chromatic aberration fitted almost as well. The authors conclude that scatter, chromatic aberration, and neural sampling likely act together. They did not take direct wavefront or straylight measurements, so they cannot assign shares to each cause.",
+      ),
+      paragraph(
+        "This matters because some press wording treats blue-light scatter as the whole explanation. Direct evidence from the experiment is the wavelength-dependent two-point threshold. The partition into scatter versus aberration is an inference the authors themselves mark as incomplete.",
+      ),
+      heading("Iris color and melanin"),
+      paragraph(
+        "Iris color was graded with a standardized photographic chart before analysis. Thresholds were highest for blue irises and for lighter irises overall. In the mixed-effects model, light-blue irises stood out from other color-lightness combinations. Medium and dark irises did not differ from each other after correction.",
+      ),
+      paragraph(
+        "Buabeng told UGA Research that darker brown irises have more melanin in the iris and in the retinal pigment epithelium, which can absorb stray light. That mechanism is consistent with older intraocular-straylight work. A ",
+        link(
+          "1991 Vision Research paper",
+          SLEEP_HEALTH_SOURCES.vanDenBergStraylight1991.url,
+        ),
+        " by van den Berg, IJspeert, and de Waard found that straylight depends on pigmentation, that a light-blue iris transmitted more red and green light than a dark-brown ocular wall, and that fundus reflection also contributes. Those findings support a pigmentation mechanism. They do not diagnose a reader's glare problem or prove that blue-eyed people cannot use screens.",
+      ),
+      heading("What this does and does not mean for screens at night"),
+      table(
+        "The useful distinction is optical blur versus sleep",
+        ["Question", "What the sources support", "What remains out of reach"],
+        [
+          item("Is short-wave light harder to resolve as two points?"),
+          item("Direct evidence in 60 young adults under equal-energy laboratory points"),
+          item("Not a measurement of phones, tablets, or ordinary room lighting"),
+        ],
+        [
+          item("Do lighter irises scatter more in this task?"),
+          item("Higher two-point thresholds, especially for light-blue irises"),
+          item("Not a diagnosis, not a glare test for every age or eye disease"),
+        ],
+        [
+          item("Do evening screens delay sleep?"),
+          item("Separate tablet-light and light-timing reviews support a circadian direction"),
+          item("This acuity experiment did not measure melatonin or sleep"),
+        ],
+        [
+          item("Do blue-blocking glasses improve sleep?"),
+          item("A 2025 actigraphy meta-analysis found no significant objective benefit"),
+          item("Comfort or glare relief, if it occurs, is a different claim from sleep"),
+        ],
+      ),
+      paragraph(
+        "The stimulus was not a phone, tablet, or television. It was two small, equal-energy points at about 1.7 m, at very low luminance, in young adults selected for good unaided acuity. Photometric (brightness-matched) conditions would have required more short-wave energy and would have changed the optical question. A bedroom display is broadband, usually brighter, closer, and mixed with content that keeps the mind busy.",
+      ),
+      paragraph(
+        "Evening light can still affect circadian timing. Controlled ",
+        link("tablet-light research", SLEEP_HEALTH_SOURCES.tabletLight2018.url),
+        " and a ",
+        link(
+          "45-study review of light timing",
+          "https://pubmed.ncbi.nlm.nih.gov/30670164/",
+        ),
+        " support a direction: brighter evening light tracks with later sleep timing. That is a different outcome from two-point acuity. If the reader question is whether evening screens or blue-blocking glasses improve sleep, use the article on ",
+        link(
+          "screens, blue-light glasses, and sleep",
+          "/research/screens-blue-light-glasses-and-sleep",
+        ),
+        ". This page answers why blue wavelengths can look softer and glarier, what the UGA experiment measured, and why those thresholds do not settle the sleep debate.",
+      ),
+      heading("Filtering glasses, macular stress, and diet"),
+      paragraph(
+        "The acuity experiment did not test blue-light filtering glasses, diet, or macular degeneration. The ",
+        link("UGA Research feature", SLEEP_HEALTH_SOURCES.ugaBlueLightNews2026.url),
+        " quotes Buabeng recommending device filters and filtering glasses for long outdoor or screen hours, linking high-energy blue light to macular oxidative stress and age-related macular degeneration over time, and pointing to macular pigment from leafy greens and colorful fruit. Those remarks are clinical opinion and a pointer to prior work. They are not results of the 60-person two-point study.",
+      ),
+      paragraph(
+        "A ",
+        link(
+          "2025 Experimental Eye Research paper",
+          SLEEP_HEALTH_SOURCES.buabengMacularPigment2025.url,
+        ),
+        " by Buabeng and Hammond, using the same two-point apparatus, reported that higher macular pigment optical density tracked with better short-wave resolution (about 31 to 38 percent better in a high-versus-low quartile comparison at 420 to 540 nm) and not with longer wavelengths. That is an association in young adults, not a diet trial and not proof that fruit and greens prevent macular degeneration.",
+      ),
+      paragraph(
+        "For sleep, the ",
+        link("2023 Cochrane review", SLEEP_HEALTH_SOURCES.blueGlassesCochrane2023.url),
+        " of blue-light filtering spectacle lenses found inconsistent results, and a ",
+        link(
+          "2025 actigraphy meta-analysis",
+          SLEEP_HEALTH_SOURCES.blueGlassesMeta2025.url,
+        ),
+        " of 49 adults found no significant improvement in sleep latency, duration, efficiency, or awakenings. Glasses that reduce short-wave light might change comfort or glare for some people. That remains a different claim from a promised sleep benefit.",
+      ),
+      heading("A practical night experiment"),
+      paragraph(
+        "If fine detail or glare on a bright display is the problem, the laboratory result supports a modest inference: lowering short-wave content and overall brightness can reduce one optical reason the image looks softer. Dim the room, drop display brightness, increase viewing distance, and stop staring at the brightest object in a dark field. None of those steps is a treatment for eye disease.",
+      ),
+      paragraph(
+        "If the problem is falling asleep, change the whole evening: light at the eyes, activating content, and time spent on the device. A 30-minute screen-free wind-down is a reasonable test because it moves all three. Quiet audio in a dim room can occupy that interval without adding another feed. Sleepyland's browser sound machine stays local and does not need an account. It does not treat blur or replace a clinician.",
+      ),
+      paragraph(
+        "Persistent glare, sudden vision change, distortion, or flashes deserves an eye-care visit. Persistent insomnia, loud snoring, or severe daytime sleepiness deserves sleep-medicine help. This page does not diagnose either problem.",
       ),
     ],
   },
