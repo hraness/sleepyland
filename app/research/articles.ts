@@ -111,6 +111,24 @@ export const RESEARCH_SOURCES = {
     note:
       "A seven-night polysomnography study in 25 healthy adults comparing environmental noise, continuous pink noise, earplugs, and combinations.",
   },
+  whiteNoiseOlderAdults2026: {
+    title:
+      "The effect of white noise on sleep quality and fatigue in community-dwelling older adults: a randomized controlled trial",
+    publication: "BMC Geriatrics",
+    year: 2026,
+    url: "https://doi.org/10.1186/s12877-026-07311-2",
+    note:
+      "A 60-person, 30-night randomized study comparing sleep hygiene alone with sleep hygiene plus 30 minutes of participant-selected nature sound, using self-reported sleep and fatigue outcomes.",
+  },
+  noiseHealthReview2026: {
+    title:
+      "Auditory and non-auditory effects of noise on health: updated evidence and future directions",
+    publication: "Environmental Research",
+    year: 2026,
+    url: "https://pubmed.ncbi.nlm.nih.gov/42081987/",
+    note:
+      "An updated review of environmental-noise evidence covering hearing, sleep disturbance, stress pathways, cardiometabolic outcomes, mental health, and mitigation.",
+  },
   whiteNoiseMeta2025: {
     title:
       "Impact of white noise on sleep quality across age groups and in critically ill/non-critically ill patients",
@@ -1335,26 +1353,28 @@ export const researchArticles = [
   },
   {
     slug: "noise-and-sleep-2026",
-    title: "Noise and Sleep in 2026: What the Latest Research Actually Says",
+    title: "Does White Noise Help You Sleep? What Three 2026 Studies Found",
     dek:
-      "The newest controlled trial complicates the usual “pink noise equals better sleep” story. Here is the useful answer: when sound helps, why it can also hurt, and how to choose it conservatively.",
+      "Three 2026 studies reached different answers: one found better self-reported sleep in older adults, another found less REM with pink noise, and a small traffic-noise pilot found selective masking benefits.",
     seoDescription:
-      "A 2026 evidence review of white, pink, and brown noise, ocean waves, binaural beats, sound masking, safe volume, and conflicting sleep studies.",
-    focusPhrase: "noise and sleep research 2026",
+      "Does white noise help you sleep? Three 2026 studies found benefits and harms across self-reported sleep, REM, traffic masking, and short-term use.",
+    focusPhrase: "does white noise help you sleep",
     keywords: [
-      "noise for sleep",
-      "continuous noise for sleep",
+      "does white noise help you sleep",
+      "white noise sleep study",
       "white noise sleep research",
       "pink noise REM sleep",
-      "brown noise for sleeping",
+      "continuous noise for sleep",
     ],
     tags: ["sleep", "sound"],
-    evidenceLabel: "Evidence mixed; newest trial urges caution",
+    evidenceLabel: "Evidence mixed; effects depend on the problem and protocol",
     publishedAt: "2026-07-24",
-    updatedAt: "2026-07-24",
+    updatedAt: "2026-08-31",
     sourceIds: [
+      "whiteNoiseOlderAdults2026",
       "basner2026",
       "vincens2026",
+      "noiseHealthReview2026",
       "whiteNoiseMeta2025",
       "auditoryReview2022",
       "noiseAidReview2020",
@@ -1365,31 +1385,42 @@ export const researchArticles = [
       "rockingNight2019",
     ],
     relatedSlugs: [
-      "best-sleep-sounds",
-      "what-frequency-helps-you-sleep",
+      "how-to-use-white-noise-for-sleep",
+      "white-pink-brown-noise-for-sleep",
       "how-sound-masking-works",
     ],
     body: [
       callout(
         "The short answer",
-        "Steady sound is best understood as an environmental tool, not a universal sleep treatment. It may help when it masks unpredictable noise or becomes a familiar bedtime cue. It can also add exposure, disturb some sleepers, or simply be less effective than making the room quieter.",
+        "White noise can help some people, especially when it masks unpredictable sound, but 2026 evidence does not show a universal sleep benefit. One 30-night trial found better self-reported sleep and shorter reported sleep latency in older adults. A separate laboratory trial found that continuous pink noise reduced REM. Use the lowest level that solves a real noise problem.",
       ),
       paragraph(
-        "For years, the popular explanation was tidy: white noise masks interruptions, pink noise resembles natural sound, and lower brown noise feels softer. The research has never been that tidy. A ",
+        "For years, the popular explanation was tidy: white noise masks interruptions, pink noise resembles natural sound, and lower brown noise feels softer. Three 2026 studies now show why the answer depends on the listener, signal, setting, duration, and outcome. They include a ",
         link(
-          "25-person 2026 trial",
+          "60-person home trial in older adults",
+          RESEARCH_SOURCES.whiteNoiseOlderAdults2026.url,
+        ),
+        ", a ",
+        link(
+          "25-person laboratory trial",
           RESEARCH_SOURCES.basner2026.url,
         ),
-        " and a ",
+        ", and a ",
         link(
-          "12-person 2026 pilot",
+          "12-person traffic-noise pilot",
           RESEARCH_SOURCES.vincens2026.url,
         ),
-        " point in different directions because they measured different outcomes under different protocols.",
+        ".",
       ),
-      heading("Two 2026 pink-noise studies point in different directions"),
+      heading("Three 2026 studies found different things"),
       paragraph(
-        "In the larger study, researchers followed 25 healthy adults across seven laboratory nights with polysomnography. Conditions included a quiet control night, 93 intermittent environmental-noise events, continuous pink noise at 40 or 50 dBA, earplugs, and combinations. Environmental noise reduced N3 deep sleep. Continuous pink noise reduced REM sleep. Adding pink noise produced small improvements in some fragmentation measures but worsened sleep structure overall. Earplugs protected sleep more consistently until the loudest environmental condition.",
+        "In the 60-person randomized trial, community-dwelling adults aged 65 and older with poor sleep and fatigue all received sleep-hygiene guidance. Half also played a selected sound from their phone for 30 minutes after getting into bed on 30 consecutive nights. Their questionnaire scores for sleep quality and fatigue improved more than the control group, and their reported sleep latency fell by an average of 10 minutes compared with two minutes in the control group. Total nighttime sleep duration did not change significantly.",
+      ),
+      paragraph(
+        "The trial's label needs care. Participants chose among river, forest, rain, and sea-wave recordings rather than receiving one acoustically defined white-noise signal. They used their own phones in uncontrolled bedrooms, and the sleep outcomes came from questionnaires and personal logs rather than polysomnography. The result supports a short, participant-selected bedtime sound in this specific older group. It cannot isolate whether the useful element was a white-noise spectrum, natural sound, masking, expectation, or the added routine. Four of 30 listeners found the sound disruptive, while 10 said it helped mask environmental noise.",
+      ),
+      paragraph(
+        "In the laboratory study, researchers followed 25 healthy adults across seven nights with polysomnography. Conditions included a quiet control night, 93 intermittent environmental-noise events, continuous pink noise at 40 or 50 dBA, earplugs, and combinations. Environmental noise reduced N3 deep sleep. Continuous pink noise reduced REM sleep. Adding pink noise produced small improvements in some fragmentation measures but worsened sleep structure overall. Earplugs protected sleep more consistently until the loudest environmental condition.",
       ),
       paragraph(
         "A separate ",
@@ -1400,8 +1431,15 @@ export const researchArticles = [
         " compared quiet, traffic events, continuous 45 dB pink noise, and traffic plus pink noise. Traffic caused brief event-related fragmentation and changed several measured blood metabolites even when total sleep time and broad sleep-stage measures were preserved. Pink noise attenuated some of those acute effects. The authors explicitly framed the result as exploratory because the sample was small and homogeneous.",
       ),
       table(
-        "Why the two 2026 results are not a simple contradiction",
+        "What three 2026 studies actually tested",
         ["Study", "Protocol", "Primary lens", "Result", "Boundary"],
+        [
+          item("Vahhabzadeh Mousavi et al."),
+          item("60 older adults; 30 nights; sleep hygiene with or without 30 minutes of a selected nature-sound file"),
+          item("Sleep and fatigue questionnaires, personal logs, and interviews"),
+          item("Better self-reported sleep and fatigue; shorter reported latency; no significant sleep-duration change"),
+          item("One-city convenience sample; uncontrolled rooms; self-report; intervention was not one standardized white-noise signal"),
+        ],
         [
           item("Basner et al."),
           item("25 adults; seven nights; pink noise at 40 or 50 dBA; environmental events; earplugs"),
@@ -1418,9 +1456,9 @@ export const researchArticles = [
         ],
       ),
       paragraph(
-        "The studies answer different questions. A masker can reduce the contrast of traffic events while the masker itself changes REM or another part of sleep. Event-level protection, whole-night sleep architecture, subjective comfort, and downstream biomarkers are related but not interchangeable outcomes. The practical conclusion remains conservative: use sound to solve a specific environmental problem at the lowest useful level, not because a color name guarantees deeper sleep.",
+        "These studies answer different questions. A short bedtime sound can improve a person's reported experience while an all-night masker changes REM in a laboratory. A masker can reduce the contrast of traffic events while the masker itself changes another part of sleep. Event-level protection, whole-night sleep architecture, subjective comfort, and downstream biomarkers are related but not interchangeable outcomes. Use sound to solve a specific environmental problem at the lowest useful level, not because a color name guarantees deeper sleep.",
       ),
-      heading("Why earlier reviews looked more optimistic"),
+      heading("Why reviews still cannot settle the question"),
       paragraph(
         "A ",
         link(
@@ -1444,6 +1482,15 @@ export const researchArticles = [
       ),
       paragraph(
         "These findings can coexist. A masker can improve sleep in a noisy ICU or apartment while adding no benefit in an already quiet bedroom. A person can sincerely sleep better with brown noise even if the average effect across a mixed group is uncertain. Subjective comfort, objective sleep stages, and protection from external events are related outcomes, not the same outcome.",
+      ),
+      heading("Reduce the source before adding a masker"),
+      paragraph(
+        "An ",
+        link(
+          "updated 2026 review of environmental noise and health",
+          RESEARCH_SOURCES.noiseHealthReview2026.url,
+        ),
+        " summarizes extensive evidence that environmental noise can disturb sleep. That evidence concerns harmful exposure; it is not proof that adding broadband sound is therapeutic. Silence alerts, repair rattles, close gaps, or move the sleeper away from the source when possible. A masker is a fallback for sound you cannot control.",
       ),
       heading("What a calming sound can actually do"),
       unordered(
