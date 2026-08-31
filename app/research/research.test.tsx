@@ -208,16 +208,19 @@ describe("Sleepyland Research content", () => {
     const frequency = getResearchArticle("what-frequency-helps-you-sleep");
     const masking = getResearchArticle("how-sound-masking-works");
     const colors = getResearchArticle("white-pink-brown-noise-for-sleep");
+    const overview = getResearchArticle("noise-and-sleep-2026");
 
     expect(selection).toBeDefined();
     expect(frequency).toBeDefined();
     expect(masking).toBeDefined();
     expect(colors).toBeDefined();
+    expect(overview).toBeDefined();
 
     const selectionText = JSON.stringify(selection?.body);
     const frequencyText = JSON.stringify(frequency?.body);
     const maskingText = JSON.stringify(masking?.body);
     const colorsText = JSON.stringify(colors?.body);
+    const overviewText = JSON.stringify(overview?.body);
 
     expect(selectionText).toContain("There is no best sleep sound for everyone");
     expect(selectionText).toContain("Choose a sleep-sound strategy by the actual problem");
@@ -228,6 +231,19 @@ describe("Sleepyland Research content", () => {
     expect(colorsText).toContain("What about green noise for sleep");
     expect(colorsText).toContain("not have one universally adopted engineering definition");
     expect(colors?.updatedAt).toBe("2026-08-28");
+    expect(overview?.title).toBe(
+      "Does White Noise Help You Sleep? What Three 2026 Studies Found",
+    );
+    expect(overview?.updatedAt).toBe("2026-08-31");
+    expect(overviewText).toContain(
+      "questionnaires and personal logs rather than polysomnography",
+    );
+    expect(overviewText).toContain(
+      "intervention was not one standardized white-noise signal",
+    );
+    expect(overviewText).toContain(
+      "Total nighttime sleep duration did not change significantly",
+    );
     expect(frequencyText).not.toMatch(/432 Hz (?:guarantees|induces|causes) sleep/iu);
     expect(maskingText).not.toMatch(/masking (?:blocks|cancels|erases) sound/iu);
   });
