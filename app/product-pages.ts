@@ -118,7 +118,7 @@ export const PRODUCT_PAGES = [
           [
             "A separate ",
             link("reading note", "/reading/good-ideas"),
-            " discusses rest and attention as a condition for work, starting from Henrik and Johanna Karlsson’s essay on how new ideas are born. Another ",
+            " discusses rest as a practiced state that keeps unfashionable ideas alive, starting from Henrik and Johanna Karlsson’s essay on how new ideas are born. Another ",
             link("reading take on habit and rest", "/reading/habit-and-rest"),
             " starts from William James: a rest environment is not a habit until the first small act starts. A later ",
             link(

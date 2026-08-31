@@ -72,10 +72,14 @@ describe("Sleepyland reading notes", () => {
     }
   });
 
-  test("keeps the good-ideas take distinct from About and free of medical advice", async () => {
+  test("keeps the good-ideas take distinct from About, siblings, and medical advice", async () => {
     const note = READING_NOTES.find((entry) => entry.slug === "good-ideas");
+    const habit = READING_NOTES.find((entry) => entry.slug === "habit-and-rest");
+    const agency = READING_NOTES.find((entry) => entry.slug === "anger-anxiety-agency");
     const about = PRODUCT_PAGES.find((page) => page.slug === "about");
     if (note === undefined) throw new Error("Expected good-ideas reading note.");
+    if (habit === undefined) throw new Error("Expected habit-and-rest reading note.");
+    if (agency === undefined) throw new Error("Expected anger-anxiety-agency reading note.");
     if (about === undefined) throw new Error("Expected about page.");
 
     const markup = renderToStaticMarkup(await ReadingNotePage({
@@ -83,9 +87,18 @@ describe("Sleepyland reading notes", () => {
     }));
 
     expect(note.heading).not.toBe(about.heading);
+    expect(note.heading).not.toBe(habit.heading);
+    expect(note.heading).not.toBe(agency.heading);
     expect(note.path).toBe("/reading/good-ideas");
-    expect(markup).toContain("<h1>Rest and attention as a condition for new ideas</h1>");
+    expect(markup).toContain(
+      "<h1>Rest is a practiced state that keeps unfashionable ideas alive</h1>",
+    );
     expect(markup).not.toContain("<h1>What Sleepyland is</h1>");
+    expect(markup).not.toContain(
+      "<h1>Rest is not a habit until the first small hard thing starts</h1>",
+    );
+    expect(markup).not.toContain("<h1>Rest is where anxiety can become curiosity</h1>");
+    expect(markup).toContain("not that Reading digest");
     expect(markup).toContain('href="/about"');
     expect(markup).toContain('href="/noise"');
     expect(markup).toContain('href="https://hraness.com"');
@@ -93,6 +106,11 @@ describe("Sleepyland reading notes", () => {
     expect(markup).toContain(
       'href="https://hraness.com/reading/cultivating-a-state-of-mind-where-new-ideas-are-born"',
     );
+    expect(markup).toContain(
+      'href="https://hraness.com/reading/the-best-general-advice-on-earth"',
+    );
+    expect(markup).toContain('href="/reading/habit-and-rest"');
+    expect(markup).toContain('href="/reading/anger-anxiety-agency"');
     expect(markup).toContain("not a medical device");
     expect(markup).toContain("not medical advice");
     expect(markup).toContain("does not diagnose");
@@ -100,7 +118,9 @@ describe("Sleepyland reading notes", () => {
     expect(markup).not.toMatch(/creatine/iu);
     expect(markup).toContain("not guaranteed outcomes");
     expect(markup).not.toMatch(/(?:cure|treat insomnia|clinically proven)/iu);
-    expect(markup).toContain('href="/reading/habit-and-rest"');
+    expect(markup).not.toContain("lucumr.pocoo.org");
+    expect(markup).not.toContain("stripedex.com");
+    expect(markup).not.toContain("spongeresearch.com");
   });
 
   test("keeps the habit-and-rest take distinct from About, good-ideas, and medical advice", async () => {
@@ -122,7 +142,9 @@ describe("Sleepyland reading notes", () => {
       "<h1>Rest is not a habit until the first small hard thing starts</h1>",
     );
     expect(markup).not.toContain("<h1>What Sleepyland is</h1>");
-    expect(markup).not.toContain("<h1>Rest and attention as a condition for new ideas</h1>");
+    expect(markup).not.toContain(
+      "<h1>Rest is a practiced state that keeps unfashionable ideas alive</h1>",
+    );
     expect(markup).toContain('href="/reading/good-ideas"');
     expect(markup).toContain('href="/about"');
     expect(markup).toContain('href="/noise"');
@@ -175,7 +197,9 @@ describe("Sleepyland reading notes", () => {
       "<h1>Rest is where anxiety can become curiosity</h1>",
     );
     expect(markup).not.toContain("<h1>What Sleepyland is</h1>");
-    expect(markup).not.toContain("<h1>Rest and attention as a condition for new ideas</h1>");
+    expect(markup).not.toContain(
+      "<h1>Rest is a practiced state that keeps unfashionable ideas alive</h1>",
+    );
     expect(markup).not.toContain(
       "<h1>Rest is not a habit until the first small hard thing starts</h1>",
     );
