@@ -251,12 +251,37 @@ describe("Sleepyland Research content", () => {
     expect(magnesium?.dek).toContain("no head-to-head sleep trial proves one form is best");
     expect(antihistamineText).toContain("associated with increased risk, not proven to cause");
     expect(screensText).toContain("no significant improvement");
+    expect(screensText).toContain("/research/blue-light-scatter-and-visual-detail");
+    expect(screens?.relatedSlugs).toContain("blue-light-scatter-and-visual-detail");
     expect(zDrugText).toContain("pharmacokinetic inference, not a demonstrated sleep-quality outcome");
     expect(oxybateText).toContain("does not reproduce amounts or informal administration techniques");
     expect(kratomText).toContain("not a proven way to restore the brain");
     expect(racingMindText).toContain("capture, clarify, schedule, and release");
     expect(oxybateText).not.toMatch(/(?:grams?|milliliters?|\bmL\b)/u);
     expect(kratomText).not.toMatch(/(?:recommended dose|take \d|use \d)/iu);
+  });
+
+  test("keeps the blue-light vision article distinct from the glasses-for-sleep page", () => {
+    const scatter = getResearchArticle("blue-light-scatter-and-visual-detail");
+    const screens = getResearchArticle("screens-blue-light-glasses-and-sleep");
+
+    expect(scatter).toBeDefined();
+    expect(screens).toBeDefined();
+
+    const scatterText = JSON.stringify(scatter?.body);
+
+    expect(scatter?.relatedSlugs).toContain("screens-blue-light-glasses-and-sleep");
+    expect(screens?.relatedSlugs).toContain("blue-light-scatter-and-visual-detail");
+    expect(scatterText).toContain("/research/screens-blue-light-glasses-and-sleep");
+    expect(scatterText).toContain("not a trial of phones, sleep");
+    expect(scatterText).toContain("clinical opinion");
+    expect(scatterText).toContain("two-point");
+    expect(scatterText).toContain("60 young adults");
+    expect(scatterText).not.toMatch(/prevents? macular degeneration/iu);
+    expect(scatterText).not.toMatch(/just wear (?:blue[- ]light )?glasses/iu);
+    expect(scatter?.evidenceLabel).toBe(
+      "Wavelength-dependent blur in young adults; not a sleep trial",
+    );
   });
 
   test("renders semantic long-form blocks and crawlable source links", () => {

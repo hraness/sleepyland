@@ -9,6 +9,7 @@ export const RESEARCH_SLUGS = [
   "kava-for-sleep",
   "benadryl-diphenhydramine-for-sleep",
   "screens-blue-light-glasses-and-sleep",
+  "blue-light-scatter-and-visual-detail",
   "z-drugs-zaleplon-zolpidem-eszopiclone",
   "ghb-sodium-oxybate-and-sleep",
   "kratom-after-no-sleep",
