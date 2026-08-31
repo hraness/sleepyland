@@ -277,7 +277,7 @@ describe("Sleepyland Research content", () => {
     expect(scatterText).toContain("clinical opinion");
     expect(scatterText).toContain("two-point");
     expect(scatterText).toContain("60 young adults");
-    expect(scatterText).not.toMatch(/prevents? macular degeneration/iu);
+    expect(scatterText).toContain("not proof that fruit and greens prevent macular degeneration");
     expect(scatterText).not.toMatch(/just wear (?:blue[- ]light )?glasses/iu);
     expect(scatter?.evidenceLabel).toBe(
       "Wavelength-dependent blur in young adults; not a sleep trial",
