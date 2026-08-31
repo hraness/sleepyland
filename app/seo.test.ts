@@ -141,9 +141,13 @@ describe("Sleepyland search surface", () => {
       url: "https://sleepy.land/noise",
       lastModified: new Date(site.updatedAt),
     });
+    const latestReadingUpdate = READING_NOTES.reduce<string>(
+      (latest, note) => note.updatedAt > latest ? note.updatedAt : latest,
+      READING_NOTES[0]?.updatedAt ?? "1970-01-01",
+    );
     expect(entries[2]).toEqual({
       url: "https://sleepy.land/reading",
-      lastModified: new Date("2026-08-28T00:00:00.000Z"),
+      lastModified: new Date(`${latestReadingUpdate}T00:00:00.000Z`),
       images: READING_NOTES.map((note) =>
         `https://sleepy.land${readingEditorialImage(note.slug).src}`),
     });
