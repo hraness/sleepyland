@@ -125,7 +125,12 @@ export const PRODUCT_PAGES = [
               "reading take on rest as a place where anxiety can become curiosity",
               "/reading/anger-anxiety-agency",
             ),
-            " starts from Armin Ronacher.",
+            " starts from Armin Ronacher. A later ",
+            link(
+              "reading take on rest as practiced attention to language",
+              "/reading/weird-is-a-weird-word",
+            ),
+            " starts from Colin Gorrie’s essay on English weird.",
           ],
         ],
       },
