@@ -7,7 +7,7 @@ import { researchEditorialImage } from "../editorial-images";
 import { RESEARCH_FEED_PATH } from "../search-discovery";
 import { serializeJsonLd } from "../seo";
 import { metadata as researchIndexMetadata } from "../page";
-import { publicationTitle, site } from "../site";
+import { homepageUpdatedAt, publicationTitle, site } from "../site";
 import ResearchArticlePage from "./[slug]/page";
 import { ArticleBody } from "./article-body";
 import { RESEARCH_IMAGE_WORDMARK } from "./article-image";
@@ -329,10 +329,11 @@ describe("Sleepyland Research content", () => {
       Bun.file(new URL("./research-index-page.tsx", import.meta.url)).text(),
       Bun.file(new URL("./[slug]/page.tsx", import.meta.url)).text(),
     ]);
+    const indexMarkup = renderToStaticMarkup(createElement(ResearchIndex));
 
     expect(indexSource).toContain("Editorial method");
-    expect(indexSource).toContain("does not impersonate a clinician");
-    expect(indexSource).toContain("open source on GitHub");
+    expect(indexMarkup).toContain("does not claim clinician review that did not happen");
+    expect(indexMarkup).toContain("open source on GitHub");
     expect(indexSource).toContain("researchContributionUrl");
     expect(indexSource).toContain('href="/noise"');
     expect(articleSource).toContain("Open the calming sound machine");
@@ -443,6 +444,7 @@ describe("Sleepyland Research search surface", () => {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       url: "https://sleepy.land/",
+      dateModified: `${homepageUpdatedAt}T00:00:00.000Z`,
       primaryImageOfPage:
         "https://sleepy.land/research/opengraph-image",
     });

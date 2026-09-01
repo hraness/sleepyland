@@ -13,7 +13,7 @@ import {
 } from "./articles";
 import { RESEARCH_FEED_PATH } from "../search-discovery";
 import { absoluteUrl, isoDateTime } from "../seo";
-import { site } from "../site";
+import { homepageUpdatedAt, site } from "../site";
 
 export const researchDescription =
   "Evidence-led guides to insomnia, sleep supplements, medications, light, routines, sound, circadian rhythm, and the limits of current research.";
@@ -90,6 +90,7 @@ export function researchCollectionJsonLd() {
     url,
     name: "Sleepyland Research",
     description: researchDescription,
+    dateModified: isoDateTime(homepageUpdatedAt),
     inLanguage: "en-US",
     primaryImageOfPage: absoluteUrl(RESEARCH_SOCIAL_IMAGE_PATH),
     isPartOf: { "@id": `${site.canonicalUrl}/#website` },

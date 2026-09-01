@@ -3,22 +3,76 @@
 [![CI](https://github.com/hraness/sleepyland/actions/workflows/ci.yml/badge.svg)](https://github.com/hraness/sleepyland/actions/workflows/ci.yml)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-[Sleepyland](https://sleepy.land) is an open-source, evidence-led publication about sleep, sound, and practical insomnia decisions. It includes a private-by-design browser sound machine at [sleepy.land/noise](https://sleepy.land/noise).
+[Sleepyland](https://sleepy.land) gives readers a direct answer, the sources behind it, and the limit of the evidence before they make a sleep decision. The same site includes a [private browser sound machine](https://sleepy.land/noise) for sleep, relaxation, and focus.
 
-The sound machine synthesizes brown, pink, and white noise, procedural ocean surf, slow spatial movement, and interactive spectrum pulses locally with the Web Audio API. It uses no recorded audio, product account, microphone input, or server-side sound generation.
+The publication covers insomnia, supplements, medications, circadian light, routines, environmental sound, and common wellness claims. It is educational publishing, not medical advice.
 
-The publication covers sleep sounds, circadian light, insomnia techniques, supplements, medications, and common wellness claims. Articles lead with a direct answer, link material claims to sources, and keep direct evidence separate from mechanism, inference, and crowdsourced experience.
+## First proof
 
-## Contribute
+[Why Blue Light Blurs Fine Detail More Than Other Colors](https://sleepy.land/research/blue-light-scatter-and-visual-detail) leads with a qualified answer, labels its evidence as wavelength-dependent blur in young adults rather than a sleep trial, links eight sources, and publishes its revision date. Its HTML, structured data, social image, RSS record, sitemap entry, and [Markdown representation](https://sleepy.land/research/blue-light-scatter-and-visual-detail.md) come from the same typed article and image registries.
 
-Code, accessibility improvements, research corrections, source additions, reproducible analyses, and carefully scoped article proposals are welcome.
+Request the canonical page as Markdown:
 
-- Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
-- Use the [research correction template](https://github.com/hraness/sleepyland/issues/new?template=research_correction.yml) for an unsupported, outdated, or mischaracterized claim.
-- Use the [bug report template](https://github.com/hraness/sleepyland/issues/new?template=bug_report.yml) for a reproducible product problem.
-- Report vulnerabilities privately according to [SECURITY.md](SECURITY.md).
+```sh
+curl -H 'Accept: text/markdown' \
+  https://sleepy.land/research/blue-light-scatter-and-visual-detail
+```
 
-Sleepyland is educational software and publishing, not medical advice. Contributions must not diagnose, prescribe, provide individualized treatment, or promise health outcomes.
+## Working model
+
+1. **Name the question.** Each guide owns one practical reader decision instead of stretching a keyword into several thin pages.
+2. **Follow the evidence.** Material claims sit beside the studies, guidelines, labels, and public-health sources that support them.
+3. **Keep the limit.** Population, protocol, uncertainty, and the line between evidence and inference remain visible.
+
+## Interfaces
+
+| Surface | Reader job | Entry point |
+| --- | --- | --- |
+| Human | Read the short answer, evidence label, decision support, linked sources, revision date, and limits. | [sleepy.land](https://sleepy.land) |
+| Agent | Retrieve the same canonical record as Markdown and discover the bounded public corpus. | [`/llms.txt`](https://sleepy.land/llms.txt), [`/sitemap.md`](https://sleepy.land/sitemap.md), or `Accept: text/markdown` |
+| Listener | Start local browser-generated sound, then choose a mode or open Tune only when needed. | [sleepy.land/noise](https://sleepy.land/noise) |
+
+Sleepyland does not publish an API, OAuth flow, GraphQL endpoint, MCP server, developer portal, or uploaded-track library. Agents should cite the visible guide and preserve its evidence label and limits.
+
+## Evidence and generated surfaces
+
+`app/research/articles.ts` and its focused expansion modules own article titles, direct answers, evidence labels, sources, dates, topics, and related reading. `app/editorial-images.ts` owns literal alt text, visible captions, credits, dimensions, and content hashes for the registered WebP assets.
+
+Those registries generate or feed:
+
+- canonical HTML routes and `BlogPosting` or `CollectionPage` structured data;
+- Open Graph and Twitter metadata;
+- the research RSS feed and XML sitemap image records;
+- content-negotiated Markdown and `.md` siblings; and
+- the Markdown sitemap and `llms.txt` discovery guide.
+
+Substantive research changes must keep those surfaces aligned. Read [the editorial method](docs/editorial-method.md) before changing a claim or source.
+
+## Boundaries
+
+- **Evidence:** Sleepyland distinguishes direct findings, mechanism, inference, and experience. It does not claim clinician review that did not happen.
+- **Review:** Software can help collect and synthesize material, but published wording is checked against the linked source.
+- **Health:** Sleepyland does not diagnose, prescribe, provide individualized dosing, or promise an outcome.
+- **Sound:** The sound machine synthesizes brown, pink, and white noise, procedural ocean surf, slow spatial movement, and spectrum pulses with the Web Audio API. It uses no recorded audio, product account, microphone input, uploaded mix, or server-side sound generation.
+- **Privacy:** Settings remain on the device. Canonical production analytics are cookieless, omit session replay and person profiles, and admit only the checked categorical event schema.
+
+## Questions
+
+### Does the sound machine send audio or settings to a server?
+
+No audio is uploaded or generated on a server. Settings stay in browser-local storage. Bounded anonymous analytics can include categorical mode and session kind, but not tuning values, exact playback duration, or spectrum gestures.
+
+### How is software-assisted research checked?
+
+Software can help organize and compare sources. Before publication, material wording is checked against the linked source, and inference stays labeled as inference.
+
+### How do I challenge a claim?
+
+Use the [research correction template](https://github.com/hraness/sleepyland/issues/new?template=research_correction.yml) with the page, disputed wording, and a stronger source. The typed registry keeps the visible guide, metadata, feed, sitemap, and Markdown record together.
+
+## Smallest useful action
+
+Choose one question in the [research library](https://sleepy.land/#research-guides), or [open the sound machine](https://sleepy.land/noise) when steady sound is the immediate job.
 
 ## Development
 
@@ -29,25 +83,29 @@ bun install --frozen-lockfile
 bun run dev
 ```
 
-Run the complete gate before submitting a change:
+Run focused tests while editing. Run the complete gate before submitting a change:
 
 ```sh
 bun run check
 ```
 
-The gate validates tests, types, lint, and the production build. Focused tests can be run directly with `bun test <path>` while editing.
+The gate validates tests, types, lint, and the production build.
+
+## Contribute
+
+Code, accessibility improvements, research corrections, source additions, reproducible analyses, and carefully scoped article proposals are welcome.
+
+- Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
+- Use the [bug report template](https://github.com/hraness/sleepyland/issues/new?template=bug_report.yml) for a reproducible product problem.
+- Report vulnerabilities privately according to [SECURITY.md](SECURITY.md).
 
 ## Structure
 
-- `app/` contains the Next.js routes, Web Audio engine, spectrogram, research registry, metadata, and tests.
+- `app/` contains the routes, Web Audio engine, research registry, metadata, discovery surfaces, and colocated tests.
 - `lib/` contains product-owned UI and browser-storage helpers.
-- `styles/` contains the sound-machine and publication visual systems.
-- `public/` contains the public IndexNow proof and silent product demo.
-- `docs/editorial-method.md` explains how research claims and sources are reviewed.
-
-## Privacy
-
-Sound generation and settings remain on the device. The canonical production site uses bounded, cookieless PostHog analytics without session replay or person profiles. See the live [privacy page](https://sleepy.land/privacy) for the exact network and retention boundaries.
+- `styles/` contains the fixed-viewport sound-machine and serif publication systems.
+- `public/` contains the IndexNow proof, silent product demo, and registered editorial images.
+- `docs/editorial-method.md` defines how research claims and sources are reviewed.
 
 ## License
 

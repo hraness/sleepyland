@@ -14,10 +14,12 @@ export interface ResearchIndexTag {
 
 export interface ResearchIndexArticle {
   readonly dek: string;
+  readonly evidenceLabel: string;
   readonly image: EditorialImage<"research", ResearchSlug>;
   readonly publishedAt: string;
   readonly readingMinutes: number;
   readonly slug: ResearchSlug;
+  readonly sourceCount: number;
   readonly tags: readonly ResearchIndexTag[];
   readonly title: string;
 }
@@ -59,6 +61,11 @@ function ResearchIndexEntry({
           <Link href={`/research/${article.slug}`}>{article.title}</Link>
         </h3>
         <p>{article.dek}</p>
+        <p className="plain-publication__entry-evidence">
+          <span>{article.evidenceLabel}</span>
+          <span aria-hidden="true"> · </span>
+          <span>{article.sourceCount} linked sources</span>
+        </p>
         <div className="plain-publication__entry-meta">
           <span className="plain-publication__entry-details">
             <time dateTime={article.publishedAt}>
@@ -91,7 +98,7 @@ export function ResearchIndexList({
   return (
     <section aria-labelledby="research-guides" className="plain-publication__list">
       <div className="plain-publication__section-heading">
-        <h2 id="research-guides">Latest research</h2>
+        <h2 id="research-guides">Research library</h2>
         <p aria-atomic="true" aria-live="polite">
           {visibleArticles.length} {visibleArticles.length === 1 ? "article" : "articles"}
         </p>
