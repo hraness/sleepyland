@@ -247,6 +247,12 @@ describe("markdown negotiation", () => {
     if (agencyNote === undefined) throw new Error("Expected anger-anxiety-agency reading note.");
     expect(agency.body).toBe(productPageMarkdown(agencyNote));
     expect(agencySibling.body).toBe(agency.body);
+    const language = await negotiated("/reading/weird-is-a-weird-word", { accept: "text/markdown" });
+    const languageSibling = await negotiated("/reading/weird-is-a-weird-word.md");
+    const languageNote = READING_NOTES.find((note) => note.slug === "weird-is-a-weird-word");
+    if (languageNote === undefined) throw new Error("Expected weird-is-a-weird-word reading note.");
+    expect(language.body).toBe(productPageMarkdown(languageNote));
+    expect(languageSibling.body).toBe(language.body);
   });
 
   test("returns a markdown 404 with recovery links for unknown paths", async () => {
