@@ -13,7 +13,6 @@ import {
   websiteJsonLd,
 } from "./seo";
 import {
-  latestResearchUpdatedAt,
   researchArticlePath,
   researchArticlesNewestFirst,
 } from "./research/articles";
@@ -24,6 +23,7 @@ import {
   noiseTitle,
   publicationDescription,
   publicationTitle,
+  homepageUpdatedAt,
   repositoryUrl,
   site,
 } from "./site";
@@ -133,7 +133,7 @@ describe("Sleepyland search surface", () => {
     const entries = sitemap();
     expect(entries[0]).toEqual({
       url: "https://sleepy.land",
-      lastModified: new Date(latestResearchUpdatedAt()),
+      lastModified: new Date(homepageUpdatedAt),
       images: researchArticlesNewestFirst.map((article) =>
         `https://sleepy.land${researchEditorialImage(article.slug).src}`),
     });

@@ -23,6 +23,13 @@ import {
   researchArticleMarkdown,
   sitemapMarkdown,
 } from "./agent-access";
+import { researchEditorialImage } from "./editorial-images";
+import {
+  homepageAgentRequest,
+  homepageBoundaryItems,
+  homepageResult,
+  homepageWorkingModel,
+} from "./homepage-content";
 import { PRODUCT_PAGES } from "./product-pages";
 import { READING_NOTES } from "./reading-notes";
 import {
@@ -87,14 +94,39 @@ describe("Accept parsing", () => {
 
 describe("agent discovery documents", () => {
   test("keeps homepage copy above the no-JS character floor", () => {
+    const markdown = homepageMarkdown();
+    const featured = researchArticlesNewestFirst[0];
+
+    if (featured === undefined) {
+      throw new Error("Expected one featured research guide.");
+    }
+
     expect(homepageDocumentText().length).toBeGreaterThan(500);
     expect(homepageDocumentText()).toContain(site.description);
-    expect(homepageDocumentText()).toContain(
-      "answer-first, source-linked guides",
-    );
+    expect(homepageDocumentText()).toContain(homepageResult.summary);
+    expect(homepageDocumentText()).toContain(homepageAgentRequest);
     expect(homepageDocumentText()).not.toContain("There are no media files");
-    expect(homepageMarkdown()).toContain("## Sitemap");
-    expect(homepageMarkdown()).toContain("/sitemap.md");
+    expect(markdown).toContain("## First proof");
+    expect(markdown).toContain("## Working model");
+    expect(markdown).toContain("## Interfaces");
+    expect(markdown).toContain("## Evidence library");
+    expect(markdown).toContain("## Boundary");
+    expect(markdown).toContain("## Questions");
+    expect(markdown).toContain("## Smallest useful action");
+    expect(markdown).toContain(homepageAgentRequest);
+    expect(markdown).toContain(featured.evidenceLabel);
+    expect(markdown).toContain(
+      `https://sleepy.land${researchEditorialImage(featured.slug).src}`,
+    );
+    for (const step of homepageWorkingModel) {
+      expect(markdown).toContain(step.label);
+      expect(markdown).toContain(step.detail);
+    }
+    for (const item of homepageBoundaryItems) {
+      expect(markdown).toContain(item.detail);
+    }
+    expect(markdown).toContain("## Sitemap");
+    expect(markdown).toContain("/sitemap.md");
   });
 
   test("lists every public research guide from the article registry", () => {
@@ -102,6 +134,8 @@ describe("agent discovery documents", () => {
     const llms = llmsTxt();
 
     expect(llms).toContain("## When to use Sleepyland");
+    expect(llms).toContain("## Interfaces");
+    expect(llms).toContain(homepageAgentRequest);
     expect(llms).toContain("Do not use Sleepyland as a medical device");
     expect(llms).toContain("does not host an API");
     expect(llms).toContain("https://github.com/hraness/sleepyland");

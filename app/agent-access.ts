@@ -3,6 +3,14 @@ import {
   readingEditorialImage,
   researchEditorialImage,
 } from "./editorial-images";
+import {
+  homepageAgentRequest,
+  homepageBoundaryItems,
+  homepageInterfaces,
+  homepageQuestions,
+  homepageResult,
+  homepageWorkingModel,
+} from "./homepage-content";
 import { RESEARCH_FEED_PATH } from "./search-discovery";
 import {
   RESEARCH_SOURCES,
@@ -31,6 +39,7 @@ import {
 } from "./reading-notes";
 import {
   noiseDescription,
+  homepageUpdatedAt,
   repositoryUrl,
   researchContributionUrl,
   site,
@@ -43,9 +52,13 @@ export const PRODUCED_MEDIA_TYPES = ["text/html", "text/markdown"] as const;
 export const HOMEPAGE_HEADING = "Sleepyland Research";
 export const HOMEPAGE_DOCUMENT_PARAGRAPHS = [
   site.description,
-  "Sleepyland Research publishes answer-first, source-linked guides on insomnia, supplements, medications, circadian light, behavior, sound, and research limits. Direct findings, mechanisms, inference, and crowdsourced experience are labeled separately.",
+  homepageResult.summary,
+  ...homepageWorkingModel.map((step) => `${step.label}: ${step.detail}`),
+  ...homepageInterfaces.map((entry) => `${entry.label}: ${entry.summary}`),
+  `Agent request: ${homepageAgentRequest}`,
+  ...homepageBoundaryItems.map((item) => `${item.label}: ${item.detail}`),
+  ...homepageQuestions.map((item) => `${item.question} ${item.answer}`),
   "Sleepyland is open source under the MIT License. Code, research corrections, stronger sources, and carefully scoped article proposals are welcome at https://github.com/hraness/sleepyland.",
-  "The publication is educational, not medical advice. Persistent insomnia, breathing symptoms, unusual daytime sleepiness, medication questions, or substance dependence deserves qualified care.",
 ] as const;
 
 export const NOISE_HEADING = "Sleepyland sound machine";
@@ -423,26 +436,91 @@ function withFrontmatter(
 }
 
 export function homepageMarkdown(): string {
+  const featuredArticle = researchArticlesNewestFirst[0];
+  const featuredImage = featuredArticle === undefined
+    ? undefined
+    : researchEditorialImage(featuredArticle.slug);
+
   return withFrontmatter({
     canonicalPath: "/",
     description: site.description,
-    lastUpdated: researchArticlesNewestFirst[0]?.updatedAt ?? site.updatedAt,
+    lastUpdated: homepageUpdatedAt,
     title: HOMEPAGE_HEADING,
   }, [
-    "# Sleep research, without the wellness myths",
+    `# ${homepageResult.heading}`,
     "",
-    ...HOMEPAGE_DOCUMENT_PARAGRAPHS.flatMap((paragraph) => [paragraph, ""]),
-    "## Guides",
+    homepageResult.summary,
+    "",
+    homepageResult.boundary,
+    "",
+    "## First proof",
+    "",
+    ...(featuredArticle === undefined || featuredImage === undefined ? [
+      "Choose a guide from the evidence library below.",
+      "",
+    ] : [
+      `### [${featuredArticle.title}](${absoluteUrl(`${researchArticlePath(featuredArticle.slug)}.md`)})`,
+      "",
+      featuredArticle.dek,
+      "",
+      `Evidence: ${featuredArticle.evidenceLabel}. Receipts: ${featuredArticle.sourceIds.length} linked sources. Revised: ${featuredArticle.updatedAt}.`,
+      "",
+      `![${featuredImage.alt}](${absoluteUrl(featuredImage.src)})`,
+      "",
+      `*${featuredImage.caption} ${featuredImage.credit}.*`,
+      "",
+    ]),
+    "## Working model",
+    "",
+    ...homepageWorkingModel.flatMap((step, index) => [
+      `${index + 1}. **${step.label}.** ${step.detail}`,
+    ]),
+    "",
+    "## Interfaces",
+    "",
+    ...homepageInterfaces.flatMap((entry) => [
+      `- **${entry.label}.** ${entry.summary}`,
+    ]),
+    "",
+    "```sh",
+    homepageAgentRequest,
+    "```",
+    "",
+    `- [Markdown sitemap](${absoluteUrl("/sitemap.md")})`,
+    `- [llms.txt](${absoluteUrl("/llms.txt")})`,
+    `- [Research RSS feed](${absoluteUrl(RESEARCH_FEED_PATH)})`,
+    "",
+    "## Evidence library",
     "",
     ...researchArticlesNewestFirst.flatMap((article) => [
-      `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}) — ${article.dek}`,
+      `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.evidenceLabel}. ${article.sourceIds.length} linked sources.`,
     ]),
     "",
     "## Editorial method",
     "",
-    "We prioritize systematic reviews, controlled human studies, public-health guidance, and primary sources. Crowdsourced reports can expose questions and failure modes, but they remain anecdotes. Every material claim links to its source, inference is labeled, and software-assisted synthesis is checked against the linked source before publication.",
+    "Sleepyland prioritizes systematic reviews, controlled human studies, public-health guidance, official labels, and primary sources. Crowdsourced reports can expose questions and failure modes, but they remain anecdotes. Every material claim links to its source, inference is labeled, and software-assisted synthesis is checked against the linked source before publication.",
     "",
-    `- [Research feed](${absoluteUrl(RESEARCH_FEED_PATH)})`,
+    `Sleepyland is [open source on GitHub](${repositoryUrl}) under the MIT License. [Research corrections are welcome](${researchContributionUrl}).`,
+    "",
+    "## Boundary",
+    "",
+    ...homepageBoundaryItems.flatMap((item) => [
+      `- **${item.label}.** ${item.detail}`,
+    ]),
+    "",
+    "## Questions",
+    "",
+    ...homepageQuestions.flatMap((item) => [
+      `### ${item.question}`,
+      "",
+      item.answer,
+      "",
+    ]),
+    "## Smallest useful action",
+    "",
+    "Start with the question keeping you awake.",
+    "",
+    `- [Choose a guide](${absoluteUrl("/index.md")}#research-guides)`,
     `- [Open the sound machine](${absoluteUrl("/noise.md")})`,
     "",
     "## Product records",
@@ -485,32 +563,7 @@ export function readingIndexMarkdown(): string {
 }
 
 export function researchIndexMarkdown(): string {
-  return withFrontmatter({
-    canonicalPath: "/",
-    description: researchDescription,
-    lastUpdated: researchArticlesNewestFirst[0]?.updatedAt ?? site.updatedAt,
-    title: "Sleepyland Research",
-  }, [
-    "# Sleep research, without the wellness myths",
-    "",
-    researchDescription,
-    "",
-    "Sleepyland Research is the editorial desk behind the Sleepyland sound generator. It does not impersonate a clinician or claim medical review that did not happen. The publication is educational, not medical advice.",
-    "",
-    "## Guides",
-    "",
-    ...researchArticlesNewestFirst.flatMap((article) => [
-      `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}) — ${article.dek}`,
-    ]),
-    "",
-    "## Editorial method",
-    "",
-    "We prioritize systematic reviews, controlled human studies, public-health guidance, and primary acoustic sources. Every material claim links to its source, inference is labeled as inference, and software-assisted synthesis is checked against the linked source before publication.",
-    "",
-    `Sleepyland is [open source on GitHub](${repositoryUrl}) under the MIT License. [Research contributions are welcome](${researchContributionUrl}).`,
-    "",
-    `- [Open the sound machine](${absoluteUrl("/noise.md")})`,
-  ].join("\n"));
+  return homepageMarkdown();
 }
 
 export function noiseMarkdown(): string {
@@ -635,6 +688,14 @@ export function llmsTxt(): string {
     "Use a Sleepyland reading note when a person wants the site’s take on rest as a practiced state that keeps unfashionable ideas alive, on when a rest environment becomes a habit, or on rest as a place where anxiety can become curiosity. Quote the visible note, keep it distinct from the About product record and from Sleepyland Research, and do not present it as medical advice.",
     "",
     "Do not use Sleepyland as a medical device, sleep-treatment service, account-based app, audio API, or uploaded-track library. Do not send tuning values, exact playback duration, or spectrum gestures to analytics. Do not invent developer resources that this site does not publish.",
+    "",
+    "## Interfaces",
+    "",
+    "Human readers use the canonical HTML pages. Agents can request the same canonical page with Accept: text/markdown or fetch its .md sibling. Preserve the guide title, evidence label, sources, revision date, and limits when quoting or summarizing it.",
+    "",
+    "```sh",
+    homepageAgentRequest,
+    "```",
     "",
     "## Sound machine",
     "",

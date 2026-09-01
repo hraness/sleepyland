@@ -5,13 +5,12 @@ import {
   researchEditorialImage,
 } from "./editorial-images";
 import {
-  latestResearchUpdatedAt,
   researchArticlePath,
   researchArticlesNewestFirst,
 } from "./research/articles";
 import { PRODUCT_PAGES } from "./product-pages";
 import { READING_NOTES } from "./reading-notes";
-import { site } from "./site";
+import { homepageUpdatedAt, site } from "./site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const latestReadingUpdate = READING_NOTES.reduce<string>(
@@ -22,7 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: site.canonicalUrl,
-      lastModified: new Date(latestResearchUpdatedAt()),
+      lastModified: new Date(homepageUpdatedAt),
       images: researchArticlesNewestFirst.map((article) =>
         `${site.canonicalUrl}${researchEditorialImage(article.slug).src}`),
     },
