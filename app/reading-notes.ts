@@ -7,12 +7,13 @@ export const READING_NOTE_SLUGS = [
   "good-ideas",
   "habit-and-rest",
   "anger-anxiety-agency",
+  "weird-is-a-weird-word",
 ] as const;
 
 export type ReadingNoteSlug = (typeof READING_NOTE_SLUGS)[number];
 
 export const READING_DESCRIPTION =
-  "Reading notes on rest, attention, habit, anxiety, curiosity, and the limited role of a quiet listening environment.";
+  "Reading notes on rest, attention, habit, anxiety, curiosity, language, and the limited role of a quiet listening environment.";
 
 export type ReadingNoteDefinition = Readonly<{
   description: string;
@@ -39,7 +40,7 @@ export const READING_NOTES = [
     description:
       "Henrik and Johanna Karlsson describe solitude as a practiced state of mind that protects fragile, unfashionable ideas. Sleepyland is a browser sound machine; rest can hold that practice. It is not a habit loop and not a treatment.",
     publishedAt: "2026-08-26",
-    updatedAt: "2026-08-31",
+    updatedAt: "2026-09-01",
     intro: [
       "Henrik and Johanna Karlsson write that unusually good ideas begin as fragile thoughts, and that those thoughts need a cultivated state of mind rather than a room of peers. Sleepyland does not write the idea. It is a free browser sound machine that can hold a listening state while you rest or work. The claim on this page is narrower: rest and solitude are a practiced state that can keep an unfashionable idea alive. They are not treatments, and they do not guarantee insight.",
     ],
@@ -110,6 +111,14 @@ export const READING_NOTES = [
             ". That later page starts from Armin Ronacher. This page starts from a different essay and a different failure: an unfashionable idea that dies because it sounded foolish too early. Rest can be the practiced state in which that idea stays.",
           ],
           [
+            "It is also a different job from ",
+            link(
+              "the reading take on rest as practiced attention to language",
+              "/reading/weird-is-a-weird-word",
+            ),
+            ". That later page starts from Colin Gorrie’s essay on English weird. Following a word backward is a sibling practice: another stretch of attention that a fashionable or casual meaning can close too soon. This page still asks what rest can hold for an unfashionable idea, not for an older word.",
+          ],
+          [
             "Sleepyland’s job, if it has one here, is modest. Sleep, Relax, and Focus are listening contexts. They generate local brown, pink, or white noise with procedural waves so a stretch of rest or work can continue in a room that would otherwise keep interrupting. Energy changes movement, not volume. Settings stay on this device. The generator does not produce ideas, score creativity, or promise that a session will yield a question worth keeping.",
           ],
         ],
@@ -139,7 +148,7 @@ export const READING_NOTES = [
         heading: "What this page does not claim",
         paragraphs: [
           [
-            "Sleepyland is not a medical device. This page is not medical advice. It does not diagnose insomnia, attention problems, or any other condition. It does not recommend supplements or treatment. Sleep, Relax, and Focus name intended listening contexts, not guaranteed outcomes. A practiced stretch of rest can hold solitude. It does not produce ideas, start a habit, or convert anxiety. Silence remains a complete option when the room is already usable.",
+            "Sleepyland is not a medical device. This page is not medical advice. It does not diagnose insomnia, attention problems, or any other condition. It does not recommend supplements or treatment. Sleep, Relax, and Focus name intended listening contexts, not guaranteed outcomes. A practiced stretch of rest can hold solitude. It does not produce ideas, start a habit, convert anxiety, or recover an older meaning. Silence remains a complete option when the room is already usable.",
           ],
         ],
       },
@@ -178,6 +187,13 @@ export const READING_NOTES = [
             link(
               "Sleepyland reading take on rest as a place where anxiety can become curiosity",
               "/reading/anger-anxiety-agency",
+            ),
+            ".",
+          ],
+          [
+            link(
+              "Sleepyland reading take on rest as practiced attention to language",
+              "/reading/weird-is-a-weird-word",
             ),
             ".",
           ],
@@ -451,6 +467,163 @@ export const READING_NOTES = [
             link(
               "Hraness Reading digest of the same essay",
               "https://hraness.com/reading/anger-anxiety-and-agency",
+            ),
+            ".",
+          ],
+          [
+            link("What Sleepyland is", "/about"),
+            ".",
+          ],
+        ],
+      },
+    ],
+  },
+  {
+    slug: "weird-is-a-weird-word",
+    path: "/reading/weird-is-a-weird-word",
+    heading: "Rest is a practiced state that can follow a word backward",
+    title: "Rest is a practiced state that can follow a word backward | Sleepyland",
+    description:
+      "Colin Gorrie traces English weird from Old English fate to everyday oddness. Sleepyland is a browser sound machine; following a word backward is a practiced state of attention, sibling to solitude. It is not a habit loop and not a treatment.",
+    publishedAt: "2026-09-01",
+    updatedAt: "2026-09-01",
+    intro: [
+      "Colin Gorrie writes that English weird once named fate, nearly vanished after French and Latin loanwords arrived, then returned through a chain of literary accidents until it meant odd. Sleepyland is a free browser sound machine for sleep, relaxation, and focus. The claim on this page is narrower: following a word backward is a practiced state of attention, sibling to the solitude that keeps an unfashionable idea alive. Rest can hold that attention. It is not a habit, and it does not treat anxiety.",
+    ],
+    sections: [
+      {
+        heading: "What Gorrie describes",
+        paragraphs: [
+          [
+            "In ",
+            link(
+              "“Weird” is a weird word",
+              "https://www.deadlanguagesociety.com/p/weird-is-a-weird-word",
+            ),
+            " (Dead Language Society, 8 July 2026), Gorrie starts from a casual modern use. People say weird for a coincidence, a fridge smell, or an odd colleague. A thousand years earlier, Old English wyrd named fate. It appears at the bleakest turns of Beowulf and The Wanderer: fate always goes as it must; fate is inexorable. The word comes from the same root as weorþan, “to happen” or “become.” So wyrd is that which happens. Poets praised the person who could face it without flinching.",
+          ],
+          [
+            "After 1066, French fortune and destiny, then Latin fate, made the native word superfluous in the south. It survived in Scots, spelled weird. That Scots spelling is why the English word looks irregular beside weed, field, and beard.",
+          ],
+          [
+            "Scots writers used weird sisters for the classical Fates. Raphael Holinshed’s Chronicles applied the phrase to the three women in the Macbeth story and glossed them as goddesses of destiny. When Shakespeare took the scene into Macbeth, he kept weird sisters and left out the explanation. The First Folio often set weyward, a compositor’s likelier English word. Lewis Theobald later restored weird from Holinshed. For a long time, most English readers met the word only in that play, without a gloss. Romantic writers filled the blank with “eerie” or “uncanny.” Dickens used it for “odd.” The Oxford English Dictionary later records a sharp rise in the adjective’s frequency. Gorrie is not writing a sleep protocol. He is tracing how a heavy word became casual, and how a few literary choices kept it alive at all.",
+          ],
+        ],
+      },
+      {
+        heading: "What Hraness recorded",
+        paragraphs: [
+          [
+            link("Hraness", "https://hraness.com"),
+            " published a ",
+            link(
+              "reading note on the same essay",
+              "https://hraness.com/reading/weird-is-a-weird-word",
+            ),
+            ". That note compresses the argument into a gist and five ideas about fate, loanwords, Scots spelling, the literary chain, and semantic drift.",
+          ],
+          [
+            "This Sleepyland page is a different document. It is not that Reading digest. It starts from Gorrie’s history and from ",
+            link("what Sleepyland is", "/about"),
+            ", then asks what rest has to do with practicing the attention a word’s older meaning needs.",
+          ],
+        ],
+      },
+      {
+        heading: "Rest as practiced attention to language",
+        paragraphs: [
+          [
+            "Gorrie’s useful object is not a trivia fact. It is the stretch of attention in which a casual word can be followed back to a heavier one. Opening a dictionary is not enough if the current meaning closes the question. The practiced state is lingering after “odd” until fate, Scots survival, and an unexplained Shakespearean phrase can still be noticed.",
+          ],
+          [
+            "That lingering is a sibling of the solitude Henrik and Johanna Karlsson describe. Their essay, and the Sleepyland ",
+            link(
+              "reading take on rest as a practiced state that keeps unfashionable ideas alive",
+              "/reading/good-ideas",
+            ),
+            ", ask how a fragile thought survives a fashionable room. This page asks how an older meaning survives a casual one. Both are practiced attention. They are not the same filter.",
+          ],
+          [
+            "This is a different job from ",
+            link(
+              "the reading take on habit and rest",
+              "/reading/habit-and-rest",
+            ),
+            ". That page starts from James Somers’s excerpts of William James: a rest environment is not a habit until the first small act starts. Following a word backward is not that loop. Starting playback does not recover wyrd.",
+          ],
+          [
+            "It is also a different job from ",
+            link(
+              "the reading take on rest as a place where anxiety can become curiosity",
+              "/reading/anger-anxiety-agency",
+            ),
+            ". That page starts from Armin Ronacher. This page does not ask how anxiety becomes curiosity, and it does not need a villain. It asks whether rest can hold the quieter work of following a word.",
+          ],
+          [
+            "A night of broken sleep or a room that keeps capturing attention leaves no interval in which a casual meaning can recede. Rest can hold that interval. That sentence is an inference from ordinary working life and from what the product does. It is not a trial result, and it does not diagnose an attention disorder.",
+          ],
+          [
+            "Sleepyland’s job, if it has one here, is modest. Sleep, Relax, and Focus are listening contexts. They generate local brown, pink, or white noise with procedural waves so a stretch of rest or work can continue in a room that would otherwise keep interrupting. Energy changes movement, not volume. Settings stay on this device. The generator does not teach etymology, score curiosity, or promise that a session will recover an older meaning.",
+          ],
+        ],
+      },
+      {
+        heading: "What Sleepyland actually does",
+        paragraphs: [
+          [
+            "The ",
+            link("about page", "/about"),
+            " records the product facts. Sleepyland is a free browser sound machine. It uses no recorded files, product accounts, or server-side audio. The ",
+            link("interactive machine", "/noise"),
+            " is the product.",
+          ],
+          [
+            "This page is not that record. It is a reading take. If you want the machine, open ",
+            link("the Sleepyland sound machine", "/noise"),
+            ". If you want the publisher, ",
+            link("Hraness", "https://hraness.com"),
+            " lists the project among its public work. If you want sourced comparisons of noise, music, and silence for attention tasks, that evidence lives in ",
+            link("Sleepyland Research", "/research/sound-for-focus-noise-music-silence"),
+            ".",
+          ],
+        ],
+      },
+      {
+        heading: "What this page does not claim",
+        paragraphs: [
+          [
+            "Sleepyland is not a medical device. This page is not medical advice. It does not diagnose insomnia, attention problems, or any other condition. It does not recommend supplements or treatment. Sleep, Relax, and Focus name intended listening contexts, not guaranteed outcomes. A practiced stretch of rest can hold attention to language. It does not produce etymology, start a habit, or convert anxiety. Silence remains a complete option when the room is already usable.",
+          ],
+        ],
+      },
+      {
+        heading: "Sources",
+        items: [
+          [
+            link(
+              "Colin Gorrie, “Weird” is a weird word, Dead Language Society, 8 July 2026",
+              "https://www.deadlanguagesociety.com/p/weird-is-a-weird-word",
+            ),
+            ".",
+          ],
+          [
+            link(
+              "Hraness reading note on the same essay",
+              "https://hraness.com/reading/weird-is-a-weird-word",
+            ),
+            ".",
+          ],
+          [
+            link(
+              "Sleepyland reading take on rest as a practiced state that keeps unfashionable ideas alive",
+              "/reading/good-ideas",
+            ),
+            ".",
+          ],
+          [
+            link(
+              "Sleepyland reading take on habit and rest",
+              "/reading/habit-and-rest",
             ),
             ".",
           ],

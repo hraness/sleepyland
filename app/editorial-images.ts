@@ -269,6 +269,13 @@ export const READING_EDITORIAL_IMAGES = {
     "The movement from tension toward open paths is a reading metaphor, not a treatment claim.",
     "440bae17e00624215fa647ce648ff290a01c1b526fbb45cc2cd368587c71b888",
   ),
+  "weird-is-a-weird-word": image(
+    "reading",
+    "weird-is-a-weird-word",
+    "A thin copper thread climbing stacked nocturnal strata toward a distant ember.",
+    "One mark recedes through older layers; the image does not claim that rest teaches etymology.",
+    "79ca399421b8d9ddf5a59d4e6e5ba3562c79730f5c2151894e896693a0d7fdca",
+  ),
 } as const satisfies EditorialImageRecord<"reading", ReadingNoteSlug>;
 
 export function researchEditorialImage(

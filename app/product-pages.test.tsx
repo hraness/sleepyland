@@ -81,6 +81,7 @@ describe("Sleepyland public product records", () => {
     expect(markup).toContain('href="/reading/good-ideas"');
     expect(markup).toContain('href="/reading/habit-and-rest"');
     expect(markup).toContain('href="/reading/anger-anxiety-agency"');
+    expect(markup).toContain('href="/reading/weird-is-a-weird-word"');
     expect(markup).toContain('href="https://github.com/hraness/sleepyland"');
     expect(markup).toContain("research contributions are welcome");
     expect(markup).not.toMatch(/(?:cure|treat insomnia|clinically proven|guaranteed sleep)/iu);
