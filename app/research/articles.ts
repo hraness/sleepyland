@@ -3785,6 +3785,18 @@ export function isIndexableResearchArticle(article: ResearchArticle): boolean {
   );
 }
 
+export function relatedResearchArticles(
+  article: ResearchArticle,
+): readonly ResearchArticle[] {
+  const sourceIsIndexable = isIndexableResearchArticle(article);
+
+  return article.relatedSlugs
+    .map(getResearchArticle)
+    .filter((candidate) => candidate !== undefined)
+    .filter((candidate) =>
+      !sourceIsIndexable || isIndexableResearchArticle(candidate));
+}
+
 export function headingId(text: string): string {
   return text
     .toLowerCase()

@@ -3,6 +3,7 @@ import { INDEXABLE_ROBOTS, NOINDEX_ROBOTS } from "@hraness/web-discovery";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
+import { researchArticleMarkdown } from "../agent-access";
 import { researchEditorialImage } from "../editorial-images";
 import { RESEARCH_FEED_PATH } from "../search-discovery";
 import { serializeJsonLd } from "../seo";
@@ -28,6 +29,7 @@ import {
   researchArticlePath,
   researchArticles,
   researchArticlesNewestFirst,
+  relatedResearchArticles,
   type ResearchSlug,
 } from "./articles";
 import {
@@ -305,6 +307,41 @@ describe("Sleepyland Research content", () => {
     expect(getResearchArticle("ghb-sodium-oxybate-and-sleep")).toBeUndefined();
     expect(getResearchArticle("kratom-after-no-sleep")).toBeUndefined();
     expect(getResearchArticle("blue-light-scatter-and-visual-detail")).toBeUndefined();
+  });
+
+  test("keeps quarantined medication guides out of indexable related discovery", async () => {
+    const quarantined = researchArticles.filter(
+      (article) => !isIndexableResearchArticle(article),
+    );
+    const indexable = researchArticles.filter(isIndexableResearchArticle);
+
+    expect(quarantined.map((article) => article.slug)).toEqual([
+      "benadryl-diphenhydramine-for-sleep",
+      "z-drugs-zaleplon-zolpidem-eszopiclone",
+    ]);
+
+    for (const article of indexable) {
+      const related = relatedResearchArticles(article);
+      expect(related.every(isIndexableResearchArticle)).toBeTrue();
+
+      const page = await ResearchArticlePage({
+        params: Promise.resolve({ slug: article.slug }),
+      });
+      const html = renderToStaticMarkup(page);
+      const markdown = researchArticleMarkdown(article);
+
+      for (const relatedArticle of related) {
+        const path = researchArticlePath(relatedArticle.slug);
+        expect(html).toContain(`href="${path}"`);
+        expect(markdown).toContain(`${path}.md`);
+      }
+
+      for (const quarantinedArticle of quarantined) {
+        const path = researchArticlePath(quarantinedArticle.slug);
+        expect(html).not.toContain(`href="${path}"`);
+        expect(markdown).not.toContain(`${path}.md`);
+      }
+    }
   });
 
   test("renders semantic long-form blocks and crawlable source links", () => {

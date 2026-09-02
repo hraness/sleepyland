@@ -14,6 +14,7 @@ import {
   getResearchArticle,
   homepageResearchArticles,
   isIndexableResearchArticle,
+  relatedResearchArticles,
   researchArticlePath,
   researchArticlesNewestFirst,
   researchTagLabel,
@@ -550,9 +551,7 @@ export function researchArticleMarkdown(article: ResearchArticle): string {
   const path = researchArticlePath(article.slug);
   const editorialImage = researchEditorialImage(article.slug);
   const sources = article.sourceIds.map((sourceId) => RESEARCH_SOURCES[sourceId]);
-  const related = article.relatedSlugs
-    .map(getResearchArticle)
-    .filter((candidate) => candidate !== undefined);
+  const related = relatedResearchArticles(article);
 
   return withFrontmatter({
     canonicalPath: path,

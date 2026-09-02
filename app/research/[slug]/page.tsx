@@ -14,6 +14,7 @@ import {
   headingId,
   researchArticlePath,
   researchArticles,
+  relatedResearchArticles,
   researchTagLabel,
 } from "../articles";
 import {
@@ -62,9 +63,7 @@ export default async function ResearchArticlePage({
     notFound();
   }
 
-  const relatedArticles = article.relatedSlugs
-    .map(getResearchArticle)
-    .filter((candidate) => candidate !== undefined);
+  const relatedArticles = relatedResearchArticles(article);
   const headings = article.body.flatMap((block) =>
     block.type === "heading" && block.level === 2
       ? [{ text: block.text }]
