@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { readdir } from "node:fs/promises";
 
 import {
   EDITORIAL_IMAGE_HEIGHT,
@@ -6,7 +7,11 @@ import {
   RESEARCH_EDITORIAL_IMAGES,
   editorialImages,
 } from "./editorial-images";
-import { RESEARCH_SLUGS } from "./research/articles";
+import {
+  discoverableResearchArticles,
+  RESEARCH_SLUGS,
+  researchArticles,
+} from "./research/articles";
 
 function lossyWebpDimensions(bytes: Uint8Array): Readonly<{
   height: number;
@@ -55,6 +60,28 @@ describe("Sleepyland editorial image registry", () => {
     expect(new Set(editorialImages.map((image) => image.sha256)).size).toBe(
       editorialImages.length,
     );
+
+    const discoverableSlugs = new Set(
+      discoverableResearchArticles(researchArticles).map(
+        (article) => article.slug,
+      ),
+    );
+    for (const image of editorialImages) {
+      expect(discoverableSlugs.has(image.slug)).toBe(true);
+    }
+  });
+
+  test("ships no public research images outside the admitted registry", async () => {
+    const publicImageDirectory = new URL(
+      "../public/editorial/research/",
+      import.meta.url,
+    );
+    const publicImageFiles = (await readdir(publicImageDirectory)).toSorted();
+    const registeredImageFiles = editorialImages
+      .map((image) => image.src.slice(image.src.lastIndexOf("/") + 1))
+      .toSorted();
+
+    expect(publicImageFiles).toEqual(registeredImageFiles);
   });
 
   test("pins compact, exact 1536 by 864 WebP assets to their content hashes", async () => {

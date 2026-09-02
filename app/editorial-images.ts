@@ -48,47 +48,12 @@ function image<Kind extends EditorialImageKind, Slug extends string>(
 }
 
 export const RESEARCH_EDITORIAL_IMAGES = {
-  "best-magnesium-for-sleep": image(
-    "research",
-    "best-magnesium-for-sleep",
-    "Four pale mineral forms with different textures dissolve and reflect across a dark nocturnal surface.",
-    "Different magnesium forms vary in solubility and tolerance; the illustration gives none a proven sleep advantage.",
-    "588f6d7744dc1972e530c5f89f5750a1970155503d9a31a5c12958c7591b5344",
-  ),
-  "l-theanine-valerian-california-poppy-for-sleep": image(
-    "research",
-    "l-theanine-valerian-california-poppy-for-sleep",
-    "Three distinct botanical forms—a curled bundle, knotted root, and pale bloom—rest in separate shallow vessels.",
-    "Three traditions sit on different evidence levels; no ingredient or preparation is shown as the winner.",
-    "a2df520f43f8784376bdc55ae68fc5cabeab5d7b4c92c5c4f712d0b996a5632d",
-  ),
-  "kava-for-sleep": image(
-    "research",
-    "kava-for-sleep",
-    "A rough wooden bowl of pale roots sits inside a dark circle beside folded cloth and an opaque black form.",
-    "The shared bowl evokes kava's communal context, while the separated dark form marks unresolved product and safety uncertainty.",
-    "a5c36a95a0739839e5ff7c8a71cb6b5f759856745121a2dcfb15f75b95761755",
-  ),
-  "benadryl-diphenhydramine-for-sleep": image(
-    "research",
-    "benadryl-diphenhydramine-for-sleep",
-    "Repeated rust-colored folds thin as they cross from a black night field into a pale dawn opening.",
-    "Sedation can fade with rapid tolerance while residual next-morning impairment extends past the night.",
-    "01ade68f95ed7e5110b241981efc6d448fe923e84088783a82bf55215c2518d0",
-  ),
   "screens-blue-light-glasses-and-sleep": image(
     "research",
     "screens-blue-light-glasses-and-sleep",
     "A blank cool screen glows through a translucent amber panel beside a closed book and small warm light.",
     "Evening screens combine light, attention, and time; filtering one part does not prove better sleep.",
     "12b687d27f40ebe8afa9d0906505cdf4657add60f9e81dfaae916c5cb0be2da5",
-  ),
-  "z-drugs-zaleplon-zolpidem-eszopiclone": image(
-    "research",
-    "z-drugs-zaleplon-zolpidem-eszopiclone",
-    "Three pale copper currents rise to different heights from the same dark nocturnal threshold.",
-    "Different exposure windows fit different insomnia patterns; this conceptual illustration is not a dosing chart.",
-    "66634ab5f57512e08c82959d42e56b0d5b3c808df3788e8395c9ce9b0962725e",
   ),
   "how-to-quiet-a-racing-mind-at-night": image(
     "research",
@@ -201,13 +166,6 @@ export const RESEARCH_EDITORIAL_IMAGES = {
     "A restrained dawn band shifting layered nocturnal arcs toward warm light.",
     "Morning light changes timing in context; the image deliberately avoids a minutes prescription.",
     "34ee4e57859f074b936fe8407d95d9dc000125f4575fbe316cc22340183d50ce",
-  ),
-  "does-grounding-help-sleep": image(
-    "research",
-    "does-grounding-help-sleep",
-    "A floating conductive form making uneven contact with layered earth lines.",
-    "Some copper paths connect and others remain unresolved, reflecting the small and uncertain evidence base.",
-    "f519ba057577991f9662252bdeed34b8eff97a58f6d40c36f0b663ee5b7af01c",
   ),
 } as const satisfies EditorialImageRecord<"research", ResearchSlug>;
 
