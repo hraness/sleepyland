@@ -1,8 +1,5 @@
 import { applicationFeatures, absoluteUrl } from "./seo";
-import {
-  readingEditorialImage,
-  researchEditorialImage,
-} from "./editorial-images";
+import { researchEditorialImage } from "./editorial-images";
 import {
   homepageAgentRequest,
   homepageBoundaryItems,
@@ -15,6 +12,7 @@ import { RESEARCH_FEED_PATH } from "./search-discovery";
 import {
   RESEARCH_SOURCES,
   getResearchArticle,
+  homepageResearchArticles,
   researchArticlePath,
   researchArticlesNewestFirst,
   researchTagLabel,
@@ -31,12 +29,6 @@ import {
   type ProductPageInline,
   type ProductPageSection,
 } from "./product-pages";
-import {
-  READING_DESCRIPTION,
-  READING_NOTES,
-  isReadingNotePath,
-  type ReadingNoteDefinition,
-} from "./reading-notes";
 import {
   noiseDescription,
   homepageUpdatedAt,
@@ -106,7 +98,7 @@ export function homepageDocumentText(): string {
     ...HOMEPAGE_DOCUMENT_PARAGRAPHS,
     researchDescription,
     "Guides",
-    ...researchArticlesNewestFirst.map((article) => article.title),
+    ...homepageResearchArticles().map((article) => article.title),
   ].join("\n");
 }
 
@@ -282,10 +274,8 @@ export function isKnownContentPath(pathname: string): boolean {
     pathname === "/"
     || pathname === "/noise"
     || pathname === "/research"
-    || pathname === "/reading"
     || pathname === "/design"
     || isProductPagePath(pathname)
-    || isReadingNotePath(pathname)
   ) {
     return true;
   }
@@ -312,13 +302,8 @@ export type DocumentPageMarkdownSource = Readonly<{
 }>;
 
 export function productPageMarkdown(
-  page: ProductPageDefinition | ReadingNoteDefinition | DocumentPageMarkdownSource,
+  page: ProductPageDefinition | DocumentPageMarkdownSource,
 ): string {
-  const readingNote = READING_NOTES.find((note) => note.path === page.path);
-  const editorialImage = readingNote === undefined
-    ? undefined
-    : readingEditorialImage(readingNote.slug);
-
   return withFrontmatter({
     canonicalPath: page.path,
     description: page.description,
@@ -329,12 +314,6 @@ export function productPageMarkdown(
     "",
     renderProductPageInline(page.intro),
     "",
-    ...(editorialImage === undefined ? [] : [
-      `![${editorialImage.alt}](${absoluteUrl(editorialImage.src)})`,
-      "",
-      `*${editorialImage.caption} ${editorialImage.credit}.*`,
-      "",
-    ]),
     ...page.sections.flatMap((section) => [
       `## ${section.heading}`,
       "",
@@ -436,7 +415,7 @@ function withFrontmatter(
 }
 
 export function homepageMarkdown(): string {
-  const featuredArticle = researchArticlesNewestFirst[0];
+  const featuredArticle = getResearchArticle("noise-and-sleep-2026");
   const featuredImage = featuredArticle === undefined
     ? undefined
     : researchEditorialImage(featuredArticle.slug);
@@ -492,7 +471,7 @@ export function homepageMarkdown(): string {
     "",
     "## Evidence library",
     "",
-    ...researchArticlesNewestFirst.flatMap((article) => [
+    ...homepageResearchArticles().flatMap((article) => [
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.evidenceLabel}. ${article.sourceIds.length} linked sources.`,
     ]),
     "",
@@ -527,43 +506,23 @@ export function homepageMarkdown(): string {
     "",
     ...PRODUCT_PAGES.map((page) =>
       `- [${page.heading}](${absoluteUrl(`${page.path}.md`)}): ${page.description}`),
-    "",
-    "## Reading",
-    "",
-    READING_DESCRIPTION,
-    "",
-    `- [Sleepyland Reading](${absoluteUrl("/reading.md")})`,
-    ...READING_NOTES.map((note) =>
-      `- [${note.heading}](${absoluteUrl(`${note.path}.md`)}): ${note.description}`),
-  ].join("\n"));
-}
-
-export function readingIndexMarkdown(): string {
-  const latestUpdate = READING_NOTES.reduce<string>(
-    (latest, note) => note.updatedAt > latest ? note.updatedAt : latest,
-    READING_NOTES[0]?.updatedAt ?? site.updatedAt,
-  );
-
-  return withFrontmatter({
-    canonicalPath: "/reading",
-    description: READING_DESCRIPTION,
-    lastUpdated: latestUpdate,
-    title: "Sleepyland Reading",
-  }, [
-    "# Rest, attention, and the ideas around them",
-    "",
-    READING_DESCRIPTION,
-    "",
-    ...READING_NOTES.toReversed().map((note) =>
-      `- [${note.heading}](${absoluteUrl(`${note.path}.md`)}) — ${note.description}`),
-    "",
-    `- [Open the sound machine](${absoluteUrl("/noise.md")})`,
-    `- [Browse Sleepyland Research](${absoluteUrl("/index.md")})`,
   ].join("\n"));
 }
 
 export function researchIndexMarkdown(): string {
-  return homepageMarkdown();
+  return withFrontmatter({
+    canonicalPath: "/research",
+    description: researchDescription,
+    lastUpdated: homepageUpdatedAt,
+    title: "All Sleepyland research guides",
+  }, [
+    "# All Sleepyland research guides",
+    "",
+    researchDescription,
+    "",
+    ...researchArticlesNewestFirst.map((article) =>
+      `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.evidenceLabel}. ${article.sourceIds.length} linked sources.`),
+  ].join("\n"));
 }
 
 export function noiseMarkdown(): string {
@@ -685,8 +644,6 @@ export function llmsTxt(): string {
     "",
     "Use Sleepyland Research when a person wants sourced evidence about insomnia, supplements, medications, behavior, sound, sleep duration, circadian light, unfamiliar rooms, ancestral-sleep claims, grounding, masking, or related wellness claims. Quote the visible guide, keep direct findings separate from mechanism, inference, and crowdsourced experience, and do not present the publication as medical advice or a guaranteed outcome.",
     "",
-    "Use a Sleepyland reading note when a person wants the site’s take on rest as a practiced state that keeps unfashionable ideas alive, on when a rest environment becomes a habit, or on rest as a place where anxiety can become curiosity. Quote the visible note, keep it distinct from the About product record and from Sleepyland Research, and do not present it as medical advice.",
-    "",
     "Do not use Sleepyland as a medical device, sleep-treatment service, account-based app, audio API, or uploaded-track library. Do not send tuning values, exact playback duration, or spectrum gestures to analytics. Do not invent developer resources that this site does not publish.",
     "",
     "## Interfaces",
@@ -705,12 +662,6 @@ export function llmsTxt(): string {
     "",
     ...PRODUCT_PAGES.map((page) =>
       `- [${page.heading}](${absoluteUrl(`${page.path}.md`)}): ${page.description}`),
-    "",
-    "## Reading",
-    "",
-    `- [Sleepyland Reading](${absoluteUrl("/reading.md")})`,
-    ...READING_NOTES.map((note) =>
-      `- [${note.heading}](${absoluteUrl(`${note.path}.md`)}): ${note.description}`),
     "",
     "## Research",
     "",
@@ -750,12 +701,6 @@ export function sitemapMarkdown(): string {
     ...PRODUCT_PAGES.map((page) =>
       `- [${page.heading}](${absoluteUrl(`${page.path}.md`)})`),
     "",
-    "## Reading",
-    "",
-    `- [Sleepyland Reading](${absoluteUrl("/reading.md")})`,
-    ...READING_NOTES.map((note) =>
-      `- [${note.heading}](${absoluteUrl(`${note.path}.md`)})`),
-    "",
     "## Discovery files",
     "",
     `- [llms.txt](${absoluteUrl("/llms.txt")})`,
@@ -775,10 +720,6 @@ export function markdownForPath(pathname: string): string | null {
     return researchIndexMarkdown();
   }
 
-  if (pathname === "/reading") {
-    return readingIndexMarkdown();
-  }
-
   if (pathname === "/noise") {
     return noiseMarkdown();
   }
@@ -790,11 +731,6 @@ export function markdownForPath(pathname: string): string | null {
   const productPage = PRODUCT_PAGES.find((page) => page.path === pathname);
   if (productPage !== undefined) {
     return productPageMarkdown(productPage);
-  }
-
-  const readingNote = READING_NOTES.find((note) => note.path === pathname);
-  if (readingNote !== undefined) {
-    return productPageMarkdown(readingNote);
   }
 
   if (pathname.startsWith("/research/")) {
@@ -823,7 +759,7 @@ export function markdownResponse(canonicalPath: string, body: string): Response 
 }
 
 function canonicalMarkdownPath(path: string): string {
-  return path === "/research" ? "/" : path;
+  return path;
 }
 
 export function notFoundMarkdownResponse(): Response {

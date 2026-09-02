@@ -6,12 +6,12 @@ import {
 import { researchEditorialImage } from "./editorial-images";
 import {
   latestResearchUpdatedAt,
+  isIndexableResearchArticle,
   researchArticlePath,
   researchArticlesNewestFirst,
   researchTagLabel,
 } from "./research/articles";
 import { PRODUCT_PAGES } from "./product-pages";
-import { READING_NOTES } from "./reading-notes";
 import { absoluteUrl, isoDateTime } from "./seo";
 import { site } from "./site";
 
@@ -32,10 +32,9 @@ export function researchDiscoveryPaths(): readonly OwnedPath[] {
   return [
     "/",
     "/noise",
-    "/reading",
+    "/research",
     ...PRODUCT_PAGES.map((page) => page.path),
-    ...READING_NOTES.map((note) => note.path),
-    ...researchArticlesNewestFirst.map((article) =>
+    ...researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) =>
       researchArticlePath(article.slug)),
   ];
 }
@@ -54,26 +53,28 @@ export function researchFeedXml(): string {
   const latestUpdate = latestResearchUpdatedAt();
   const feedUrl = absoluteUrl(RESEARCH_FEED_PATH);
   const channelUrl = absoluteUrl("/");
-  const items = researchArticlesNewestFirst.map((article) => {
-    const url = absoluteUrl(researchArticlePath(article.slug));
-    const editorialImage = researchEditorialImage(article.slug);
+  const items = researchArticlesNewestFirst
+    .filter(isIndexableResearchArticle)
+    .map((article) => {
+      const url = absoluteUrl(researchArticlePath(article.slug));
+      const editorialImage = researchEditorialImage(article.slug);
 
-    return [
-      "    <item>",
-      `      <title>${xmlEscape(article.title)}</title>`,
-      `      <link>${xmlEscape(url)}</link>`,
-      `      <guid isPermaLink="true">${xmlEscape(url)}</guid>`,
-      `      <pubDate>${new Date(isoDateTime(article.publishedAt)).toUTCString()}</pubDate>`,
-      `      <description>${xmlEscape(article.dek)}</description>`,
-      `      <media:content height="${editorialImage.height}" medium="image" type="image/webp" url="${xmlEscape(absoluteUrl(editorialImage.src))}" width="${editorialImage.width}">`,
-      `        <media:description type="plain">${xmlEscape(editorialImage.alt)}</media:description>`,
-      `        <media:credit role="creator">${xmlEscape(editorialImage.credit)}</media:credit>`,
-      "      </media:content>",
-      ...article.tags.map((tagId) =>
-        `      <category>${xmlEscape(researchTagLabel(tagId))}</category>`),
-      "    </item>",
-    ].join("\n");
-  });
+      return [
+        "    <item>",
+        `      <title>${xmlEscape(article.title)}</title>`,
+        `      <link>${xmlEscape(url)}</link>`,
+        `      <guid isPermaLink="true">${xmlEscape(url)}</guid>`,
+        `      <pubDate>${new Date(isoDateTime(article.publishedAt)).toUTCString()}</pubDate>`,
+        `      <description>${xmlEscape(article.dek)}</description>`,
+        `      <media:content height="${editorialImage.height}" medium="image" type="image/webp" url="${xmlEscape(absoluteUrl(editorialImage.src))}" width="${editorialImage.width}">`,
+        `        <media:description type="plain">${xmlEscape(editorialImage.alt)}</media:description>`,
+        `        <media:credit role="creator">${xmlEscape(editorialImage.credit)}</media:credit>`,
+        "      </media:content>",
+        ...article.tags.map((tagId) =>
+          `      <category>${xmlEscape(researchTagLabel(tagId))}</category>`),
+        "    </item>",
+      ].join("\n");
+    });
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',

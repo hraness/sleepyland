@@ -1,4 +1,3 @@
-import type { ReadingNoteSlug } from "./reading-notes";
 import type { ResearchSlug } from "./research/articles";
 
 export const EDITORIAL_IMAGE_WIDTH = 1536;
@@ -6,7 +5,7 @@ export const EDITORIAL_IMAGE_HEIGHT = 864;
 export const EDITORIAL_IMAGE_CREDIT =
   "Sleepyland editorial illustration · Atet with Recraft V4";
 
-export type EditorialImageKind = "reading" | "research";
+export type EditorialImageKind = "research";
 
 export type EditorialImage<
   Kind extends EditorialImageKind = EditorialImageKind,
@@ -84,33 +83,12 @@ export const RESEARCH_EDITORIAL_IMAGES = {
     "Evening screens combine light, attention, and time; filtering one part does not prove better sleep.",
     "12b687d27f40ebe8afa9d0906505cdf4657add60f9e81dfaae916c5cb0be2da5",
   ),
-  "blue-light-scatter-and-visual-detail": image(
-    "research",
-    "blue-light-scatter-and-visual-detail",
-    "Two close points of light smear into a wide blue halo while longer copper wavelengths stay tighter on a dark field.",
-    "Short-wave light spreads more in this editorial metaphor; the image is not a photograph of the UGA apparatus.",
-    "1f5fa10b1faa3566381e536425997a845d753b2f7ad1f52e0e44fe4eeafe3d70",
-  ),
   "z-drugs-zaleplon-zolpidem-eszopiclone": image(
     "research",
     "z-drugs-zaleplon-zolpidem-eszopiclone",
     "Three pale copper currents rise to different heights from the same dark nocturnal threshold.",
     "Different exposure windows fit different insomnia patterns; this conceptual illustration is not a dosing chart.",
     "66634ab5f57512e08c82959d42e56b0d5b3c808df3788e8395c9ce9b0962725e",
-  ),
-  "ghb-sodium-oxybate-and-sleep": image(
-    "research",
-    "ghb-sodium-oxybate-and-sleep",
-    "Two matching dark forms sit side by side, one enclosed by rings and one surrounded by a fractured pale edge.",
-    "The same molecule sits inside very different control systems; monitored evidence does not transfer to unsupervised use.",
-    "a211a71fd5a121a8cdd2c37baf59a3e98f836189ea2299e3c47c8cf126fb93e8",
-  ),
-  "kratom-after-no-sleep": image(
-    "research",
-    "kratom-after-no-sleep",
-    "A green leaf-like form lifts a small copper ember above an interrupted black current leading into pale dawn.",
-    "A brief feeling of alertness does not repair the missing sleep represented by the broken current below.",
-    "92c4d246e7dd843cb49d2d657bcf76914ad7507071c3bc5abd4fbcaac6b5fc23",
   ),
   "how-to-quiet-a-racing-mind-at-night": image(
     "research",
@@ -247,50 +225,12 @@ export const RESEARCH_EDITORIAL_IMAGES = {
   ),
 } as const satisfies EditorialImageRecord<"research", ResearchSlug>;
 
-export const READING_EDITORIAL_IMAGES = {
-  "good-ideas": image(
-    "reading",
-    "good-ideas",
-    "A small ember-seed protected inside a deep branching nocturnal hollow.",
-    "A fragile idea survives inside protected attention; the image does not claim to explain creativity.",
-    "3cc487b8a45e71c37c8e439a1410cb75f8ea1dd17c4bb2a1f81ad0332f909919",
-  ),
-  "habit-and-rest": image(
-    "reading",
-    "habit-and-rest",
-    "A modest copper ripple beginning a repeated path through dark space.",
-    "One small acted start becomes a quiet repeating pattern rather than a triumphant streak.",
-    "ae05cc611bf9377df71cf8962d81226463ab053e5921ff12d30f64f846b582d9",
-  ),
-  "anger-anxiety-agency": image(
-    "reading",
-    "anger-anxiety-agency",
-    "Dense dark currents loosening into exploratory copper branches.",
-    "The movement from tension toward open paths is a reading metaphor, not a treatment claim.",
-    "440bae17e00624215fa647ce648ff290a01c1b526fbb45cc2cd368587c71b888",
-  ),
-  "weird-is-a-weird-word": image(
-    "reading",
-    "weird-is-a-weird-word",
-    "A thin copper thread climbing stacked nocturnal strata toward a distant ember.",
-    "One mark recedes through older layers; the image does not claim that rest teaches etymology.",
-    "79ca399421b8d9ddf5a59d4e6e5ba3562c79730f5c2151894e896693a0d7fdca",
-  ),
-} as const satisfies EditorialImageRecord<"reading", ReadingNoteSlug>;
-
 export function researchEditorialImage(
   slug: ResearchSlug,
 ): EditorialImage<"research", ResearchSlug> {
   return RESEARCH_EDITORIAL_IMAGES[slug];
 }
 
-export function readingEditorialImage(
-  slug: ReadingNoteSlug,
-): EditorialImage<"reading", ReadingNoteSlug> {
-  return READING_EDITORIAL_IMAGES[slug];
-}
-
 export const editorialImages = [
   ...Object.values(RESEARCH_EDITORIAL_IMAGES),
-  ...Object.values(READING_EDITORIAL_IMAGES),
 ] as const;

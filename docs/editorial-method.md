@@ -6,6 +6,10 @@ Sleepyland publishes practical, evidence-led guides for people making decisions 
 
 One page should own one decision. Search language helps identify unresolved questions, but it does not justify thin pages or wording variants. A new article must have a distinct reader job, sufficient evidence, and an original contribution that an existing page cannot absorb cleanly.
 
+Before drafting an indexable route, record the reader's concrete job, its canonical owner, the original decision aid or inspectable result, the three nearest existing pages, why consolidation is insufficient, the primary evidence, claim-risk reviewer, and next evidence-refresh date. Source count and word count do not establish usefulness. A page that only restates a caveat, targets a wording variant, or forces an unrelated essay into Sleepyland's product vocabulary should be merged or rejected.
+
+Treat publication as provisional until a 28- to 56-day consolidation review chooses keep, revise, merge-and-redirect, or remove. Generate editorial imagery only after admission; a completed banner never creates a reason to retain a weak page.
+
 ## Build the evidence map
 
 Start with current systematic reviews, professional guidelines, regulator records, official labels, and controlled human studies. Follow citations into primary research when protocol details or subgroup claims matter. Record the population, intervention, comparator, outcome, duration, and limitations that change interpretation.
@@ -34,6 +38,8 @@ Do not diagnose, prescribe, provide individualized treatment, recommend dangerou
 
 Persistent insomnia, breathing symptoms during sleep, severe daytime impairment, medication questions, substance dependence, or immediate danger deserves qualified help beyond this publication.
 
+Medication comparisons, controlled-substance topics, and dangerous-use queries stay `noindex` and out of feeds, sitemaps, home modules, and proactive indexing until a documented clinical or pharmacist review approves the exact claims. Community reports may identify a safety question, but they are not a mandate to publish an acquisition page.
+
 ## Review before publication
 
 A substantive article change should pass this checklist:
@@ -43,6 +49,8 @@ A substantive article change should pass this checklist:
 - New articles use at least five useful sources and add original decision support.
 - Evidence, mechanism, inference, history, and experience remain distinguishable.
 - Related links are intentional and no existing page owns the same reader job.
+- Homepage promotion is curated rather than date-driven and never exceeds eight guides; the full registry belongs at `/research`.
+- Any health-risk review and indexing decision is documented beside the change.
 - The article route, canonical, structured data, RSS, sitemap, and Markdown representation agree.
 - `bun run check` passes.
 

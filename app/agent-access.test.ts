@@ -19,8 +19,8 @@ import {
   parseAccept,
   preferredProducedType,
   productPageMarkdown,
-  readingIndexMarkdown,
   researchArticleMarkdown,
+  researchIndexMarkdown,
   sitemapMarkdown,
 } from "./agent-access";
 import { researchEditorialImage } from "./editorial-images";
@@ -31,7 +31,6 @@ import {
   homepageWorkingModel,
 } from "./homepage-content";
 import { PRODUCT_PAGES } from "./product-pages";
-import { READING_NOTES } from "./reading-notes";
 import {
   getResearchArticle,
   researchArticlePath,
@@ -95,7 +94,7 @@ describe("Accept parsing", () => {
 describe("agent discovery documents", () => {
   test("keeps homepage copy above the no-JS character floor", () => {
     const markdown = homepageMarkdown();
-    const featured = researchArticlesNewestFirst[0];
+    const featured = getResearchArticle("noise-and-sleep-2026");
 
     if (featured === undefined) {
       throw new Error("Expected one featured research guide.");
@@ -155,26 +154,10 @@ describe("agent discovery documents", () => {
       );
     }
 
-    expect(llms).toContain("## Reading");
-    expect(sitemap).toContain("## Reading");
-    expect(sitemap).toContain("https://sleepy.land/reading.md");
-    expect(isKnownContentPath("/reading")).toBe(true);
-    expect(readingIndexMarkdown()).toContain(
-      'canonical_url: "https://sleepy.land/reading"',
-    );
-    expect(markdownForPath("/reading")).toBe(readingIndexMarkdown());
-    for (const note of READING_NOTES) {
-      const markdownUrl = `https://sleepy.land${note.path}.md`;
-      expect(llms).toContain(markdownUrl);
-      expect(sitemap).toContain(markdownUrl);
-      expect(isKnownContentPath(note.path)).toBe(true);
-      expect(productPageMarkdown(note)).toContain(
-        `canonical_url: ${JSON.stringify(`https://sleepy.land${note.path}`)}`,
-      );
-      expect(productPageMarkdown(note)).toContain(
-        `https://sleepy.land/editorial/reading/${note.slug}.webp`,
-      );
-    }
+    expect(llms).not.toContain("## Reading");
+    expect(sitemap).not.toContain("## Reading");
+    expect(isKnownContentPath("/reading")).toBe(false);
+    expect(markdownForPath("/reading")).toBeNull();
 
     for (const article of researchArticlesNewestFirst) {
       const markdownUrl = `https://sleepy.land${researchArticlePath(article.slug)}.md`;
@@ -253,40 +236,17 @@ describe("markdown negotiation", () => {
     expect(noise.headers.get("link")).toBe(
       "<https://sleepy.land/noise>; rel=\"canonical\"",
     );
-    const legacyResearch = await negotiated("/research.md");
-    expect(legacyResearch.headers.get("link")).toBe(
-      "<https://sleepy.land/>; rel=\"canonical\"",
+    const research = await negotiated("/research.md");
+    expect(research.headers.get("link")).toBe(
+      "<https://sleepy.land/research>; rel=\"canonical\"",
     );
+    expect(research.body).toBe(researchIndexMarkdown());
     const privacy = await negotiated("/privacy", { accept: "text/markdown" });
     const privacySibling = await negotiated("/privacy.md");
     const privacyPage = PRODUCT_PAGES.find((page) => page.slug === "privacy");
     if (privacyPage === undefined) throw new Error("Expected privacy page.");
     expect(privacy.body).toBe(productPageMarkdown(privacyPage));
     expect(privacySibling.body).toBe(privacy.body);
-    const reading = await negotiated("/reading/good-ideas", { accept: "text/markdown" });
-    const readingSibling = await negotiated("/reading/good-ideas.md");
-    const readingNote = READING_NOTES.find((note) => note.slug === "good-ideas");
-    if (readingNote === undefined) throw new Error("Expected good-ideas reading note.");
-    expect(reading.body).toBe(productPageMarkdown(readingNote));
-    expect(readingSibling.body).toBe(reading.body);
-    const habit = await negotiated("/reading/habit-and-rest", { accept: "text/markdown" });
-    const habitSibling = await negotiated("/reading/habit-and-rest.md");
-    const habitNote = READING_NOTES.find((note) => note.slug === "habit-and-rest");
-    if (habitNote === undefined) throw new Error("Expected habit-and-rest reading note.");
-    expect(habit.body).toBe(productPageMarkdown(habitNote));
-    expect(habitSibling.body).toBe(habit.body);
-    const agency = await negotiated("/reading/anger-anxiety-agency", { accept: "text/markdown" });
-    const agencySibling = await negotiated("/reading/anger-anxiety-agency.md");
-    const agencyNote = READING_NOTES.find((note) => note.slug === "anger-anxiety-agency");
-    if (agencyNote === undefined) throw new Error("Expected anger-anxiety-agency reading note.");
-    expect(agency.body).toBe(productPageMarkdown(agencyNote));
-    expect(agencySibling.body).toBe(agency.body);
-    const language = await negotiated("/reading/weird-is-a-weird-word", { accept: "text/markdown" });
-    const languageSibling = await negotiated("/reading/weird-is-a-weird-word.md");
-    const languageNote = READING_NOTES.find((note) => note.slug === "weird-is-a-weird-word");
-    if (languageNote === undefined) throw new Error("Expected weird-is-a-weird-word reading note.");
-    expect(language.body).toBe(productPageMarkdown(languageNote));
-    expect(languageSibling.body).toBe(language.body);
   });
 
   test("returns a markdown 404 with recovery links for unknown paths", async () => {

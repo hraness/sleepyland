@@ -3,7 +3,6 @@ import { classifyAnalyticsRoute } from "@hraness/posthog";
 
 import { sleepylandPostHogSite } from "./analytics";
 import { PRODUCT_PAGES } from "./product-pages";
-import { READING_NOTES } from "./reading-notes";
 
 test("Sleepyland analytics distinguishes the generator, research index, and articles", () => {
   expect(sleepylandPostHogSite.stripQueryAttribution).toBeTrue();
@@ -31,28 +30,6 @@ test("Sleepyland analytics classifies every public product record without a slug
       canonical_path: page.path,
       content_group: "product_info",
       page_kind: page.slug === "demo" ? "product_demo" : "product_info",
-    });
-  }
-});
-
-test("Sleepyland analytics classifies every reading note", () => {
-  expect(classifyAnalyticsRoute(
-    sleepylandPostHogSite,
-    "https://sleepy.land/reading",
-  )).toMatchObject({
-    canonical_path: "/reading",
-    content_group: "reading",
-    page_kind: "reading_index",
-  });
-
-  for (const note of READING_NOTES) {
-    expect(classifyAnalyticsRoute(
-      sleepylandPostHogSite,
-      `https://sleepy.land${note.path}?private=value`,
-    )).toMatchObject({
-      canonical_path: note.path,
-      content_group: "reading",
-      page_kind: "reading_note",
     });
   }
 });

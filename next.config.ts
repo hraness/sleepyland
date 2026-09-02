@@ -34,7 +34,12 @@ const nextConfig: NextConfig = {
       {
         destination: "/",
         permanent: true,
-        source: "/research",
+        source: "/reading/:path*",
+      },
+      {
+        destination: "/research/screens-blue-light-glasses-and-sleep",
+        permanent: true,
+        source: "/research/blue-light-scatter-and-visual-detail",
       },
     ];
   },

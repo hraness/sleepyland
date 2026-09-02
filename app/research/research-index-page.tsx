@@ -8,7 +8,6 @@ import {
 } from "@hraness/design-kit/react/server";
 import Link from "next/link";
 
-import { SleepylandAskAiAboutThis } from "../ask-ai-about-this";
 import { EditorialImageFigure } from "../editorial-image";
 import { researchEditorialImage } from "../editorial-images";
 import {
@@ -25,6 +24,9 @@ import { repositoryUrl, researchContributionUrl } from "../site";
 import {
   RESEARCH_TAGS,
   articleReadingMinutes,
+  getResearchArticle,
+  homepageResearchArticles,
+  isIndexableResearchArticle,
   researchArticlePath,
   researchArticlesNewestFirst,
   researchTagLabel,
@@ -32,7 +34,7 @@ import {
 import { ResearchIndexList } from "./research-index-list";
 import { breadcrumbJsonLd, researchCollectionJsonLd } from "./seo";
 
-const researchIndexArticles = researchArticlesNewestFirst.map((article) => ({
+export const researchIndexArticles = researchArticlesNewestFirst.map((article) => ({
   dek: article.dek,
   evidenceLabel: article.evidenceLabel,
   image: researchEditorialImage(article.slug),
@@ -44,8 +46,10 @@ const researchIndexArticles = researchArticlesNewestFirst.map((article) => ({
   title: article.title,
 }));
 
-export function ResearchIndexPage() {
-  const featuredArticle = researchArticlesNewestFirst[0];
+export function ResearchIndexPage({
+  showAll = false,
+}: Readonly<{ showAll?: boolean }>) {
+  const featuredArticle = getResearchArticle("noise-and-sleep-2026");
 
   if (featuredArticle === undefined) {
     throw new Error("Sleepyland Research requires at least one published guide.");
@@ -53,13 +57,43 @@ export function ResearchIndexPage() {
 
   const featuredPath = researchArticlePath(featuredArticle.slug);
   const featuredImage = researchEditorialImage(featuredArticle.slug);
+  const homepageArticles = homepageResearchArticles();
+  const archiveArticles = researchArticlesNewestFirst.filter(isIndexableResearchArticle);
+  const visibleArticles = showAll ? archiveArticles : homepageArticles;
+  const visibleIndexArticles = researchIndexArticles.filter((entry) =>
+    visibleArticles.some((article) => article.slug === entry.slug));
+
+  if (showAll) {
+    return (
+      <main className="plain-publication__index" id="research-content">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: serializeJsonLd([
+              researchCollectionJsonLd(archiveArticles, "/research"),
+              breadcrumbJsonLd([{ name: "All research", path: "/research" }]),
+            ]),
+          }}
+          id="research-collection-structured-data"
+          type="application/ld+json"
+        />
+        <div className="plain-publication__shell plain-publication__index-content">
+          <header className="plain-publication__hero">
+            <p className="plain-publication__eyebrow">Sleepyland Research</p>
+            <h1>All research guides</h1>
+            <p>Browse accepted, evidence-led guides by topic. Medication comparisons awaiting clinical review stay out of this archive.</p>
+          </header>
+          <ResearchIndexList articles={visibleIndexArticles} tagOptions={RESEARCH_TAGS} />
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="plain-publication__index" id="research-content">
       <script
         dangerouslySetInnerHTML={{
           __html: serializeJsonLd([
-            researchCollectionJsonLd(),
+            researchCollectionJsonLd(homepageArticles, "/"),
             breadcrumbJsonLd([{ name: "Sleepyland Research", path: "/" }]),
           ]),
         }}
@@ -74,7 +108,7 @@ export function ResearchIndexPage() {
           <p>{homepageResult.summary}</p>
           <div className="sleepyland-home__hero-actions">
             <Link className="plain-publication__primary-link" href="#first-proof">
-              Inspect the latest guide <span aria-hidden="true">→</span>
+              Inspect the evidence guide <span aria-hidden="true">→</span>
             </Link>
             <Link className="plain-publication__primary-link" href="/noise">
               Open the sound machine
@@ -163,9 +197,12 @@ export function ResearchIndexPage() {
         />
 
         <ResearchIndexList
-          articles={researchIndexArticles}
+          articles={visibleIndexArticles.filter((article) => article.slug !== featuredArticle.slug)}
           tagOptions={RESEARCH_TAGS}
         />
+        <p className="plain-publication__browse-all">
+          <Link href="/research">Browse every research guide</Link>
+        </p>
 
         <MarketingSection
           className="sleepyland-home__method"
@@ -187,7 +224,6 @@ export function ResearchIndexPage() {
             on GitHub</a> under the MIT License, and <a href={researchContributionUrl}>
             research corrections are welcome</a>.
           </p>
-          <SleepylandAskAiAboutThis path="/" />
         </MarketingSection>
 
         <MarketingTrustBoundary

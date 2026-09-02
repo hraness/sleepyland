@@ -1,12 +1,11 @@
-import { INDEXABLE_ROBOTS } from "@hraness/web-discovery";
+import { INDEXABLE_ROBOTS, NOINDEX_ROBOTS } from "@hraness/web-discovery";
 import type { Metadata } from "next";
 
 import { researchEditorialImage } from "../editorial-images";
 import {
   RESEARCH_SOURCES,
   researchArticlePath,
-  researchArticles,
-  researchArticlesNewestFirst,
+  isIndexableResearchArticle,
   researchTagLabel,
   type ResearchArticle,
   type ResearchSlug,
@@ -35,7 +34,9 @@ export function researchArticleMetadata(
   return {
     title,
     description: article.seoDescription,
-    robots: INDEXABLE_ROBOTS,
+    robots: isIndexableResearchArticle(article)
+      ? INDEXABLE_ROBOTS
+      : NOINDEX_ROBOTS,
     alternates: {
       canonical: path,
       types: {
@@ -80,8 +81,12 @@ export function researchArticleMetadata(
   };
 }
 
-export function researchCollectionJsonLd() {
-  const url = absoluteUrl("/");
+export function researchCollectionJsonLd(
+  visibleArticles: readonly ResearchArticle[],
+  path: "/" | "/research",
+) {
+  const url = absoluteUrl(path);
+  const collectionArticles = visibleArticles.filter(isIndexableResearchArticle);
 
   return {
     "@context": "https://schema.org",
@@ -96,8 +101,8 @@ export function researchCollectionJsonLd() {
     isPartOf: { "@id": `${site.canonicalUrl}/#website` },
     mainEntity: {
       "@type": "ItemList",
-      numberOfItems: researchArticles.length,
-      itemListElement: researchArticlesNewestFirst.map((article, index) => ({
+      numberOfItems: collectionArticles.length,
+      itemListElement: collectionArticles.map((article, index) => ({
         "@type": "ListItem",
         position: index + 1,
         name: article.title,

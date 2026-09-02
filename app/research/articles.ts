@@ -9,10 +9,7 @@ export const RESEARCH_SLUGS = [
   "kava-for-sleep",
   "benadryl-diphenhydramine-for-sleep",
   "screens-blue-light-glasses-and-sleep",
-  "blue-light-scatter-and-visual-detail",
   "z-drugs-zaleplon-zolpidem-eszopiclone",
-  "ghb-sodium-oxybate-and-sleep",
-  "kratom-after-no-sleep",
   "how-to-quiet-a-racing-mind-at-night",
   "best-sleep-sounds",
   "what-frequency-helps-you-sleep",
@@ -35,6 +32,21 @@ export const RESEARCH_SLUGS = [
 ] as const;
 
 export type ResearchSlug = (typeof RESEARCH_SLUGS)[number];
+
+export const HOMEPAGE_RESEARCH_SLUGS = [
+  "noise-and-sleep-2026",
+  "best-sleep-sounds",
+  "how-sound-masking-works",
+  "sound-masking-vs-earplugs-vs-noise-cancelling",
+  "is-eight-hours-of-sleep-necessary",
+  "morning-sunlight-and-sleep",
+  "why-you-sleep-badly-in-hotels",
+  "how-to-quiet-a-racing-mind-at-night",
+] as const satisfies readonly ResearchSlug[];
+
+export const CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS = [
+  "z-drugs-zaleplon-zolpidem-eszopiclone",
+] as const satisfies readonly ResearchSlug[];
 
 export const RESEARCH_TAGS = [
   { id: "sleep", label: "Sleep" },
@@ -3858,6 +3870,20 @@ export function researchArticlePath(slug: ResearchSlug): `/research/${ResearchSl
 
 export function getResearchArticle(slug: string): ResearchArticle | undefined {
   return researchArticles.find((article) => article.slug === slug);
+}
+
+export function homepageResearchArticles(): readonly ResearchArticle[] {
+  return HOMEPAGE_RESEARCH_SLUGS.map((slug) => {
+    const article = getResearchArticle(slug);
+    if (article === undefined) throw new Error(`Missing curated guide: ${slug}`);
+    return article;
+  });
+}
+
+export function isIndexableResearchArticle(article: ResearchArticle): boolean {
+  return !CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS.some(
+    (slug) => slug === article.slug,
+  );
 }
 
 export function headingId(text: string): string {

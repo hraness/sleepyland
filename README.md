@@ -9,13 +9,13 @@ The publication covers insomnia, supplements, medications, circadian light, rout
 
 ## First proof
 
-[Why Blue Light Blurs Fine Detail More Than Other Colors](https://sleepy.land/research/blue-light-scatter-and-visual-detail) leads with a qualified answer, labels its evidence as wavelength-dependent blur in young adults rather than a sleep trial, links eight sources, and publishes its revision date. Its HTML, structured data, social image, RSS record, sitemap entry, and [Markdown representation](https://sleepy.land/research/blue-light-scatter-and-visual-detail.md) come from the same typed article and image registries.
+[Does White Noise Help You Sleep? What Three 2026 Studies Found](https://sleepy.land/research/noise-and-sleep-2026) leads with a qualified answer, compares three recent studies without forcing a single verdict, links its sources, and publishes its revision date. Its HTML, structured data, social image, RSS record, sitemap entry, and [Markdown representation](https://sleepy.land/research/noise-and-sleep-2026.md) come from the same typed article and image registries.
 
 Request the canonical page as Markdown:
 
 ```sh
 curl -H 'Accept: text/markdown' \
-  https://sleepy.land/research/blue-light-scatter-and-visual-detail
+  https://sleepy.land/research/noise-and-sleep-2026
 ```
 
 ## Working model

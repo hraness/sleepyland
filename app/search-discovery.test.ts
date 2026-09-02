@@ -10,11 +10,11 @@ import {
   researchDiscoveryPaths,
 } from "./search-discovery";
 import {
+  isIndexableResearchArticle,
   researchArticlePath,
   researchArticles,
 } from "./research/articles";
 import { PRODUCT_PAGES } from "./product-pages";
-import { READING_NOTES } from "./reading-notes";
 
 describe("Sleepyland search discovery", () => {
   test("publishes every research article in a static RSS feed", async () => {
@@ -27,10 +27,11 @@ describe("Sleepyland search discovery", () => {
     expect(xml).toContain(
       `<atom:link href="https://sleepy.land${RESEARCH_FEED_PATH}" rel="self" type="application/rss+xml" />`,
     );
-    expect(xml.match(/<item>/g)?.length).toBe(researchArticles.length);
+    const indexableArticles = researchArticles.filter(isIndexableResearchArticle);
+    expect(xml.match(/<item>/g)?.length).toBe(indexableArticles.length);
     expect(xml).toContain('xmlns:media="http://search.yahoo.com/mrss/"');
 
-    for (const article of researchArticles) {
+    for (const article of indexableArticles) {
       const editorialImage = researchEditorialImage(article.slug);
       expect(xml).toContain(
         `https://sleepy.land${researchArticlePath(article.slug)}`,
@@ -40,6 +41,7 @@ describe("Sleepyland search discovery", () => {
       );
       expect(xml).toContain(editorialImage.alt);
     }
+    expect(xml).not.toContain("z-drugs-zaleplon-zolpidem-eszopiclone");
   });
 
   test("builds an authenticated same-origin IndexNow payload", async () => {
@@ -65,8 +67,6 @@ describe("Sleepyland search discovery", () => {
     for (const page of PRODUCT_PAGES) {
       expect(researchDiscoveryPaths()).toContain(page.path);
     }
-    for (const note of READING_NOTES) {
-      expect(researchDiscoveryPaths()).toContain(note.path);
-    }
+    expect(researchDiscoveryPaths()).toContain("/research");
   });
 });

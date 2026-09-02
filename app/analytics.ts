@@ -4,7 +4,6 @@ import {
 } from "@hraness/posthog";
 
 import { PRODUCT_PAGES } from "./product-pages";
-import { READING_NOTES } from "./reading-notes";
 
 export const sleepylandPostHogSite = {
   id: "sleepyland",
@@ -26,24 +25,12 @@ export const sleepylandPostHogSite = {
       contentGroup: "research",
       captureSlug: true,
     },
-    {
-      match: "exact",
-      path: "/reading",
-      pageKind: "reading_index",
-      contentGroup: "reading",
-    },
     { match: "exact", path: "/design", pageKind: "design_system" },
     ...PRODUCT_PAGES.map((page) => ({
       match: "exact" as const,
       path: page.path,
       pageKind: page.slug === "demo" ? "product_demo" : "product_info",
       contentGroup: "product_info",
-    })),
-    ...READING_NOTES.map((note) => ({
-      match: "exact" as const,
-      path: note.path,
-      pageKind: "reading_note",
-      contentGroup: "reading",
     })),
   ],
   stripQueryAttribution: true,

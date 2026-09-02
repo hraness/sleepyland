@@ -7,7 +7,7 @@ import { homepageDocumentText } from "./agent-access";
 import { researchEditorialImage } from "./editorial-images";
 import { homepageAgentRequest, homepageResult } from "./homepage-content";
 import Home, { metadata } from "./page";
-import { researchArticlesNewestFirst } from "./research/articles";
+import { getResearchArticle } from "./research/articles";
 import { RESEARCH_FEED_PATH } from "./search-discovery";
 import { publicationDescription, publicationTitle } from "./site";
 
@@ -36,7 +36,7 @@ describe("Sleepyland publication homepage", () => {
   test("server-renders the outcome, inspectable proof, and bounded action path", () => {
     const markup = renderToStaticMarkup(createElement(Home));
     const text = homepageDocumentText();
-    const featured = researchArticlesNewestFirst[0];
+    const featured = getResearchArticle("noise-and-sleep-2026");
 
     if (featured === undefined) {
       throw new Error("Expected one featured research guide.");

@@ -43,7 +43,6 @@ export function ResearchShell({
       {children}
       <nav aria-label="Sleepyland research resources" className="sleepyland-resource-nav">
         <Link href="/noise">Sound machine</Link>
-        <Link href="/reading">Reading</Link>
         <Link href="/about">About</Link>
         <Link href="/privacy">Privacy</Link>
         <Link href="/support">Support</Link>

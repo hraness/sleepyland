@@ -1,9 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import {
-  readingEditorialImage,
-  researchEditorialImage,
-} from "./editorial-images";
+import { researchEditorialImage } from "./editorial-images";
 import robots from "./robots";
 import {
   organizationJsonLd,
@@ -13,11 +10,12 @@ import {
   websiteJsonLd,
 } from "./seo";
 import {
+  homepageResearchArticles,
+  isIndexableResearchArticle,
   researchArticlePath,
   researchArticlesNewestFirst,
 } from "./research/articles";
 import { PRODUCT_PAGES } from "./product-pages";
-import { READING_NOTES } from "./reading-notes";
 import {
   noiseDescription,
   noiseTitle,
@@ -134,22 +132,18 @@ describe("Sleepyland search surface", () => {
     expect(entries[0]).toEqual({
       url: "https://sleepy.land",
       lastModified: new Date(homepageUpdatedAt),
-      images: researchArticlesNewestFirst.map((article) =>
+      images: homepageResearchArticles().filter(isIndexableResearchArticle).map((article) =>
         `https://sleepy.land${researchEditorialImage(article.slug).src}`),
     });
     expect(entries[1]).toEqual({
       url: "https://sleepy.land/noise",
       lastModified: new Date(site.updatedAt),
     });
-    const latestReadingUpdate = READING_NOTES.reduce<string>(
-      (latest, note) => note.updatedAt > latest ? note.updatedAt : latest,
-      READING_NOTES[0]?.updatedAt ?? "1970-01-01",
-    );
     expect(entries[2]).toEqual({
-      url: "https://sleepy.land/reading",
-      lastModified: new Date(`${latestReadingUpdate}T00:00:00.000Z`),
-      images: READING_NOTES.map((note) =>
-        `https://sleepy.land${readingEditorialImage(note.slug).src}`),
+      url: "https://sleepy.land/research",
+      lastModified: new Date(homepageUpdatedAt),
+      images: researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) =>
+        `https://sleepy.land${researchEditorialImage(article.slug).src}`),
     });
     expect(entries.slice(3, 3 + PRODUCT_PAGES.length)).toEqual(
       PRODUCT_PAGES.map((page) => ({
@@ -157,18 +151,8 @@ describe("Sleepyland search surface", () => {
         lastModified: new Date(`${page.updatedAt}T00:00:00.000Z`),
       })),
     );
-    expect(entries.slice(
-      3 + PRODUCT_PAGES.length,
-      3 + PRODUCT_PAGES.length + READING_NOTES.length,
-    )).toEqual(
-      READING_NOTES.map((note) => ({
-        url: `https://sleepy.land${note.path}`,
-        lastModified: new Date(`${note.updatedAt}T00:00:00.000Z`),
-        images: [`https://sleepy.land${readingEditorialImage(note.slug).src}`],
-      })),
-    );
-    expect(entries.slice(3 + PRODUCT_PAGES.length + READING_NOTES.length)).toEqual(
-      researchArticlesNewestFirst.map((article) =>
+    expect(entries.slice(3 + PRODUCT_PAGES.length)).toEqual(
+      researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) =>
         ({
           url: `https://sleepy.land${researchArticlePath(article.slug)}`,
           lastModified: new Date(`${article.updatedAt}T00:00:00.000Z`),

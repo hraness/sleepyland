@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { INDEXABLE_ROBOTS } from "@hraness/web-discovery";
+import { INDEXABLE_ROBOTS, NOINDEX_ROBOTS } from "@hraness/web-discovery";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
@@ -20,6 +20,8 @@ import {
   articleWordCount,
   getResearchArticle,
   headingId,
+  homepageResearchArticles,
+  isIndexableResearchArticle,
   researchArticlePath,
   researchArticles,
   researchArticlesNewestFirst,
@@ -89,7 +91,7 @@ describe("Sleepyland Research content", () => {
       ).toBeTrue();
     }
 
-    const markup = renderToStaticMarkup(createElement(ResearchIndex));
+    const markup = renderToStaticMarkup(createElement(ResearchIndex, { showAll: true }));
     const augustArticle = markup.indexOf("Is Eight Hours of Sleep Necessary?");
     const julyArticle = markup.indexOf("Can Sound Help You Focus?");
 
@@ -101,6 +103,10 @@ describe("Sleepyland Research content", () => {
     for (const tag of RESEARCH_TAGS) {
       expect(markup).toContain(`>${tag.label}</button>`);
     }
+    expect(markup).not.toContain("z-drugs-zaleplon-zolpidem-eszopiclone");
+
+    const homepageMarkup = renderToStaticMarkup(createElement(ResearchIndex));
+    expect(homepageMarkup.match(/class="plain-publication__entry"/gu)).toHaveLength(7);
   });
 
   test("publishes one substantial evidence cluster without thin query variants", () => {
@@ -253,51 +259,23 @@ describe("Sleepyland Research content", () => {
     const antihistamine = getResearchArticle("benadryl-diphenhydramine-for-sleep");
     const screens = getResearchArticle("screens-blue-light-glasses-and-sleep");
     const zDrugs = getResearchArticle("z-drugs-zaleplon-zolpidem-eszopiclone");
-    const oxybate = getResearchArticle("ghb-sodium-oxybate-and-sleep");
-    const kratom = getResearchArticle("kratom-after-no-sleep");
     const racingMind = getResearchArticle("how-to-quiet-a-racing-mind-at-night");
 
     const antihistamineText = JSON.stringify(antihistamine?.body);
     const screensText = JSON.stringify(screens?.body);
     const zDrugText = JSON.stringify(zDrugs?.body);
-    const oxybateText = JSON.stringify(oxybate?.body);
-    const kratomText = JSON.stringify(kratom?.body);
     const racingMindText = JSON.stringify(racingMind?.body);
 
     expect(magnesium?.dek).toContain("no head-to-head sleep trial proves one form is best");
     expect(antihistamineText).toContain("associated with increased risk, not proven to cause");
     expect(screensText).toContain("no significant improvement");
-    expect(screensText).toContain("/research/blue-light-scatter-and-visual-detail");
-    expect(screens?.relatedSlugs).toContain("blue-light-scatter-and-visual-detail");
+    expect(screensText).not.toContain("/research/blue-light-scatter-and-visual-detail");
+    expect(screens?.relatedSlugs).not.toContain("blue-light-scatter-and-visual-detail");
     expect(zDrugText).toContain("pharmacokinetic inference, not a demonstrated sleep-quality outcome");
-    expect(oxybateText).toContain("does not reproduce amounts or informal administration techniques");
-    expect(kratomText).toContain("not a proven way to restore the brain");
     expect(racingMindText).toContain("capture, clarify, schedule, and release");
-    expect(oxybateText).not.toMatch(/(?:grams?|milliliters?|\bmL\b)/u);
-    expect(kratomText).not.toMatch(/(?:recommended dose|take \d|use \d)/iu);
-  });
-
-  test("keeps the blue-light vision article distinct from the glasses-for-sleep page", () => {
-    const scatter = getResearchArticle("blue-light-scatter-and-visual-detail");
-    const screens = getResearchArticle("screens-blue-light-glasses-and-sleep");
-
-    expect(scatter).toBeDefined();
-    expect(screens).toBeDefined();
-
-    const scatterText = JSON.stringify(scatter?.body);
-
-    expect(scatter?.relatedSlugs).toContain("screens-blue-light-glasses-and-sleep");
-    expect(screens?.relatedSlugs).toContain("blue-light-scatter-and-visual-detail");
-    expect(scatterText).toContain("/research/screens-blue-light-glasses-and-sleep");
-    expect(scatterText).toContain("not a trial of phones, sleep");
-    expect(scatterText).toContain("clinical opinion");
-    expect(scatterText).toContain("two-point");
-    expect(scatterText).toContain("60 young adults");
-    expect(scatterText).toContain("not proof that fruit and greens prevent macular degeneration");
-    expect(scatterText).not.toMatch(/just wear (?:blue[- ]light )?glasses/iu);
-    expect(scatter?.evidenceLabel).toBe(
-      "Wavelength-dependent blur in young adults; not a sleep trial",
-    );
+    expect(getResearchArticle("ghb-sodium-oxybate-and-sleep")).toBeUndefined();
+    expect(getResearchArticle("kratom-after-no-sleep")).toBeUndefined();
+    expect(getResearchArticle("blue-light-scatter-and-visual-detail")).toBeUndefined();
   });
 
   test("renders semantic long-form blocks and crawlable source links", () => {
@@ -407,7 +385,9 @@ describe("Sleepyland Research search surface", () => {
 
       expect(metadata.title).toBe(article.title);
       expect(metadata.description).toBe(article.seoDescription);
-      expect(metadata.robots).toEqual(INDEXABLE_ROBOTS);
+      expect(metadata.robots).toEqual(
+        isIndexableResearchArticle(article) ? INDEXABLE_ROBOTS : NOINDEX_ROBOTS,
+      );
       expect(metadata.alternates).toEqual({
         canonical: path,
         types: {
@@ -439,7 +419,7 @@ describe("Sleepyland Research search surface", () => {
   });
 
   test("publishes truthful BlogPosting citations and a complete collection", () => {
-    const collection = researchCollectionJsonLd();
+    const collection = researchCollectionJsonLd(homepageResearchArticles(), "/");
     expect(collection).toMatchObject({
       "@context": "https://schema.org",
       "@type": "CollectionPage",
@@ -448,7 +428,9 @@ describe("Sleepyland Research search surface", () => {
       primaryImageOfPage:
         "https://sleepy.land/research/opengraph-image",
     });
-    expect(collection.mainEntity.numberOfItems).toBe(researchArticles.length);
+    expect(collection.mainEntity.numberOfItems).toBe(
+      homepageResearchArticles().filter(isIndexableResearchArticle).length,
+    );
 
     for (const article of researchArticles) {
       const structuredData = researchArticleJsonLd(article);

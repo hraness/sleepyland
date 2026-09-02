@@ -4,7 +4,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { serializeJsonLd } from "../../seo";
-import { SleepylandAskAiAboutThis } from "../../ask-ai-about-this";
 import { EditorialImageFigure } from "../../editorial-image";
 import { researchEditorialImage } from "../../editorial-images";
 import { ArticleBody } from "../article-body";
@@ -71,7 +70,6 @@ export default async function ResearchArticlePage({
       ? [{ text: block.text }]
       : []);
   const path = researchArticlePath(article.slug);
-
   return (
     <main className="plain-publication__article" id="research-content">
       <script
@@ -185,7 +183,6 @@ export default async function ResearchArticlePage({
             Found a stronger source or a claim that needs review? Research
             contributions are <a href={researchContributionUrl}>welcome on GitHub</a>.
           </p>
-          <SleepylandAskAiAboutThis path={path} />
         </div>
       </div>
 

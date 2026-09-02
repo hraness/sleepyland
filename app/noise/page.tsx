@@ -7,15 +7,11 @@ import {
   NOISE_HEADING,
   markdownAlternatePath,
 } from "../agent-access";
-import {
-  readingEditorialImage,
-  researchEditorialImage,
-} from "../editorial-images";
+import { researchEditorialImage } from "../editorial-images";
 import {
   NoiseStudio,
   type StudioResourceGroup,
 } from "../noise-studio";
-import { READING_NOTES } from "../reading-notes";
 import {
   getResearchArticle,
   researchArticlePath,
@@ -49,16 +45,6 @@ const studioResourceGroups = [
         title: article.title,
       };
     }),
-  },
-  {
-    allPath: "/reading",
-    label: "Reading notes",
-    resources: READING_NOTES.toReversed().map((note) => ({
-      description: note.description,
-      image: readingEditorialImage(note.slug),
-      path: note.path,
-      title: note.heading,
-    })),
   },
 ] as const satisfies readonly StudioResourceGroup[];
 

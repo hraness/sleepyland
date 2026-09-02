@@ -16,6 +16,8 @@
 - Keep the sound machine compact, dark, warm, responsive to the visual viewport, and free of document overflow on narrow portrait or short landscape screens.
 - Preserve semantic controls, visible focus, reduced-motion behavior, conservative output gain, and smooth audio fades.
 - Treat sleep and wellness content as health-adjacent. Source material claims, distinguish evidence from mechanism and inference, and never diagnose, prescribe, provide individualized dosing, or guarantee an outcome.
+- Keep medication comparisons, controlled-substance topics, and dangerous-use queries noindex and out of discovery feeds until the exact claims have a documented clinical or pharmacist review.
+- Curate at most eight research guides on the homepage, choose them by first-time-reader utility rather than recency, and route the complete accepted registry through `/research`.
 - Follow `STYLE.md` for public research, product copy, documentation, and README prose.
 - Follow `docs/editorial-method.md` and `CONTRIBUTING.md` for research changes. Update the typed article and source registries rather than generated output.
 - Keep public files self-contained. Never commit credentials, private analytics, personal health information, provider tokens, local absolute paths, or unpublished operational records.

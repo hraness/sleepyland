@@ -320,7 +320,7 @@ export function StudioResources({
       </Button>
       <Modal
         className="studio-resources-modal"
-        description="Evidence-led guides and reading notes for quieter sleep, rest, and attention."
+        description="Evidence-led guides to sleep, sound, light, and routines."
         size="large"
         surfaceClassName="studio-resources-modal__surface"
         title="Sleepyland library"

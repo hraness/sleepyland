@@ -3,11 +3,9 @@ import { describe, expect, test } from "bun:test";
 import {
   EDITORIAL_IMAGE_HEIGHT,
   EDITORIAL_IMAGE_WIDTH,
-  READING_EDITORIAL_IMAGES,
   RESEARCH_EDITORIAL_IMAGES,
   editorialImages,
 } from "./editorial-images";
-import { READING_NOTE_SLUGS } from "./reading-notes";
 import { RESEARCH_SLUGS } from "./research/articles";
 
 function lossyWebpDimensions(bytes: Uint8Array): Readonly<{
@@ -44,12 +42,9 @@ function lossyWebpDimensions(bytes: Uint8Array): Readonly<{
 }
 
 describe("Sleepyland editorial image registry", () => {
-  test("covers every research article and reading note exactly once", () => {
+  test("covers every research article exactly once", () => {
     expect(Object.keys(RESEARCH_EDITORIAL_IMAGES)).toEqual([...RESEARCH_SLUGS]);
-    expect(Object.keys(READING_EDITORIAL_IMAGES)).toEqual([...READING_NOTE_SLUGS]);
-    expect(editorialImages).toHaveLength(
-      RESEARCH_SLUGS.length + READING_NOTE_SLUGS.length,
-    );
+    expect(editorialImages).toHaveLength(RESEARCH_SLUGS.length);
     expect(new Set(editorialImages.map((image) => image.src)).size).toBe(
       editorialImages.length,
     );
