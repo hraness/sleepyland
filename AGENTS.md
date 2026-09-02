@@ -20,6 +20,7 @@
 - Curate at most eight research guides on the homepage, choose them by first-time-reader utility rather than recency, and route the complete accepted registry through `/research`.
 - Follow `STYLE.md` for public research, product copy, documentation, and README prose.
 - Follow `docs/editorial-method.md` and `CONTRIBUTING.md` for research changes. Update the typed article and source registries rather than generated output.
+- Admit an indexable research route only at 9/12 or higher with no zero across reader utility, original evidence, factual confidence, Sleepyland fit, voice integrity, and maintenance value. Never use word, source, link, image, keyword, recency, or publishing-count quotas as proxies for usefulness.
 - Keep public files self-contained. Never commit credentials, private analytics, personal health information, provider tokens, local absolute paths, or unpublished operational records.
 - Use `apply_patch` for edits. Run focused tests while working and `bun run check` before handoff.
 

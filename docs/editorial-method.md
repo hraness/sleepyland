@@ -8,6 +8,12 @@ One page should own one decision. Search language helps identify unresolved ques
 
 Before drafting an indexable route, record the reader's concrete job, its canonical owner, the original decision aid or inspectable result, the three nearest existing pages, why consolidation is insufficient, the primary evidence, claim-risk reviewer, and next evidence-refresh date. Source count and word count do not establish usefulness. A page that only restates a caveat, targets a wording variant, or forces an unrelated essay into Sleepyland's product vocabulary should be merged or rejected.
 
+Score reader utility, original evidence, factual confidence, Sleepyland fit,
+voice integrity, and maintenance value from 0–2. An indexable route needs at
+least 9/12 and no zero. Scores of 6–8 require revision or consolidation; 5 or
+less is a rejection. Keywords, article length, source count, link count, image
+count, recency, and a publishing calendar cannot raise the score.
+
 Treat publication as provisional until a 28- to 56-day consolidation review chooses keep, revise, merge-and-redirect, or remove. Generate editorial imagery only after admission; a completed banner never creates a reason to retain a weak page.
 
 ## Build the evidence map
@@ -46,7 +52,7 @@ A substantive article change should pass this checklist:
 
 - The direct answer matches the body and metadata.
 - Each material claim has a source that supports the nearby wording.
-- New articles use at least five useful sources and add original decision support.
+- The evidence is sufficient for the exact claims and the page adds original decision support; a source-count target is not a substitute for either.
 - Evidence, mechanism, inference, history, and experience remain distinguishable.
 - Related links are intentional and no existing page owns the same reader job.
 - Homepage promotion is curated rather than date-driven and never exceeds eight guides; the full registry belongs at `/research`.

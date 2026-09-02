@@ -17,7 +17,6 @@ import {
   RESEARCH_SLUGS,
   RESEARCH_SOURCES,
   RESEARCH_TAGS,
-  articleWordCount,
   getResearchArticle,
   headingId,
   homepageResearchArticles,
@@ -127,10 +126,10 @@ describe("Sleepyland Research content", () => {
 
     for (const article of researchArticles) {
       expect(article.title.length).toBeLessThanOrEqual(72);
-      expect(article.seoDescription.length).toBeGreaterThanOrEqual(120);
       expect(article.seoDescription.length).toBeLessThanOrEqual(160);
-      expect(articleWordCount(article)).toBeGreaterThanOrEqual(650);
-      expect(article.sourceIds.length).toBeGreaterThanOrEqual(5);
+      expect(article.body.length).toBeGreaterThan(0);
+      expect(article.sourceIds.length).toBeGreaterThan(0);
+      expect(new Set(article.sourceIds).size).toBe(article.sourceIds.length);
       expect(article.tags.length).toBeGreaterThan(0);
       expect(new Set(article.tags).size).toBe(article.tags.length);
       for (const tag of article.tags) {
@@ -172,8 +171,8 @@ describe("Sleepyland Research content", () => {
     expect(new Set(urls).size).toBe(urls.length);
 
     for (const source of Object.values(RESEARCH_SOURCES)) {
-      expect(source.title.length).toBeGreaterThan(12);
-      expect(source.note.length).toBeGreaterThan(40);
+      expect(source.title.trim()).not.toBe("");
+      expect(source.note.trim()).not.toBe("");
       expect(new URL(source.url).protocol).toBe("https:");
     }
   });
