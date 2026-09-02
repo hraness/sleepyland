@@ -2,15 +2,13 @@ import { applicationFeatures, absoluteUrl } from "./seo";
 import { researchEditorialImage } from "./editorial-images";
 import {
   homepageAgentRequest,
-  homepageBoundaryItems,
-  homepageInterfaces,
-  homepageQuestions,
+  homepageMethod,
   homepageResult,
-  homepageWorkingModel,
 } from "./homepage-content";
 import { RESEARCH_FEED_PATH } from "./search-discovery";
 import {
   RESEARCH_SOURCES,
+  discoverableResearchArticles,
   getResearchArticle,
   homepageResearchArticles,
   isIndexableResearchArticle,
@@ -47,11 +45,8 @@ export const HOMEPAGE_HEADING = "Sleepyland Research";
 export const HOMEPAGE_DOCUMENT_PARAGRAPHS = [
   site.description,
   homepageResult.summary,
-  ...homepageWorkingModel.map((step) => `${step.label}: ${step.detail}`),
-  ...homepageInterfaces.map((entry) => `${entry.label}: ${entry.summary}`),
-  `Agent request: ${homepageAgentRequest}`,
-  ...homepageBoundaryItems.map((item) => `${item.label}: ${item.detail}`),
-  ...homepageQuestions.map((item) => `${item.question} ${item.answer}`),
+  homepageMethod.detail,
+  homepageMethod.boundary,
   "Sleepyland is open source under the MIT License. Code, research corrections, stronger sources, and carefully scoped article proposals are welcome at https://github.com/hraness/sleepyland.",
 ] as const;
 
@@ -417,8 +412,13 @@ function withFrontmatter(
   ].join("\n");
 }
 
-export function homepageMarkdown(): string {
-  const featuredArticle = getResearchArticle("noise-and-sleep-2026");
+export function homepageMarkdown(
+  candidateArticles: readonly ResearchArticle[] = homepageResearchArticles(),
+): string {
+  const homepageArticles = discoverableResearchArticles(candidateArticles);
+  const featuredArticle = homepageArticles.find(
+    (article) => article.slug === "noise-and-sleep-2026",
+  ) ?? homepageArticles[0];
   const featuredImage = featuredArticle === undefined
     ? undefined
     : researchEditorialImage(featuredArticle.slug);
@@ -437,7 +437,7 @@ export function homepageMarkdown(): string {
     "",
     "## First proof",
     "",
-    ...(featuredArticle === undefined || featuredImage === undefined ? [
+    ...(featuredArticle === undefined ? [
       "Choose a guide from the evidence library below.",
       "",
     ] : [
@@ -445,74 +445,39 @@ export function homepageMarkdown(): string {
       "",
       featuredArticle.dek,
       "",
-      `Evidence: ${featuredArticle.evidenceLabel}. Receipts: ${featuredArticle.sourceIds.length} linked sources. Revised: ${featuredArticle.updatedAt}.`,
+      `Evidence: ${featuredArticle.evidenceLabel}. Revised: ${featuredArticle.updatedAt}.`,
       "",
-      `![${featuredImage.alt}](${absoluteUrl(featuredImage.src)})`,
-      "",
-      `*${featuredImage.caption} ${featuredImage.credit}.*`,
-      "",
+      ...(featuredImage === undefined ? [] : [
+        `![${featuredImage.alt}](${absoluteUrl(featuredImage.src)})`,
+        "",
+        `*${featuredImage.caption} ${featuredImage.credit}.*`,
+        "",
+      ]),
     ]),
-    "## Working model",
-    "",
-    ...homepageWorkingModel.flatMap((step, index) => [
-      `${index + 1}. **${step.label}.** ${step.detail}`,
-    ]),
-    "",
-    "## Interfaces",
-    "",
-    ...homepageInterfaces.flatMap((entry) => [
-      `- **${entry.label}.** ${entry.summary}`,
-    ]),
-    "",
-    "```sh",
-    homepageAgentRequest,
-    "```",
-    "",
-    `- [Markdown sitemap](${absoluteUrl("/sitemap.md")})`,
-    `- [llms.txt](${absoluteUrl("/llms.txt")})`,
-    `- [Research RSS feed](${absoluteUrl(RESEARCH_FEED_PATH)})`,
-    "",
     "## Evidence library",
     "",
-    ...homepageResearchArticles().flatMap((article) => [
-      `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.evidenceLabel}. ${article.sourceIds.length} linked sources.`,
+    ...homepageArticles.flatMap((article) => [
+      `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.evidenceLabel}.`,
     ]),
     "",
-    "## Editorial method",
+    "## Editorial boundary",
     "",
-    "Sleepyland prioritizes systematic reviews, controlled human studies, public-health guidance, official labels, and primary sources. Crowdsourced reports can expose questions and failure modes, but they remain anecdotes. Every material claim links to its source, inference is labeled, and software-assisted synthesis is checked against the linked source before publication.",
+    `### ${homepageMethod.heading}`,
+    "",
+    homepageMethod.detail,
+    "",
+    homepageMethod.boundary,
     "",
     `Sleepyland is [open source on GitHub](${repositoryUrl}) under the MIT License. [Research corrections are welcome](${researchContributionUrl}).`,
     "",
-    "## Boundary",
-    "",
-    ...homepageBoundaryItems.flatMap((item) => [
-      `- **${item.label}.** ${item.detail}`,
-    ]),
-    "",
-    "## Questions",
-    "",
-    ...homepageQuestions.flatMap((item) => [
-      `### ${item.question}`,
-      "",
-      item.answer,
-      "",
-    ]),
-    "## Smallest useful action",
-    "",
-    "Start with the question keeping you awake.",
-    "",
-    `- [Choose a guide](${absoluteUrl("/index.md")}#research-guides)`,
     `- [Open the sound machine](${absoluteUrl("/noise.md")})`,
-    "",
-    "## Product records",
-    "",
-    ...PRODUCT_PAGES.map((page) =>
-      `- [${page.heading}](${absoluteUrl(`${page.path}.md`)}): ${page.description}`),
+    `- [Browse every admitted guide](${absoluteUrl("/research.md")})`,
   ].join("\n"));
 }
 
-export function researchIndexMarkdown(): string {
+export function researchIndexMarkdown(
+  candidateArticles: readonly ResearchArticle[] = researchArticlesNewestFirst,
+): string {
   return withFrontmatter({
     canonicalPath: "/research",
     description: researchDescription,
@@ -523,8 +488,8 @@ export function researchIndexMarkdown(): string {
     "",
     researchDescription,
     "",
-    ...researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) =>
-      `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.evidenceLabel}. ${article.sourceIds.length} linked sources.`),
+    ...discoverableResearchArticles(candidateArticles).map((article) =>
+      `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.evidenceLabel}.`),
   ].join("\n"));
 }
 
@@ -632,7 +597,9 @@ export function notFoundMarkdown(): string {
   ].join("\n");
 }
 
-export function llmsTxt(): string {
+export function llmsTxt(
+  candidateArticles: readonly ResearchArticle[] = researchArticlesNewestFirst,
+): string {
   return [
     "# Sleepyland",
     "",
@@ -645,7 +612,7 @@ export function llmsTxt(): string {
     "",
     "Use Sleepyland when a person wants a free, account-free sound machine in the browser for sleep, relaxation, or focus, and can start playback themselves. Point them at the sound machine, name Sleep, Relax, or Focus, and mention Tune only if they ask about noise color, warmth, levels, or wave pace.",
     "",
-    "Use Sleepyland Research when a person wants sourced evidence about insomnia, supplements, medications, behavior, sound, sleep duration, circadian light, unfamiliar rooms, ancestral-sleep claims, grounding, masking, or related wellness claims. Quote the visible guide, keep direct findings separate from mechanism, inference, and crowdsourced experience, and do not present the publication as medical advice or a guaranteed outcome.",
+    "Use Sleepyland Research when a person wants sourced evidence about insomnia, supplements, behavior, sound, sleep duration, circadian light, unfamiliar rooms, ancestral-sleep claims, grounding, masking, or related wellness claims. Quote the visible guide, keep direct findings separate from mechanism, inference, and crowdsourced experience, and do not present the publication as medical advice or a guaranteed outcome.",
     "",
     "Do not use Sleepyland as a medical device, sleep-treatment service, account-based app, audio API, or uploaded-track library. Do not send tuning values, exact playback duration, or spectrum gestures to analytics. Do not invent developer resources that this site does not publish.",
     "",
@@ -669,7 +636,7 @@ export function llmsTxt(): string {
     "## Research",
     "",
     `- [Sleepyland Research](${absoluteUrl("/index.md")}): Evidence-led guides and the editorial method.`,
-    ...researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) =>
+    ...discoverableResearchArticles(candidateArticles).map((article) =>
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.dek}`),
     "",
     "## Discovery files",
@@ -683,7 +650,9 @@ export function llmsTxt(): string {
   ].join("\n");
 }
 
-export function sitemapMarkdown(): string {
+export function sitemapMarkdown(
+  candidateArticles: readonly ResearchArticle[] = researchArticlesNewestFirst,
+): string {
   return [
     "# Sitemap",
     "",
@@ -692,7 +661,7 @@ export function sitemapMarkdown(): string {
     "## Research",
     "",
     `- [Sleepyland Research](${absoluteUrl("/index.md")})`,
-    ...researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) =>
+    ...discoverableResearchArticles(candidateArticles).map((article) =>
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)})`),
     "",
     "## Sound machine",
@@ -744,7 +713,10 @@ export function markdownForPath(pathname: string): string | null {
   return null;
 }
 
-function markdownHeaders(canonicalPath: string): Headers {
+function markdownHeaders(
+  canonicalPath: string,
+  articleOverride?: ResearchArticle,
+): Headers {
   const headers = new Headers({
     "Cache-Control": "public, max-age=0, must-revalidate",
     "Content-Type": MARKDOWN_CONTENT_TYPE,
@@ -753,7 +725,7 @@ function markdownHeaders(canonicalPath: string): Headers {
   });
 
   if (canonicalPath.startsWith("/research/")) {
-    const article = getResearchArticle(
+    const article = articleOverride ?? getResearchArticle(
       canonicalPath.slice("/research/".length),
     );
     if (article !== undefined && !isIndexableResearchArticle(article)) {
@@ -764,9 +736,13 @@ function markdownHeaders(canonicalPath: string): Headers {
   return headers;
 }
 
-export function markdownResponse(canonicalPath: string, body: string): Response {
+export function markdownResponse(
+  canonicalPath: string,
+  body: string,
+  article?: ResearchArticle,
+): Response {
   return new Response(body, {
-    headers: markdownHeaders(canonicalPath),
+    headers: markdownHeaders(canonicalPath, article),
     status: 200,
   });
 }

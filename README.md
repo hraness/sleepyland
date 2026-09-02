@@ -5,7 +5,7 @@
 
 [Sleepyland](https://sleepy.land) gives readers a direct answer, the sources behind it, and the limit of the evidence before they make a sleep decision. The same site includes a [private browser sound machine](https://sleepy.land/noise) for sleep, relaxation, and focus.
 
-The publication covers insomnia, supplements, medications, circadian light, routines, environmental sound, and common wellness claims. It is educational publishing, not medical advice.
+The admitted publication covers insomnia, supplements, circadian light, routines, environmental sound, and common wellness claims. It is educational publishing, not medical advice. Medication pages remain outside discovery until their exact claims receive documented clinical review.
 
 ## First proof
 
@@ -36,7 +36,7 @@ Sleepyland does not publish an API, OAuth flow, GraphQL endpoint, MCP server, de
 
 ## Evidence and generated surfaces
 
-`app/research/articles.ts` and its focused expansion modules own article titles, direct answers, evidence labels, sources, dates, topics, and related reading. `app/editorial-images.ts` owns literal alt text, visible captions, credits, dimensions, and content hashes for the registered WebP assets.
+`app/research/articles.ts` and its focused expansion modules own article titles, direct answers, evidence labels, sources, dates, topics, and related reading. `app/research/admissions.ts` owns the case-specific reader job, contribution, overlap decision, evidence fit, risk, score, and reassessment that permit an article into discovery. `app/editorial-images.ts` owns literal alt text, visible captions, credits, dimensions, and content hashes for the registered WebP assets.
 
 Those registries generate or feed:
 
@@ -106,6 +106,7 @@ Code, accessibility improvements, research corrections, source additions, reprod
 - `styles/` contains the fixed-viewport sound-machine and serif publication systems.
 - `public/` contains the IndexNow proof, silent product demo, and registered editorial images.
 - `docs/editorial-method.md` defines how research claims and sources are reviewed.
+- `docs/editorial-lifecycle.md` records clinical quarantine and durable merge history.
 
 ## License
 

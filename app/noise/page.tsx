@@ -7,16 +7,10 @@ import {
   NOISE_HEADING,
   markdownAlternatePath,
 } from "../agent-access";
-import { researchEditorialImage } from "../editorial-images";
 import {
   NoiseStudio,
   type StudioResourceGroup,
 } from "../noise-studio";
-import {
-  getResearchArticle,
-  researchArticlePath,
-  type ResearchSlug,
-} from "../research/articles";
 import {
   applicationFeatures,
   defaultSocialImage,
@@ -24,27 +18,13 @@ import {
   webApplicationJsonLd,
 } from "../seo";
 import { noiseDescription, noiseTitle, site } from "../site";
-
-const FEATURED_RESEARCH_SLUGS = [
-  "best-sleep-sounds",
-  "morning-sunlight-and-sleep",
-  "why-you-sleep-badly-in-hotels",
-] as const satisfies readonly ResearchSlug[];
+import { featuredResearchResources } from "./research-resources";
 
 const studioResourceGroups = [
   {
     allPath: "/",
     label: "Research",
-    resources: FEATURED_RESEARCH_SLUGS.map((slug) => {
-      const article = getResearchArticle(slug);
-      if (article === undefined) throw new Error(`Missing featured research: ${slug}`);
-      return {
-        description: article.dek,
-        image: researchEditorialImage(slug),
-        path: researchArticlePath(slug),
-        title: article.title,
-      };
-    }),
+    resources: featuredResearchResources(),
   },
 ] as const satisfies readonly StudioResourceGroup[];
 

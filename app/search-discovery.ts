@@ -5,11 +5,12 @@ import {
 
 import { researchEditorialImage } from "./editorial-images";
 import {
+  discoverableResearchArticles,
   latestResearchUpdatedAt,
-  isIndexableResearchArticle,
   researchArticlePath,
   researchArticlesNewestFirst,
   researchTagLabel,
+  type ResearchArticle,
 } from "./research/articles";
 import { PRODUCT_PAGES } from "./product-pages";
 import { absoluteUrl, isoDateTime } from "./seo";
@@ -28,13 +29,15 @@ function xmlEscape(value: string): string {
     .replaceAll("'", "&apos;");
 }
 
-export function researchDiscoveryPaths(): readonly OwnedPath[] {
+export function researchDiscoveryPaths(
+  candidateArticles: readonly ResearchArticle[] = researchArticlesNewestFirst,
+): readonly OwnedPath[] {
   return [
     "/",
     "/noise",
     "/research",
     ...PRODUCT_PAGES.map((page) => page.path),
-    ...researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) =>
+    ...discoverableResearchArticles(candidateArticles).map((article) =>
       researchArticlePath(article.slug)),
   ];
 }
@@ -49,12 +52,13 @@ export function indexNowPayload(
   );
 }
 
-export function researchFeedXml(): string {
+export function researchFeedXml(
+  candidateArticles: readonly ResearchArticle[] = researchArticlesNewestFirst,
+): string {
   const latestUpdate = latestResearchUpdatedAt();
   const feedUrl = absoluteUrl(RESEARCH_FEED_PATH);
   const channelUrl = absoluteUrl("/");
-  const items = researchArticlesNewestFirst
-    .filter(isIndexableResearchArticle)
+  const items = discoverableResearchArticles(candidateArticles)
     .map((article) => {
       const url = absoluteUrl(researchArticlePath(article.slug));
       const editorialImage = researchEditorialImage(article.slug);

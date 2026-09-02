@@ -1,7 +1,7 @@
 export const publicationTitle =
   "Sleep Research, Insomnia Guides & Sound | Sleepyland";
 export const publicationDescription =
-  "Answer-first, source-linked sleep guides on insomnia, supplements, medications, light, routines, and sound, plus a private browser sound machine.";
+  "Answer-first, source-linked sleep guides on insomnia, supplements, light, routines, and sound, plus a private browser sound machine.";
 export const homepageUpdatedAt = "2026-09-01";
 export const noiseTitle =
   "Sleep Sound Machine: White Noise & Ocean Waves | Sleepyland";

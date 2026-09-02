@@ -2,6 +2,7 @@ import {
   SLEEP_HEALTH_ARTICLES,
   SLEEP_HEALTH_SOURCES,
 } from "./sleep-health-expansion";
+import { isResearchSlugAdmitted } from "./admissions";
 
 export const RESEARCH_SLUGS = [
   "best-magnesium-for-sleep",
@@ -3771,30 +3772,42 @@ export function getResearchArticle(slug: string): ResearchArticle | undefined {
   return researchArticles.find((article) => article.slug === slug);
 }
 
-export function homepageResearchArticles(): readonly ResearchArticle[] {
-  return HOMEPAGE_RESEARCH_SLUGS.map((slug) => {
-    const article = getResearchArticle(slug);
-    if (article === undefined) throw new Error(`Missing curated guide: ${slug}`);
-    return article;
+export function curateHomepageResearchArticles(
+  articles: readonly ResearchArticle[],
+  slugs: readonly string[] = HOMEPAGE_RESEARCH_SLUGS,
+): readonly ResearchArticle[] {
+  return slugs.flatMap((slug) => {
+    const article = articles.find((candidate) => candidate.slug === slug);
+    return article === undefined || !isIndexableResearchArticle(article)
+      ? []
+      : [article];
   });
 }
 
+export function homepageResearchArticles(): readonly ResearchArticle[] {
+  return curateHomepageResearchArticles(researchArticles);
+}
+
 export function isIndexableResearchArticle(article: ResearchArticle): boolean {
-  return !CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS.some(
-    (slug) => slug === article.slug,
-  );
+  return isResearchSlugAdmitted(article.slug)
+    && !CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS.some(
+      (slug) => slug === article.slug,
+    );
+}
+
+export function discoverableResearchArticles(
+  articles: readonly ResearchArticle[],
+): readonly ResearchArticle[] {
+  return articles.filter(isIndexableResearchArticle);
 }
 
 export function relatedResearchArticles(
   article: ResearchArticle,
 ): readonly ResearchArticle[] {
-  const sourceIsIndexable = isIndexableResearchArticle(article);
-
   return article.relatedSlugs
     .map(getResearchArticle)
     .filter((candidate) => candidate !== undefined)
-    .filter((candidate) =>
-      !sourceIsIndexable || isIndexableResearchArticle(candidate));
+    .filter(isIndexableResearchArticle);
 }
 
 export function headingId(text: string): string {
@@ -3836,7 +3849,7 @@ export function articleReadingMinutes(article: ResearchArticle): number {
 }
 
 export function latestResearchUpdatedAt(): string {
-  return researchArticles.reduce<string>(
+  return discoverableResearchArticles(researchArticles).reduce<string>(
     (latest, article) => article.updatedAt > latest ? article.updatedAt : latest,
     researchArticles[0]?.updatedAt ?? "1970-01-01",
   );

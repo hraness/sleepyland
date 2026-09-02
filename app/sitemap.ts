@@ -2,16 +2,17 @@ import type { MetadataRoute } from "next";
 
 import { researchEditorialImage } from "./editorial-images";
 import {
+  discoverableResearchArticles,
   homepageResearchArticles,
-  isIndexableResearchArticle,
   researchArticlePath,
   researchArticlesNewestFirst,
+  type ResearchArticle,
 } from "./research/articles";
 import { PRODUCT_PAGES } from "./product-pages";
 import { homepageUpdatedAt, site } from "./site";
 
 function researchImageUrls(
-  articles: ReturnType<typeof homepageResearchArticles>,
+  articles: readonly ResearchArticle[],
 ): string[] {
   return articles.flatMap((article) => {
     const image = researchEditorialImage(article.slug);
@@ -19,14 +20,18 @@ function researchImageUrls(
   });
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export function buildSitemap(
+  candidateArticles: readonly ResearchArticle[] = researchArticlesNewestFirst,
+  homepageCandidates: readonly ResearchArticle[] = homepageResearchArticles(),
+): MetadataRoute.Sitemap {
+  const admittedArticles = discoverableResearchArticles(candidateArticles);
+  const admittedHomepageArticles = discoverableResearchArticles(homepageCandidates);
+
   return [
     {
       url: site.canonicalUrl,
       lastModified: new Date(homepageUpdatedAt),
-      images: researchImageUrls(
-        homepageResearchArticles().filter(isIndexableResearchArticle),
-      ),
+      images: researchImageUrls(admittedHomepageArticles),
     },
     {
       url: `${site.canonicalUrl}/noise`,
@@ -35,15 +40,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${site.canonicalUrl}/research`,
       lastModified: new Date(homepageUpdatedAt),
-      images: researchImageUrls(
-        researchArticlesNewestFirst.filter(isIndexableResearchArticle),
-      ),
+      images: researchImageUrls(admittedArticles),
     },
     ...PRODUCT_PAGES.map((page) => ({
       url: `${site.canonicalUrl}${page.path}`,
       lastModified: new Date(`${page.updatedAt}T00:00:00.000Z`),
     })),
-    ...researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) => {
+    ...admittedArticles.map((article) => {
       const image = researchEditorialImage(article.slug);
       return {
         url: `${site.canonicalUrl}${researchArticlePath(article.slug)}`,
@@ -54,4 +57,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       };
     }),
   ];
+}
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  return buildSitemap();
 }

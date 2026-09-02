@@ -1,8 +1,8 @@
 # Sleepyland editorial lifecycle ledger
 
-This ledger records why an indexable editorial route deserves a separate URL and when that decision must be revisited. Add the record before drafting. A record does not admit a page by itself: the evidence and rendered page still need independent review under `docs/editorial-method.md`.
+`app/research/admissions.ts` is the executable, authored registry for why each indexable route deserves a separate URL and when that decision must be revisited. This document records clinical quarantine and the longer merge history that should remain readable after a route disappears. Neither record substitutes for independent evidence and rendered-page review under `docs/editorial-method.md`.
 
-Each record names the reader job, non-obvious answer, canonical host, original contribution, three nearest routes and their overlap, consolidation decision, primary evidence and checked date, claim-risk review state, voice evidence, homepage slot, owner, six admission scores, and reassessment date. Retired routes remain in the merge history of their canonical owner so a later contributor does not recreate them as keyword variants.
+Typed admission entries name the reader job, original contribution, three nearest routes and their separation, decision, primary evidence fit, claim risk, owner, six admission scores, and reassessment date. Retired routes remain in the merge history of their canonical owner here so a later contributor does not recreate them as keyword variants.
 
 ## Clinical-review quarantine
 

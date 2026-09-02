@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { researchEditorialImage } from "../editorial-images";
 import {
   RESEARCH_SOURCES,
+  discoverableResearchArticles,
   researchArticlePath,
   isIndexableResearchArticle,
   researchTagLabel,
@@ -15,7 +16,7 @@ import { absoluteUrl, isoDateTime } from "../seo";
 import { homepageUpdatedAt, site } from "../site";
 
 export const researchDescription =
-  "Evidence-led guides to insomnia, sleep supplements, medications, light, routines, sound, circadian rhythm, and the limits of current research.";
+  "Evidence-led guides to insomnia, sleep supplements, light, routines, sound, circadian rhythm, and the limits of current research.";
 export const RESEARCH_SOCIAL_IMAGE_PATH = "/research/opengraph-image";
 
 export function researchArticleImagePath(slug: ResearchSlug): string | undefined {
@@ -88,7 +89,7 @@ export function researchCollectionJsonLd(
   path: "/" | "/research",
 ) {
   const url = absoluteUrl(path);
-  const collectionArticles = visibleArticles.filter(isIndexableResearchArticle);
+  const collectionArticles = discoverableResearchArticles(visibleArticles);
 
   return {
     "@context": "https://schema.org",

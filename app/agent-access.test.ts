@@ -26,9 +26,8 @@ import {
 import { researchEditorialImage } from "./editorial-images";
 import {
   homepageAgentRequest,
-  homepageBoundaryItems,
+  homepageMethod,
   homepageResult,
-  homepageWorkingModel,
 } from "./homepage-content";
 import { PRODUCT_PAGES } from "./product-pages";
 import {
@@ -104,27 +103,26 @@ describe("agent discovery documents", () => {
 
     expect(homepageDocumentText()).toContain(site.description);
     expect(homepageDocumentText()).toContain(homepageResult.summary);
-    expect(homepageDocumentText()).toContain(homepageAgentRequest);
+    expect(homepageDocumentText()).toContain(homepageMethod.detail);
+    expect(homepageDocumentText()).toContain(homepageMethod.boundary);
+    expect(homepageDocumentText()).not.toContain(homepageAgentRequest);
     expect(homepageDocumentText()).not.toContain("There are no media files");
     expect(markdown).toContain("## First proof");
-    expect(markdown).toContain("## Working model");
-    expect(markdown).toContain("## Interfaces");
     expect(markdown).toContain("## Evidence library");
-    expect(markdown).toContain("## Boundary");
-    expect(markdown).toContain("## Questions");
-    expect(markdown).toContain("## Smallest useful action");
-    expect(markdown).toContain(homepageAgentRequest);
+    expect(markdown).toContain("## Editorial boundary");
+    expect(markdown).toContain(homepageMethod.heading);
+    expect(markdown).toContain(homepageMethod.detail);
+    expect(markdown).toContain(homepageMethod.boundary);
+    expect(markdown).not.toContain("## Working model");
+    expect(markdown).not.toContain("## Interfaces");
+    expect(markdown).not.toContain("## Questions");
+    expect(markdown).not.toContain("## Smallest useful action");
+    expect(markdown).not.toContain(homepageAgentRequest);
+    expect(markdown).not.toMatch(/\d+ linked sources/iu);
     expect(markdown).toContain(featured.evidenceLabel);
     const featuredImage = researchEditorialImage(featured.slug);
     if (featuredImage !== undefined) {
       expect(markdown).toContain(`https://sleepy.land${featuredImage.src}`);
-    }
-    for (const step of homepageWorkingModel) {
-      expect(markdown).toContain(step.label);
-      expect(markdown).toContain(step.detail);
-    }
-    for (const item of homepageBoundaryItems) {
-      expect(markdown).toContain(item.detail);
     }
     expect(markdown).toContain("## Sitemap");
     expect(markdown).toContain("/sitemap.md");

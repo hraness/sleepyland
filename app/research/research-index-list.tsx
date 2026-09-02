@@ -19,7 +19,6 @@ export interface ResearchIndexArticle {
   readonly publishedAt: string;
   readonly readingMinutes: number;
   readonly slug: ResearchSlug;
-  readonly sourceCount: number;
   readonly tags: readonly ResearchIndexTag[];
   readonly title: string;
 }
@@ -67,8 +66,6 @@ function ResearchIndexEntry({
         <p>{article.dek}</p>
         <p className="plain-publication__entry-evidence">
           <span>{article.evidenceLabel}</span>
-          <span aria-hidden="true"> · </span>
-          <span>{article.sourceCount} linked sources</span>
         </p>
         <div className="plain-publication__entry-meta">
           <span className="plain-publication__entry-details">
