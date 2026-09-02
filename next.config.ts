@@ -32,9 +32,14 @@ const nextConfig: NextConfig = {
         source: "/:path*",
       },
       {
-        destination: "/",
+        destination: "/research/what-frequency-helps-you-sleep",
         permanent: true,
-        source: "/research",
+        source: "/research/binaural-beats-for-sleep",
+      },
+      {
+        destination: "/research/what-frequency-helps-you-sleep.md",
+        permanent: true,
+        source: "/research/binaural-beats-for-sleep.md",
       },
     ];
   },

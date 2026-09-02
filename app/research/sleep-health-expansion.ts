@@ -64,10 +64,6 @@ function strong(text: string): InlinePart {
   return { text, emphasis: "strong" };
 }
 
-function emphasis(text: string): InlinePart {
-  return { text, emphasis: "em" };
-}
-
 function link(text: string, href: string): InlinePart {
   return { text, href };
 }
@@ -285,40 +281,6 @@ export const SLEEP_HEALTH_SOURCES = {
     note:
       "A nationwide case-control study reporting a nonlinear dose-response association, including signals within strong antihistamines.",
   },
-  buabengWavelength2026: {
-    title: "Wavelength dependence of fine spatial resolution in human vision",
-    publication: "Attention, Perception, & Psychophysics",
-    year: 2026,
-    url: "https://doi.org/10.3758/s13414-026-03244-5",
-    note:
-      "Open-access 60-person two-point experiment finding poorer short-wave resolution and higher thresholds with lighter irises, attributed to scatter, chromatic aberration, and sampling together.",
-  },
-  ugaBlueLightNews2026: {
-    title: "Blue light has a surprising effect on your eyes, study finds",
-    publication: "UGA Research News",
-    year: 2026,
-    url: "https://research.uga.edu/news/blue-light-has-a-surprising-effect-on-your-eyes-study-finds/",
-    note:
-      "Institutional news report of the Buabeng and Hammond experiment, also quoting the lead author's clinical comments on filtering glasses, macular stress, and diet.",
-  },
-  buabengMacularPigment2025: {
-    title:
-      "The influence of macular pigment on the fine spatial resolution of light of varying wavelengths",
-    publication: "Experimental Eye Research",
-    year: 2025,
-    url: "https://doi.org/10.1016/j.exer.2025.110625",
-    note:
-      "A same-laboratory two-point study in 60 young adults linking higher macular pigment optical density to better short-wave resolution, not a diet or macular-degeneration trial.",
-  },
-  vanDenBergStraylight1991: {
-    title:
-      "Dependence of intraocular straylight on pigmentation and light transmission through the ocular wall",
-    publication: "Vision Research",
-    year: 1991,
-    url: "https://pubmed.ncbi.nlm.nih.gov/1891824/",
-    note:
-      "A classic straylight paper showing that lighter irises transmit more light through the ocular wall and that fundus reflection also contributes to pigmentation-dependent glare.",
-  },
   blueGlassesMeta2025: {
     title:
       "Efficacy of blue-light blocking glasses on actigraphic sleep outcomes",
@@ -420,116 +382,6 @@ export const SLEEP_HEALTH_SOURCES = {
     url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3504423/",
     note:
       "A pharmacology review comparing half-lives, target symptoms, residual effects, and uncertain clinical significance of sleep-architecture changes.",
-  },
-  oxybateLabel2025: {
-    title: "XYWAV and XYREM prescribing information and REMS",
-    publication: "U.S. Food and Drug Administration",
-    year: 2025,
-    url: "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/021196Orig1s047%2C212690Orig1s017lbl.pdf",
-    note:
-      "Current regulatory source for approved uses, restricted distribution, CNS and respiratory depression, abuse, interactions, and other serious risks.",
-  },
-  oxybateNarcolepsyMeta2019: {
-    title:
-      "Gamma-hydroxybutyrate for narcolepsy in adults: a systematic review and meta-analysis",
-    publication: "Sleep Medicine",
-    year: 2019,
-    url: "https://pubmed.ncbi.nlm.nih.gov/31671326/",
-    note:
-      "A 15-trial synthesis finding benefits for narcolepsy symptoms and sleep measures alongside dose-related tolerability problems.",
-  },
-  oxybatePhysiological2012: {
-    title:
-      "Differential effects of sodium oxybate and baclofen on EEG, sleep, performance, and memory",
-    publication: "Sleep",
-    year: 2012,
-    url: "https://pubmed.ncbi.nlm.nih.gov/22851803/",
-    note:
-      "A controlled experiment showing that drug-induced slow EEG waves were not necessarily functionally equivalent to ordinary physiological slow-wave sleep.",
-  },
-  oxybateMdd2025: {
-    title:
-      "Gamma-hydroxybutyrate to promote slow-wave sleep in major depressive disorder",
-    publication: "Journal of Psychopharmacology",
-    year: 2025,
-    url: "https://pubmed.ncbi.nlm.nih.gov/40229541/",
-    note:
-      "A small randomized crossover trial in a specific clinical population, useful as experimental evidence rather than support for self-treatment.",
-  },
-  oxybateHealthy2026: {
-    title:
-      "Sodium oxybate alters sleep architecture and memory-related responses",
-    publication: "Journal of Sleep Research",
-    year: 2026,
-    url: "https://pubmed.ncbi.nlm.nih.gov/42267755/",
-    note:
-      "A 19-person healthy-volunteer crossover study showing altered architecture and memory-related effects, not a general insomnia benefit.",
-  },
-  erowidGhbOverdose: {
-    title: "GHB experience report: An overdose",
-    publication: "Erowid Experience Vaults",
-    year: 2000,
-    url: "https://www.erowid.org/experiences/exp.php?ID=45",
-    note:
-      "An unverified first-person report included only to document the kinds of dosing uncertainty and acute harm described outside clinical settings.",
-  },
-  erowidGhbWithdrawal: {
-    title: "GHB experience report: Dependence and withdrawal insomnia",
-    publication: "Erowid Experience Vaults",
-    year: 2003,
-    url: "https://www.erowid.org/experiences/exp.php?ID=13866",
-    note:
-      "An unverified account describing escalating use and withdrawal insomnia; useful for question discovery, not frequency or causality estimates.",
-  },
-  erowidGhbVariable: {
-    title: "GHB experience report: Short duration and variable sleep",
-    publication: "Erowid Experience Vaults",
-    year: 2004,
-    url: "https://www.erowid.org/experiences/exp.php?ID=20916",
-    note:
-      "An unverified report illustrating why subjective claims of restorative sleep cannot substitute for controlled outcomes or safe pharmaceutical use.",
-  },
-  fdaKratom2026: {
-    title: "FDA and Kratom",
-    publication: "U.S. Food and Drug Administration",
-    year: 2026,
-    url: "https://www.fda.gov/news-events/public-health-focus/fda-and-kratom",
-    note:
-      "Current federal summary of unapproved uses, opioid-receptor activity, dependence, adverse events, contamination, and regulatory concerns.",
-  },
-  cdcKratom2026: {
-    title:
-      "Increases in Kratom-Related Reports to Poison Centers, 2015–2025",
-    publication: "CDC Morbidity and Mortality Weekly Report",
-    year: 2026,
-    url: "https://www.cdc.gov/mmwr/volumes/75/wr/mm7511a1.htm",
-    note:
-      "Current national surveillance documenting rising reports, hospitalizations, serious outcomes, high-potency products, and multi-substance risk.",
-  },
-  kratomWithdrawal2019: {
-    title: "Kratom withdrawal: a systematic review with case series",
-    publication: "Journal of Psychoactive Drugs",
-    year: 2019,
-    url: "https://pubmed.ncbi.nlm.nih.gov/30614408/",
-    note:
-      "A systematic clinical review describing tolerance, dependence, withdrawal, and the limits of the available evidence.",
-  },
-  kratomDependence2024: {
-    title:
-      "Kratom use disorder and physical dependence: amount versus frequency",
-    publication: "Drug and Alcohol Dependence",
-    year: 2024,
-    url: "https://pubmed.ncbi.nlm.nih.gov/38788532/",
-    note:
-      "A study finding that dependence and use-disorder indicators become more likely as consumption frequency increases.",
-  },
-  kratomForum2026: {
-    title: "Community discussion: poor sleep after later-day kratom use",
-    publication: "Reddit r/kratom",
-    year: 2026,
-    url: "https://www.reddit.com/r/kratom/comments/1s1dee7/poor_sleep_caused_by_kratom_consumed_later_in_the/",
-    note:
-      "A recent self-report thread showing conflicting experiences of energy, sleep disruption, and a later crash; anecdotal and selection-biased.",
   },
   toDoList2018: {
     title:
@@ -838,8 +690,8 @@ export const SLEEP_HEALTH_ARTICLES = [
     ],
     relatedSlugs: [
       "l-theanine-valerian-california-poppy-for-sleep",
-      "ghb-sodium-oxybate-and-sleep",
-      "kratom-after-no-sleep",
+      "best-magnesium-for-sleep",
+      "benadryl-diphenhydramine-for-sleep",
     ],
     body: [
       callout(
@@ -1057,7 +909,6 @@ export const SLEEP_HEALTH_ARTICLES = [
       "lightTimingReview2019",
     ],
     relatedSlugs: [
-      "blue-light-scatter-and-visual-detail",
       "morning-sunlight-and-sleep",
       "how-to-quiet-a-racing-mind-at-night",
       "why-you-sleep-badly-in-hotels",
@@ -1077,12 +928,7 @@ export const SLEEP_HEALTH_ARTICLES = [
         " supports a biological effect of evening light exposure, while broader light reviews show that morning and evening timing push the circadian system in different directions. None establishes one universal device curfew for every sleeper.",
       ),
       paragraph(
-        "A separate 2026 University of Georgia vision experiment asked whether short-wave light is harder to resolve as two points than other colors. That laboratory task measured optical blur and iris-color differences, not melatonin or sleep. The companion article on ",
-        link(
-          "blue-light scatter and visual detail",
-          "/research/blue-light-scatter-and-visual-detail",
-        ),
-        " explains what those two-point thresholds can support and why they do not replace a screen-free wind-down.",
+        "Short-wavelength light can also look less crisp because of ordinary optical scatter and focus differences. That visual effect is separate from sleep evidence and does not make blue-blocking glasses a proven insomnia treatment.",
       ),
       heading("What a 30-minute screen break can and cannot prove"),
       paragraph(
@@ -1147,160 +993,6 @@ export const SLEEP_HEALTH_ARTICLES = [
     ],
   },
   {
-    slug: "blue-light-scatter-and-visual-detail",
-    title: "Why Blue Light Blurs Fine Detail More Than Other Colors",
-    dek:
-      "A 2026 University of Georgia experiment found short-wave light hardest to resolve as two points. The result is about optical blur and glare, not a new proof that evening screens ruin sleep.",
-    seoDescription:
-      "A 2026 UGA experiment found blue light hardest to resolve as two points. Review scatter, iris color, limits, and what that does not prove about night screens.",
-    focusPhrase: "why blue light blurs fine detail",
-    keywords: [
-      "blue light scatter",
-      "two-point resolution",
-      "iris color glare",
-      "UGA blue light study",
-      "blue light fine detail",
-    ],
-    tags: ["sleep", "environment", "wellness-claims"],
-    evidenceLabel: "Wavelength-dependent blur in young adults; not a sleep trial",
-    publishedAt: "2026-08-31",
-    updatedAt: "2026-08-31",
-    sourceIds: [
-      "buabengWavelength2026",
-      "ugaBlueLightNews2026",
-      "buabengMacularPigment2025",
-      "vanDenBergStraylight1991",
-      "blueGlassesMeta2025",
-      "blueGlassesCochrane2023",
-      "tabletLight2018",
-      "lightTimingReview2019",
-    ],
-    relatedSlugs: [
-      "screens-blue-light-glasses-and-sleep",
-      "morning-sunlight-and-sleep",
-    ],
-    body: [
-      callout(
-        "The short answer",
-        "In a 2026 University of Georgia laboratory experiment, 60 young adults needed more space between two points of short-wave (blue) light than between green, yellow, red, or broadband points before they could tell the points apart. Lighter irises, especially blue, showed higher thresholds. The published paper treats that pattern as a mix of scatter, chromatic aberration, and photoreceptor sampling. It is not a trial of phones, sleep, age-related macular degeneration, or filtering glasses.",
-      ),
-      heading("What the 2026 experiment measured"),
-      paragraph(
-        "Yaw Buabeng, OD, MS, a University of Georgia psychology doctoral candidate and former optometrist, is the lead author. Billy R. Hammond is the corresponding author. Their paper, ",
-        emphasis("Wavelength dependence of fine spatial resolution in human vision"),
-        ", appeared open access in ",
-        emphasis("Attention, Perception, & Psychophysics"),
-        " on 29 May 2026. UGA Research later summarized the work for a general audience. That ",
-        link("news report", SLEEP_HEALTH_SOURCES.ugaBlueLightNews2026.url),
-        " is useful for the authors' later comments on glasses, macular stress, and diet. It is not a substitute for the journal paper's protocol, statistics, or stated limits.",
-      ),
-      paragraph(
-        "The ",
-        link("published experiment", SLEEP_HEALTH_SOURCES.buabengWavelength2026.url),
-        " tested 60 healthy adults aged 18 to 30 years (mean age 22.7). Participants had unaided acuity better than 20/40, reported normal color vision, and did not wear glasses or contact lenses during testing. A 1,000-watt xenon lamp and narrowband interference filters produced peaks at 420, 460, 500, 540, 580, 620, and 660 nm, plus a broadband white condition. Energy at the apertures was matched at 628 microwatts. Two 2 mm apertures started together and were separated until the viewer reported two points. Each wavelength was tested three times with an ascending adjustment method. Viewing distance was 67 inches (about 1.7 m) in a darkened room.",
-      ),
-      paragraph(
-        "Thresholds differed by wavelength. Short-wave light at 420 nm produced poorer two-point resolution than long-wave light at 660 nm. Broadband white needed less separation than any narrowband condition. The authors report a Friedman test of χ²(7, N = 60) = 243.84, p < 0.001. Those numbers describe this task and this sample. They are not a percentage of everyday visual loss on a phone.",
-      ),
-      heading("Why short-wave light is harder to resolve"),
-      paragraph(
-        "When light spreads on the retina, two sources must sit farther apart before they look separate. That is a mechanism story with several contributors. The paper's discussion says a Rayleigh-type curve fitted the thresholds well, but ocular media are not the atmosphere, and longitudinal chromatic aberration fitted almost as well. The authors conclude that scatter, chromatic aberration, and neural sampling likely act together. They did not take direct wavefront or straylight measurements, so they cannot assign shares to each cause.",
-      ),
-      paragraph(
-        "This matters because some press wording treats blue-light scatter as the whole explanation. Direct evidence from the experiment is the wavelength-dependent two-point threshold. The partition into scatter versus aberration is an inference the authors themselves mark as incomplete.",
-      ),
-      heading("Iris color and melanin"),
-      paragraph(
-        "Iris color was graded with a standardized photographic chart before analysis. Thresholds were highest for blue irises and for lighter irises overall. In the mixed-effects model, light-blue irises stood out from other color-lightness combinations. Medium and dark irises did not differ from each other after correction.",
-      ),
-      paragraph(
-        "Buabeng told UGA Research that darker brown irises have more melanin in the iris and in the retinal pigment epithelium, which can absorb stray light. That mechanism is consistent with older intraocular-straylight work. A ",
-        link(
-          "1991 Vision Research paper",
-          SLEEP_HEALTH_SOURCES.vanDenBergStraylight1991.url,
-        ),
-        " by van den Berg, IJspeert, and de Waard found that straylight depends on pigmentation, that a light-blue iris transmitted more red and green light than a dark-brown ocular wall, and that fundus reflection also contributes. Those findings support a pigmentation mechanism. They do not diagnose a reader's glare problem or prove that blue-eyed people cannot use screens.",
-      ),
-      heading("What this does and does not mean for screens at night"),
-      table(
-        "The useful distinction is optical blur versus sleep",
-        ["Question", "What the sources support", "What remains out of reach"],
-        [
-          item("Is short-wave light harder to resolve as two points?"),
-          item("Direct evidence in 60 young adults under equal-energy laboratory points"),
-          item("Not a measurement of phones, tablets, or ordinary room lighting"),
-        ],
-        [
-          item("Do lighter irises scatter more in this task?"),
-          item("Higher two-point thresholds, especially for light-blue irises"),
-          item("Not a diagnosis, not a glare test for every age or eye disease"),
-        ],
-        [
-          item("Do evening screens delay sleep?"),
-          item("Separate tablet-light and light-timing reviews support a circadian direction"),
-          item("This acuity experiment did not measure melatonin or sleep"),
-        ],
-        [
-          item("Do blue-blocking glasses improve sleep?"),
-          item("A 2025 actigraphy meta-analysis found no significant objective benefit"),
-          item("Comfort or glare relief, if it occurs, is a different claim from sleep"),
-        ],
-      ),
-      paragraph(
-        "The stimulus was not a phone, tablet, or television. It was two small, equal-energy points at about 1.7 m, at very low luminance, in young adults selected for good unaided acuity. Photometric (brightness-matched) conditions would have required more short-wave energy and would have changed the optical question. A bedroom display is broadband, usually brighter, closer, and mixed with content that keeps the mind busy.",
-      ),
-      paragraph(
-        "Evening light can still affect circadian timing. Controlled ",
-        link("tablet-light research", SLEEP_HEALTH_SOURCES.tabletLight2018.url),
-        " and a ",
-        link(
-          "45-study review of light timing",
-          "https://pubmed.ncbi.nlm.nih.gov/30670164/",
-        ),
-        " support a direction: brighter evening light tracks with later sleep timing. That is a different outcome from two-point acuity. If the reader question is whether evening screens or blue-blocking glasses improve sleep, use the article on ",
-        link(
-          "screens, blue-light glasses, and sleep",
-          "/research/screens-blue-light-glasses-and-sleep",
-        ),
-        ". This page answers why blue wavelengths can look softer and glarier, what the UGA experiment measured, and why those thresholds do not settle the sleep debate.",
-      ),
-      heading("Filtering glasses, macular stress, and diet"),
-      paragraph(
-        "The acuity experiment did not test blue-light filtering glasses, diet, or macular degeneration. The ",
-        link("UGA Research feature", SLEEP_HEALTH_SOURCES.ugaBlueLightNews2026.url),
-        " quotes Buabeng recommending device filters and filtering glasses for long outdoor or screen hours, linking high-energy blue light to macular oxidative stress and age-related macular degeneration over time, and pointing to macular pigment from leafy greens and colorful fruit. Those remarks are clinical opinion and a pointer to prior work. They are not results of the 60-person two-point study.",
-      ),
-      paragraph(
-        "A ",
-        link(
-          "2025 Experimental Eye Research paper",
-          SLEEP_HEALTH_SOURCES.buabengMacularPigment2025.url,
-        ),
-        " by Buabeng and Hammond, using the same two-point apparatus, reported that higher macular pigment optical density tracked with better short-wave resolution (about 31 to 38 percent better in a high-versus-low quartile comparison at 420 to 540 nm) and not with longer wavelengths. That is an association in young adults, not a diet trial and not proof that fruit and greens prevent macular degeneration.",
-      ),
-      paragraph(
-        "For sleep, the ",
-        link("2023 Cochrane review", SLEEP_HEALTH_SOURCES.blueGlassesCochrane2023.url),
-        " of blue-light filtering spectacle lenses found inconsistent results, and a ",
-        link(
-          "2025 actigraphy meta-analysis",
-          SLEEP_HEALTH_SOURCES.blueGlassesMeta2025.url,
-        ),
-        " of 49 adults found no significant improvement in sleep latency, duration, efficiency, or awakenings. Glasses that reduce short-wave light might change comfort or glare for some people. That remains a different claim from a promised sleep benefit.",
-      ),
-      heading("A practical night experiment"),
-      paragraph(
-        "If fine detail or glare on a bright display is the problem, the laboratory result supports a modest inference: lowering short-wave content and overall brightness can reduce one optical reason the image looks softer. Dim the room, drop display brightness, increase viewing distance, and stop staring at the brightest object in a dark field. None of those steps is a treatment for eye disease.",
-      ),
-      paragraph(
-        "If the problem is falling asleep, change the whole evening: light at the eyes, activating content, and time spent on the device. A 30-minute screen-free wind-down is a reasonable test because it moves all three. Quiet audio in a dim room can occupy that interval without adding another feed. Sleepyland's browser sound machine stays local and does not need an account. It does not treat blur or replace a clinician.",
-      ),
-      paragraph(
-        "Persistent glare, sudden vision change, distortion, or flashes deserves an eye-care visit. Persistent insomnia, loud snoring, or severe daytime sleepiness deserves sleep-medicine help. This page does not diagnose either problem.",
-      ),
-    ],
-  },
-  {
     slug: "z-drugs-zaleplon-zolpidem-eszopiclone",
     title: "Zaleplon vs Ambien and Other Z-Drugs for Insomnia",
     dek:
@@ -1330,8 +1022,8 @@ export const SLEEP_HEALTH_ARTICLES = [
     ],
     relatedSlugs: [
       "benadryl-diphenhydramine-for-sleep",
-      "ghb-sodium-oxybate-and-sleep",
       "how-to-quiet-a-racing-mind-at-night",
+      "is-eight-hours-of-sleep-necessary",
     ],
     body: [
       callout(
@@ -1401,230 +1093,6 @@ export const SLEEP_HEALTH_ARTICLES = [
       ),
       paragraph(
         "For chronic insomnia, CBT-I remains the first-line behavioral treatment with durable benefit after treatment ends. Medication can be appropriate in selected cases, including short-term support or a carefully reviewed adjunct. The right conclusion is not that zaleplon is the good Z-drug. It is that zaleplon is the shortest-acting common option, suited mainly to sleep-onset difficulty, with the same need for prescription oversight and safety boundaries.",
-      ),
-    ],
-  },
-  {
-    slug: "ghb-sodium-oxybate-and-sleep",
-    title: "GHB, Sodium Oxybate & Sleep Quality: Evidence and Risk",
-    dek:
-      "Prescription sodium oxybate has important uses in narcolepsy and idiopathic hypersomnia and can increase slow-wave sleep. That clinical evidence does not make illicit GHB a safe insomnia treatment.",
-    seoDescription:
-      "Review GHB and sodium oxybate sleep research, approved uses, slow-wave sleep findings, REMS controls, overdose risk, and limits of experience reports.",
-    focusPhrase: "GHB sleep quality sodium oxybate",
-    keywords: [
-      "GHB for sleep",
-      "sodium oxybate sleep quality",
-      "Xyrem slow wave sleep",
-      "GHB insomnia evidence",
-      "GHB Erowid sleep reports",
-    ],
-    tags: ["sleep", "medications", "wellness-claims"],
-    evidenceLabel: "Real clinical uses, profound CNS risk, not an insomnia shortcut",
-    publishedAt: "2026-08-28",
-    updatedAt: "2026-08-28",
-    sourceIds: [
-      "oxybateLabel2025",
-      "oxybateNarcolepsyMeta2019",
-      "oxybatePhysiological2012",
-      "oxybateMdd2025",
-      "oxybateHealthy2026",
-      "erowidGhbOverdose",
-      "erowidGhbWithdrawal",
-      "erowidGhbVariable",
-      "cbtiGuideline2021",
-    ],
-    relatedSlugs: [
-      "z-drugs-zaleplon-zolpidem-eszopiclone",
-      "kratom-after-no-sleep",
-      "is-eight-hours-of-sleep-necessary",
-    ],
-    body: [
-      callout(
-        "The short answer",
-        "GHB has been studied extensively as the prescription drug sodium oxybate. In restricted medical use it improves cataplexy and excessive daytime sleepiness in narcolepsy, and low-sodium oxybate is approved for idiopathic hypersomnia. It can increase slow-wave measures and consolidate disrupted sleep in those populations. It is not an ordinary insomnia medicine. The distance between an intended effect and respiratory depression, coma, or death can be dangerously small, especially with alcohol or other depressants, and pharmaceutical products are distributed through a REMS.",
-      ),
-      heading("The same molecule lives in very different systems"),
-      paragraph(
-        "Gamma-hydroxybutyrate is a central nervous system depressant. Sodium oxybate is a regulated pharmaceutical form manufactured, prescribed, dispensed, and monitored for defined indications. Illicit or informal GHB may have uncertain concentration, identity, co-ingredients, measuring tools, storage, and supervision. Evidence for one cannot be transferred to the other without carrying the controls with it.",
-      ),
-      paragraph(
-        "The current ",
-        link("FDA prescribing information and REMS", SLEEP_HEALTH_SOURCES.oxybateLabel2025.url),
-        " covers sodium oxybate for cataplexy or excessive daytime sleepiness in narcolepsy and low-sodium oxybate for narcolepsy and adult idiopathic hypersomnia. The boxed warning addresses CNS depression and abuse or misuse. Respiratory depression, sleep-disordered breathing, confusion, depression, and dangerous interactions are explicit concerns.",
-      ),
-      heading("Why people describe the sleep as deep"),
-      paragraph(
-        "In narcolepsy, nighttime sleep is often fragmented. A ",
-        link("15-trial systematic review", SLEEP_HEALTH_SOURCES.oxybateNarcolepsyMeta2019.url),
-        " found improvements in cataplexy, daytime sleepiness, slow-wave sleep, awakenings, and reported nighttime quality, alongside more dose-related adverse effects than placebo. This is disease-specific evidence from clinical protocols, not a trial in ordinary stressed sleepers.",
-      ),
-      paragraph(
-        "The phrase restorative slow-wave sleep also needs discipline. In a ",
-        link("controlled physiology study", SLEEP_HEALTH_SOURCES.oxybatePhysiological2012.url),
-        ", sodium oxybate increased low-frequency EEG power, but the researchers concluded that the induced slow waves did not appear functionally identical to physiological slow waves and did not improve measured performance or memory. More slow-wave-looking activity is not automatically better restoration.",
-      ),
-      table(
-        "What different evidence streams can tell us",
-        ["Evidence stream", "Useful conclusion", "What it cannot establish"],
-        [
-          item("Narcolepsy and hypersomnia trials"),
-          item("Oxybate can improve specific disease symptoms under monitored pharmaceutical use"),
-          item("Safety or benefit for unsupervised insomnia"),
-        ],
-        [
-          item("Small experimental studies"),
-          item("The drug can alter sleep architecture and next-day biology"),
-          item("That every alteration is restorative or desirable"),
-        ],
-        [
-          item("Experience reports"),
-          item("Questions about short duration, redosing, dependence, withdrawal, and acute harm recur"),
-          item("Frequency, causality, product identity, or a safe method"),
-        ],
-      ),
-      heading("What newer experimental work adds"),
-      paragraph(
-        "A ",
-        link("2025 crossover trial in major depressive disorder", SLEEP_HEALTH_SOURCES.oxybateMdd2025.url),
-        " examined slow-wave sleep and next-day outcomes in a small clinical sample. A ",
-        link("2026 healthy-volunteer study", SLEEP_HEALTH_SOURCES.oxybateHealthy2026.url),
-        " found altered architecture and emotional-memory responses in 19 men. These studies show continuing pharmaceutical research. They do not establish GHB as a consumer sleep aid, and small mechanistic studies cannot define long-term benefit-risk.",
-      ),
-      heading("What Erowid and forum reports add, and what they do not"),
-      paragraph(
-        "Crowdsourced reports repeatedly describe a short, abrupt sleep period, waking and redosing, highly variable subjective restoration, rapid escalation, withdrawal insomnia, vomiting, unconsciousness, and emergency care. The ",
-        link("overdose report", SLEEP_HEALTH_SOURCES.erowidGhbOverdose.url),
-        ", ",
-        link("withdrawal account", SLEEP_HEALTH_SOURCES.erowidGhbWithdrawal.url),
-        ", and ",
-        link("variable-sleep account", SLEEP_HEALTH_SOURCES.erowidGhbVariable.url),
-        " are unverified narratives. They are useful because they expose failure modes that a simple “high-quality sleep” claim hides. They cannot establish prevalence, dose-response, purity, or effectiveness.",
-      ),
-      paragraph(
-        "This article intentionally does not reproduce amounts or informal administration techniques. Concentration can vary, individual response is unpredictable, and turning an experience report into instructions would erase the most important finding: unsupervised use lacks the controls that make pharmaceutical research interpretable.",
-      ),
-      heading("Why mixing is especially dangerous"),
-      unordered(
-        item("Alcohol, opioids, benzodiazepines, Z-drugs, sedating antihistamines, kava, and other depressants can compound CNS and respiratory depression."),
-        item("Sleep apnea or other breathing vulnerability can make a sedative's nighttime effects more dangerous."),
-        item("A person who appears asleep may be severely intoxicated; inability to wake, abnormal breathing, seizure, or collapse requires emergency help."),
-        item("Dependence can produce severe rebound and withdrawal symptoms that require medical care rather than improvised tapering."),
-      ),
-      heading("The clinical lesson"),
-      paragraph(
-        "GHB is not an example of a suppressed miracle sleep chemical. It is an example of a drug with real pharmacology, real approved uses, real sleep-stage effects, and a narrow enough safety context to require restricted distribution. Anyone with narcolepsy or idiopathic hypersomnia should discuss approved oxybate therapy with a sleep specialist. Anyone with chronic insomnia deserves evaluation and evidence-based care, not translation of a controlled-drug experience vault into a home protocol.",
-      ),
-    ],
-  },
-  {
-    slug: "kratom-after-no-sleep",
-    title: "Kratom After No Sleep? Why It Does Not Restore Sleep Loss",
-    dek:
-      "Kratom can feel stimulating or sedating, but no evidence shows that it reverses sleep-deprivation impairment. Dependence, withdrawal insomnia, contamination, and potent 7-OH products make it a risky morning-after strategy.",
-    seoDescription:
-      "Can kratom help after no sleep? Review stimulation, sleep disruption, dependence, withdrawal, 7-OH products, poison data, and safer recovery priorities.",
-    focusPhrase: "kratom after no sleep",
-    keywords: [
-      "kratom for energy after no sleep",
-      "kratom sleep deprivation",
-      "kratom morning energy",
-      "kratom affects sleep",
-      "kratom withdrawal insomnia",
-    ],
-    tags: ["sleep", "medications", "wellness-claims"],
-    evidenceLabel: "No restorative evidence and rising safety concerns",
-    publishedAt: "2026-08-28",
-    updatedAt: "2026-08-28",
-    sourceIds: [
-      "fdaKratom2026",
-      "cdcKratom2026",
-      "kratomWithdrawal2019",
-      "kratomDependence2024",
-      "kratomForum2026",
-      "vanDongen2003",
-      "aasmDurationConsensus2015",
-    ],
-    relatedSlugs: [
-      "is-eight-hours-of-sleep-necessary",
-      "ghb-sodium-oxybate-and-sleep",
-      "morning-sunlight-and-sleep",
-    ],
-    body: [
-      callout(
-        "The short answer",
-        "Kratom is not a proven way to restore the brain after a sleepless night. Some people report stimulant-like energy, while others report sedation, a later crash, poorer sleep, or withdrawal-related insomnia. Feeling more awake does not reverse impaired attention, judgment, or reaction time. Kratom products are not FDA-approved for this purpose, can produce dependence, and increasingly include concentrated or semisynthetic 7-hydroxymitragynine products with greater risk.",
-      ),
-      heading("Stimulation is not restoration"),
-      paragraph(
-        "After inadequate sleep, the immediate desire is often functional: stay awake, work, drive, or stop feeling miserable. A psychoactive substance can change the feeling of fatigue without repairing the missed sleep or reliably normalizing performance. This is the same distinction seen with caffeine, prescription stimulants, and other alerting drugs: subjective wakefulness and objective safety can separate.",
-      ),
-      paragraph(
-        link(
-          "Controlled sleep-restriction research",
-          "https://pubmed.ncbi.nlm.nih.gov/12683469/",
-        ),
-        " shows that neurobehavioral performance can deteriorate cumulatively while subjective sleepiness fails to track the deficit accurately. No controlled kratom trial shows that the plant reverses those deficits.",
-      ),
-      paragraph(
-        "Kratom, ",
-        "Mitragyna speciosa",
-        ", contains multiple alkaloids with complex and variable effects, including activity at opioid receptors. The ",
-        link("FDA's current kratom page", SLEEP_HEALTH_SOURCES.fdaKratom2026.url),
-        " says no kratom product is approved for a medical use and describes dependence, withdrawal, seizures, liver toxicity, and contamination concerns. “White,” “green,” and “red” strain labels are not standardized pharmacological categories and do not create an evidence-based morning protocol.",
-      ),
-      heading("What community reports reveal"),
-      paragraph(
-        "Crowdsourced discussions contain all of the expected directions: alertness and motivation, calm or sedation, delayed sleep, heavy morning grogginess, a rebound crash, waking in withdrawal, and difficulty sleeping after stopping. A ",
-        link("recent community thread", SLEEP_HEALTH_SOURCES.kratomForum2026.url),
-        " includes people describing later-day stimulation and the feeling of borrowing energy from the future. Other users report the opposite. These accounts are useful for identifying variation and failure modes. They cannot tell us which effect a new user will have or whether a product is what its label says.",
-      ),
-      table(
-        "Why common kratom claims do not solve sleep loss",
-        ["Claim", "What may be felt", "What remains unresolved"],
-        [
-          item("It gives morning energy"),
-          item("Stimulant-like alertness or mood change"),
-          item("No evidence of restored vigilance, judgment, memory, or safe driving"),
-        ],
-        [
-          item("A red strain helps sleep"),
-          item("Sedation in some users"),
-          item("Strain labels are inconsistent; opioid-like effects, tolerance, and breathing risk remain"),
-        ],
-        [
-          item("Plant powder is safer than extracts"),
-          item("Lower concentration may reduce some acute risk"),
-          item("Dependence, contamination, interactions, and product variation still occur"),
-        ],
-      ),
-      heading("Dependence can create the sleep problem it appears to solve"),
-      paragraph(
-        "A ",
-        link("systematic review of kratom withdrawal", SLEEP_HEALTH_SOURCES.kratomWithdrawal2019.url),
-        " describes tolerance, dependence, and withdrawal, including sleep disruption. A ",
-        link("2024 dependence study", SLEEP_HEALTH_SOURCES.kratomDependence2024.url),
-        " found that physical dependence and use-disorder indicators became more likely as use frequency increased. The morning energy can therefore become relief from overnight withdrawal rather than recovery from the original poor sleep.",
-      ),
-      heading("The product market is becoming more hazardous"),
-      paragraph(
-        "The ",
-        link("2026 CDC poison-center analysis", SLEEP_HEALTH_SOURCES.cdcKratom2026.url),
-        " found approximately a 1,200 percent increase in kratom-related exposure reports from 2015 to 2025, with a sharp rise in 2025 and concern about high-potency alkaloid products. Multiple-substance reports had more hospitalizations and serious outcomes and accounted for most associated deaths in the dataset. Poison-center reports do not measure total use or individual probability, but the trend argues against casual safety claims.",
-      ),
-      paragraph(
-        "Concentrated 7-OH and semisynthetic products deserve special separation from traditional leaf material. They can be sold with candy-like branding or as enhanced kratom while delivering a different potency profile. Avoiding those products does not make ordinary kratom restorative; it only removes one escalating risk.",
-      ),
-      heading("What to prioritize after a bad night"),
-      ordered(
-        item(strong("Protect safety. "), "Do not drive or perform hazardous work if you are fighting sleep or having attention lapses. Alerting feelings are not a clearance test."),
-        item(strong("Use light and timing. "), "Get ordinary daytime light, keep a reasonable wake schedule, and avoid turning one bad night into a full circadian reversal."),
-        item(strong("Use naps deliberately. "), "A short planned nap can help some people, while a long late nap can reduce the next night's sleep pressure."),
-        item(strong("Reduce the next night's obstacles. "), "Avoid stacking sedatives or stimulants, and return to a calm, repeatable wind-down."),
-        item(strong("Look for the pattern. "), "Repeated all-night insomnia, breathing symptoms, mood elevation, substance withdrawal, or disabling sleepiness deserves qualified evaluation."),
-      ),
-      paragraph(
-        "This is not a moral judgment about people who use kratom for pain or opioid withdrawal. Those are complex clinical and public-health contexts. It is a narrower conclusion: no controlled evidence supports kratom as restoration after sleep loss, and the known risks make it a poor experiment for an already impaired person.",
       ),
     ],
   },

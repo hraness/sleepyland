@@ -4,10 +4,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { serializeJsonLd } from "../../seo";
-import { SleepylandAskAiAboutThis } from "../../ask-ai-about-this";
 import { EditorialImageFigure } from "../../editorial-image";
 import { researchEditorialImage } from "../../editorial-images";
 import { ArticleBody } from "../article-body";
+import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "../editorial-disclosure";
 import {
   RESEARCH_SOURCES,
   articleReadingMinutes,
@@ -15,6 +15,7 @@ import {
   headingId,
   researchArticlePath,
   researchArticles,
+  relatedResearchArticles,
   researchTagLabel,
 } from "../articles";
 import {
@@ -63,15 +64,13 @@ export default async function ResearchArticlePage({
     notFound();
   }
 
-  const relatedArticles = article.relatedSlugs
-    .map(getResearchArticle)
-    .filter((candidate) => candidate !== undefined);
+  const relatedArticles = relatedResearchArticles(article);
   const headings = article.body.flatMap((block) =>
     block.type === "heading" && block.level === 2
       ? [{ text: block.text }]
       : []);
   const path = researchArticlePath(article.slug);
-
+  const editorialImage = researchEditorialImage(article.slug);
   return (
     <main className="plain-publication__article" id="research-content">
       <script
@@ -79,7 +78,7 @@ export default async function ResearchArticlePage({
           __html: serializeJsonLd([
             researchArticleJsonLd(article),
             breadcrumbJsonLd([
-              { name: "Research", path: "/" },
+              { name: "Research", path: "/research" },
               { name: article.title, path },
             ]),
           ]),
@@ -93,7 +92,7 @@ export default async function ResearchArticlePage({
           aria-label="Breadcrumb"
           className="plain-publication__breadcrumbs"
           items={[
-            { href: "/", id: "research", label: "Research" },
+            { href: "/research", id: "research", label: "Research" },
             { id: article.slug, label: article.title },
           ]}
         />
@@ -124,12 +123,11 @@ export default async function ResearchArticlePage({
         </p>
       </header>
 
-      <div className="plain-publication__article-banner plain-publication__shell">
-        <EditorialImageFigure
-          image={researchEditorialImage(article.slug)}
-          preload
-        />
-      </div>
+      {editorialImage === undefined ? null : (
+        <div className="plain-publication__article-banner plain-publication__shell">
+          <EditorialImageFigure image={editorialImage} preload />
+        </div>
+      )}
 
       <div className="plain-publication__article-layout plain-publication__shell">
         <nav aria-label="In this article" className="plain-publication__toc">
@@ -182,17 +180,19 @@ export default async function ResearchArticlePage({
             claims when stronger evidence appears.
           </p>
           <p className="plain-publication__disclosure">
+            {RESEARCH_AUTHORSHIP_DISCLOSURE}
+          </p>
+          <p className="plain-publication__disclosure">
             Found a stronger source or a claim that needs review? Research
             contributions are <a href={researchContributionUrl}>welcome on GitHub</a>.
           </p>
-          <SleepylandAskAiAboutThis path={path} />
         </div>
       </div>
 
       <footer className="plain-publication__related plain-publication__shell">
         <div className="plain-publication__section-heading">
           <h2>Continue researching</h2>
-          <Link href="/">All research</Link>
+          <Link href="/research">All research</Link>
         </div>
         <div className="plain-publication__related-grid">
           {relatedArticles.map((relatedArticle) => (

@@ -4,14 +4,16 @@ import {
 } from "@hraness/web-discovery";
 
 import { researchEditorialImage } from "./editorial-images";
+import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "./research/editorial-disclosure";
 import {
+  discoverableResearchArticles,
   latestResearchUpdatedAt,
   researchArticlePath,
   researchArticlesNewestFirst,
   researchTagLabel,
+  type ResearchArticle,
 } from "./research/articles";
 import { PRODUCT_PAGES } from "./product-pages";
-import { READING_NOTES } from "./reading-notes";
 import { absoluteUrl, isoDateTime } from "./seo";
 import { site } from "./site";
 
@@ -28,14 +30,15 @@ function xmlEscape(value: string): string {
     .replaceAll("'", "&apos;");
 }
 
-export function researchDiscoveryPaths(): readonly OwnedPath[] {
+export function researchDiscoveryPaths(
+  candidateArticles: readonly ResearchArticle[] = researchArticlesNewestFirst,
+): readonly OwnedPath[] {
   return [
     "/",
     "/noise",
-    "/reading",
+    "/research",
     ...PRODUCT_PAGES.map((page) => page.path),
-    ...READING_NOTES.map((note) => note.path),
-    ...researchArticlesNewestFirst.map((article) =>
+    ...discoverableResearchArticles(candidateArticles).map((article) =>
       researchArticlePath(article.slug)),
   ];
 }
@@ -50,34 +53,40 @@ export function indexNowPayload(
   );
 }
 
-export function researchFeedXml(): string {
+export function researchFeedXml(
+  candidateArticles: readonly ResearchArticle[] = researchArticlesNewestFirst,
+): string {
   const latestUpdate = latestResearchUpdatedAt();
   const feedUrl = absoluteUrl(RESEARCH_FEED_PATH);
   const channelUrl = absoluteUrl("/");
-  const items = researchArticlesNewestFirst.map((article) => {
-    const url = absoluteUrl(researchArticlePath(article.slug));
-    const editorialImage = researchEditorialImage(article.slug);
+  const items = discoverableResearchArticles(candidateArticles)
+    .map((article) => {
+      const url = absoluteUrl(researchArticlePath(article.slug));
+      const editorialImage = researchEditorialImage(article.slug);
 
-    return [
-      "    <item>",
-      `      <title>${xmlEscape(article.title)}</title>`,
-      `      <link>${xmlEscape(url)}</link>`,
-      `      <guid isPermaLink="true">${xmlEscape(url)}</guid>`,
-      `      <pubDate>${new Date(isoDateTime(article.publishedAt)).toUTCString()}</pubDate>`,
-      `      <description>${xmlEscape(article.dek)}</description>`,
-      `      <media:content height="${editorialImage.height}" medium="image" type="image/webp" url="${xmlEscape(absoluteUrl(editorialImage.src))}" width="${editorialImage.width}">`,
-      `        <media:description type="plain">${xmlEscape(editorialImage.alt)}</media:description>`,
-      `        <media:credit role="creator">${xmlEscape(editorialImage.credit)}</media:credit>`,
-      "      </media:content>",
-      ...article.tags.map((tagId) =>
-        `      <category>${xmlEscape(researchTagLabel(tagId))}</category>`),
-      "    </item>",
-    ].join("\n");
-  });
+      return [
+        "    <item>",
+        `      <title>${xmlEscape(article.title)}</title>`,
+        `      <link>${xmlEscape(url)}</link>`,
+        `      <guid isPermaLink="true">${xmlEscape(url)}</guid>`,
+        `      <pubDate>${new Date(isoDateTime(article.publishedAt)).toUTCString()}</pubDate>`,
+        `      <description>${xmlEscape(`${article.dek} ${RESEARCH_AUTHORSHIP_DISCLOSURE}`)}</description>`,
+        "      <dc:creator>Sleepyland Research</dc:creator>",
+        ...(editorialImage === undefined ? [] : [
+          `      <media:content height="${editorialImage.height}" medium="image" type="image/webp" url="${xmlEscape(absoluteUrl(editorialImage.src))}" width="${editorialImage.width}">`,
+          `        <media:description type="plain">${xmlEscape(editorialImage.alt)}</media:description>`,
+          `        <media:credit role="creator">${xmlEscape(editorialImage.credit)}</media:credit>`,
+          "      </media:content>",
+        ]),
+        ...article.tags.map((tagId) =>
+          `      <category>${xmlEscape(researchTagLabel(tagId))}</category>`),
+        "    </item>",
+      ].join("\n");
+    });
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">',
+    '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:media="http://search.yahoo.com/mrss/">',
     "  <channel>",
     `    <title>${site.shortName} Research</title>`,
     `    <link>${xmlEscape(channelUrl)}</link>`,

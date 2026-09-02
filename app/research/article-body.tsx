@@ -35,9 +35,11 @@ function RichText({ content }: Readonly<{ content: InlineContent }>) {
 
 function ArticleBlock({ block }: Readonly<{ block: ResearchBlock }>) {
   if (block.type === "editorial-image") {
+    const image = researchEditorialImage(block.imageSlug);
+    if (image === undefined) return null;
     return (
       <EditorialImageFigure
-        image={researchEditorialImage(block.imageSlug)}
+        image={image}
         sizes="(max-width: 46rem) calc(100vw - 2rem), 46rem"
         variant="interstitial"
       />

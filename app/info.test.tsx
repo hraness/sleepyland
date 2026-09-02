@@ -39,7 +39,7 @@ describe("Sleepyland product explanation", () => {
     expect(source).toContain("research contributions are welcome on GitHub");
     expect(source).toContain("href={repositoryUrl}");
     expect(source).toContain('aria-label="Product information"');
-    for (const path of ["/about", "/", "/demo", "/privacy", "/support", "/accessibility"]) {
+    for (const path of ["/about", "/research", "/demo", "/privacy", "/support", "/accessibility"]) {
       expect(source).toContain(`href="${path}"`);
     }
     expect(source).not.toContain("Deep work, Learn, Create, and Quick task");

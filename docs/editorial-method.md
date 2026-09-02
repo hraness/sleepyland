@@ -2,9 +2,21 @@
 
 Sleepyland publishes practical, evidence-led guides for people making decisions about sleep, sound, light, routines, supplements, and medications. The publication is educational and does not provide medical advice.
 
+Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed. A future clinical or pharmacist review must name the reviewer, scope, and date in the clinical-review ledger before the site claims it.
+
 ## Choose the reader question
 
 One page should own one decision. Search language helps identify unresolved questions, but it does not justify thin pages or wording variants. A new article must have a distinct reader job, sufficient evidence, and an original contribution that an existing page cannot absorb cleanly.
+
+Before drafting an indexable route, add an authored record to `app/research/admissions.ts` with the reader's concrete job, original contribution, three nearest existing pages, why their decisions remain separate, a primary evidence anchor and its exact fit, evidence type, claim risk, owner, source-check date, human-review state, lifecycle, score, and reassessment date. The registry fails closed: a typed article without a valid admission remains `noindex` and outside every discovery surface. Use `docs/editorial-lifecycle.md` for clinical quarantine and detailed merge history. Source count and word count do not establish usefulness. A page that only restates a caveat, targets a wording variant, or forces an unrelated essay into Sleepyland's product vocabulary should be merged or rejected.
+
+Score reader utility, original evidence, factual confidence, Sleepyland fit,
+voice integrity, and maintenance value from 0–2. An indexable route needs at
+least 9/12 and no zero. Scores of 6–8 require revision or consolidation; 5 or
+less is a rejection. Keywords, article length, source count, link count, image
+count, recency, and a publishing calendar cannot raise the score.
+
+Treat publication as provisional until a 28- to 56-day consolidation review chooses keep, revise, merge-and-redirect, or remove. Generate editorial imagery only after admission; a completed banner never creates a reason to retain a weak page.
 
 ## Build the evidence map
 
@@ -34,15 +46,19 @@ Do not diagnose, prescribe, provide individualized treatment, recommend dangerou
 
 Persistent insomnia, breathing symptoms during sleep, severe daytime impairment, medication questions, substance dependence, or immediate danger deserves qualified help beyond this publication.
 
+Medication guides and comparisons, supplement interaction or adverse-effect guidance, other material health-safety instructions, controlled-substance topics, and dangerous-use queries stay `noindex` and out of feeds, sitemaps, home modules, and proactive indexing until a documented clinical or pharmacist review approves the exact claims. This applies to every public representation, including negotiated and `.md` Markdown. Community reports may identify a safety question, but they are not a mandate to publish an acquisition page.
+
 ## Review before publication
 
 A substantive article change should pass this checklist:
 
 - The direct answer matches the body and metadata.
 - Each material claim has a source that supports the nearby wording.
-- New articles use at least five useful sources and add original decision support.
+- The evidence is sufficient for the exact claims and the page adds original decision support; a source-count target is not a substitute for either.
 - Evidence, mechanism, inference, history, and experience remain distinguishable.
 - Related links are intentional and no existing page owns the same reader job.
+- Homepage promotion is curated rather than date-driven and never exceeds eight guides; the full registry belongs at `/research`.
+- Any health-risk review and indexing decision is documented beside the change.
 - The article route, canonical, structured data, RSS, sitemap, and Markdown representation agree.
 - `bun run check` passes.
 

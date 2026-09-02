@@ -10,14 +10,14 @@ import {
   researchDiscoveryPaths,
 } from "./search-discovery";
 import {
+  isIndexableResearchArticle,
   researchArticlePath,
   researchArticles,
 } from "./research/articles";
 import { PRODUCT_PAGES } from "./product-pages";
-import { READING_NOTES } from "./reading-notes";
 
 describe("Sleepyland search discovery", () => {
-  test("publishes every research article in a static RSS feed", async () => {
+  test("publishes every indexable article with optional image parity", async () => {
     const response = getResearchFeed();
     const xml = await response.text();
 
@@ -27,18 +27,37 @@ describe("Sleepyland search discovery", () => {
     expect(xml).toContain(
       `<atom:link href="https://sleepy.land${RESEARCH_FEED_PATH}" rel="self" type="application/rss+xml" />`,
     );
-    expect(xml.match(/<item>/g)?.length).toBe(researchArticles.length);
+    const indexableArticles = researchArticles.filter(isIndexableResearchArticle);
+    expect(xml.match(/<item>/g)?.length).toBe(indexableArticles.length);
     expect(xml).toContain('xmlns:media="http://search.yahoo.com/mrss/"');
+    expect(xml).toContain('xmlns:dc="http://purl.org/dc/elements/1.1/"');
 
-    for (const article of researchArticles) {
+    for (const article of indexableArticles) {
       const editorialImage = researchEditorialImage(article.slug);
+      const articleUrl = `https://sleepy.land${researchArticlePath(article.slug)}`;
       expect(xml).toContain(
-        `https://sleepy.land${researchArticlePath(article.slug)}`,
+        articleUrl,
       );
-      expect(xml).toContain(
-        `url="https://sleepy.land${editorialImage.src}"`,
+      const itemStart = xml.indexOf(`<link>${articleUrl}</link>`);
+      const itemEnd = xml.indexOf("</item>", itemStart);
+      const item = xml.slice(itemStart, itemEnd);
+      expect(item).toContain(
+        "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
       );
-      expect(xml).toContain(editorialImage.alt);
+      expect(item).toContain("<dc:creator>Sleepyland Research</dc:creator>");
+      if (editorialImage === undefined) {
+        expect(item).not.toContain("<media:content");
+      } else {
+        expect(item).toContain(
+          `url="https://sleepy.land${editorialImage.src}"`,
+        );
+        expect(item).toContain(editorialImage.alt);
+      }
+    }
+    for (const article of researchArticles.filter(
+      (candidate) => !isIndexableResearchArticle(candidate),
+    )) {
+      expect(xml).not.toContain(article.slug);
     }
   });
 
@@ -65,8 +84,6 @@ describe("Sleepyland search discovery", () => {
     for (const page of PRODUCT_PAGES) {
       expect(researchDiscoveryPaths()).toContain(page.path);
     }
-    for (const note of READING_NOTES) {
-      expect(researchDiscoveryPaths()).toContain(note.path);
-    }
+    expect(researchDiscoveryPaths()).toContain("/research");
   });
 });

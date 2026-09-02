@@ -5,6 +5,8 @@ import { GET as getSitemapMarkdown } from "./sitemap.md/route";
 import {
   AI_CRAWLER_USER_AGENTS,
   MARKDOWN_CONTENT_TYPE,
+  NOISE_DOCUMENT_PARAGRAPHS,
+  NOISE_HEADING,
   PLAIN_TEXT_CONTENT_TYPE,
   appendVaryAccept,
   homepageDocumentText,
@@ -19,26 +21,22 @@ import {
   parseAccept,
   preferredProducedType,
   productPageMarkdown,
-  readingIndexMarkdown,
   researchArticleMarkdown,
+  researchIndexMarkdown,
   sitemapMarkdown,
 } from "./agent-access";
-import { researchEditorialImage } from "./editorial-images";
 import {
   homepageAgentRequest,
-  homepageBoundaryItems,
-  homepageResult,
-  homepageWorkingModel,
 } from "./homepage-content";
 import { PRODUCT_PAGES } from "./product-pages";
-import { READING_NOTES } from "./reading-notes";
 import {
+  CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS,
   getResearchArticle,
+  isIndexableResearchArticle,
   researchArticlePath,
   researchArticles,
   researchArticlesNewestFirst,
 } from "./research/articles";
-import { site } from "./site";
 
 function request(
   path: string,
@@ -93,45 +91,39 @@ describe("Accept parsing", () => {
 });
 
 describe("agent discovery documents", () => {
-  test("keeps homepage copy above the no-JS character floor", () => {
+  test("keeps homepage Markdown product-first with a compact research module", () => {
     const markdown = homepageMarkdown();
-    const featured = researchArticlesNewestFirst[0];
+    const featured = getResearchArticle("noise-and-sleep-2026");
 
     if (featured === undefined) {
       throw new Error("Expected one featured research guide.");
     }
 
-    expect(homepageDocumentText().length).toBeGreaterThan(500);
-    expect(homepageDocumentText()).toContain(site.description);
-    expect(homepageDocumentText()).toContain(homepageResult.summary);
-    expect(homepageDocumentText()).toContain(homepageAgentRequest);
+    expect(homepageDocumentText()).toContain(NOISE_HEADING);
+    for (const paragraph of NOISE_DOCUMENT_PARAGRAPHS) {
+      expect(homepageDocumentText()).toContain(paragraph);
+      expect(markdown).toContain(paragraph);
+    }
+    expect(homepageDocumentText()).not.toContain(homepageAgentRequest);
     expect(homepageDocumentText()).not.toContain("There are no media files");
-    expect(markdown).toContain("## First proof");
-    expect(markdown).toContain("## Working model");
-    expect(markdown).toContain("## Interfaces");
-    expect(markdown).toContain("## Evidence library");
-    expect(markdown).toContain("## Boundary");
-    expect(markdown).toContain("## Questions");
-    expect(markdown).toContain("## Smallest useful action");
-    expect(markdown).toContain(homepageAgentRequest);
+    expect(markdown).toContain("## What you can do");
+    expect(markdown).toContain("## Featured research");
+    expect(markdown).not.toContain("## Working model");
+    expect(markdown).not.toContain("## Interfaces");
+    expect(markdown).not.toContain("## Questions");
+    expect(markdown).not.toContain("## Smallest useful action");
+    expect(markdown).not.toContain(homepageAgentRequest);
+    expect(markdown).not.toMatch(/\d+ linked sources/iu);
     expect(markdown).toContain(featured.evidenceLabel);
-    expect(markdown).toContain(
-      `https://sleepy.land${researchEditorialImage(featured.slug).src}`,
-    );
-    for (const step of homepageWorkingModel) {
-      expect(markdown).toContain(step.label);
-      expect(markdown).toContain(step.detail);
-    }
-    for (const item of homepageBoundaryItems) {
-      expect(markdown).toContain(item.detail);
-    }
+    expect(markdown).not.toContain("![");
     expect(markdown).toContain("## Sitemap");
     expect(markdown).toContain("/sitemap.md");
   });
 
-  test("lists every public research guide from the article registry", () => {
+  test("lists only indexable research guides in discovery documents", () => {
     const sitemap = sitemapMarkdown();
     const llms = llmsTxt();
+    const researchIndex = researchIndexMarkdown();
 
     expect(llms).toContain("## When to use Sleepyland");
     expect(llms).toContain("## Interfaces");
@@ -155,31 +147,22 @@ describe("agent discovery documents", () => {
       );
     }
 
-    expect(llms).toContain("## Reading");
-    expect(sitemap).toContain("## Reading");
-    expect(sitemap).toContain("https://sleepy.land/reading.md");
-    expect(isKnownContentPath("/reading")).toBe(true);
-    expect(readingIndexMarkdown()).toContain(
-      'canonical_url: "https://sleepy.land/reading"',
-    );
-    expect(markdownForPath("/reading")).toBe(readingIndexMarkdown());
-    for (const note of READING_NOTES) {
-      const markdownUrl = `https://sleepy.land${note.path}.md`;
-      expect(llms).toContain(markdownUrl);
-      expect(sitemap).toContain(markdownUrl);
-      expect(isKnownContentPath(note.path)).toBe(true);
-      expect(productPageMarkdown(note)).toContain(
-        `canonical_url: ${JSON.stringify(`https://sleepy.land${note.path}`)}`,
-      );
-      expect(productPageMarkdown(note)).toContain(
-        `https://sleepy.land/editorial/reading/${note.slug}.webp`,
-      );
-    }
+    expect(llms).not.toContain("## Reading");
+    expect(sitemap).not.toContain("## Reading");
+    expect(isKnownContentPath("/reading")).toBe(false);
+    expect(markdownForPath("/reading")).toBeNull();
 
     for (const article of researchArticlesNewestFirst) {
       const markdownUrl = `https://sleepy.land${researchArticlePath(article.slug)}.md`;
-      expect(llms).toContain(markdownUrl);
-      expect(sitemap).toContain(markdownUrl);
+      if (isIndexableResearchArticle(article)) {
+        expect(llms).toContain(markdownUrl);
+        expect(sitemap).toContain(markdownUrl);
+        expect(researchIndex).toContain(markdownUrl);
+      } else {
+        expect(llms).not.toContain(markdownUrl);
+        expect(sitemap).not.toContain(markdownUrl);
+        expect(researchIndex).not.toContain(markdownUrl);
+      }
       expect(isKnownContentPath(researchArticlePath(article.slug))).toBe(true);
     }
 
@@ -201,13 +184,22 @@ describe("agent discovery documents", () => {
     expect(markdown).toContain(`# ${article.title}`);
     expect(markdown).toContain(article.dek);
     expect(markdown).toContain(
+      "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
+    );
+    expect(markdown).toContain(
       `https://sleepy.land/editorial/research/${article.slug}.webp`,
     );
     expect(markdown).toContain("Sleepyland editorial illustration");
     expect(markdown).toContain("## Sources");
     expect(markdown).toContain("## Sitemap");
     expect(markdown).toContain("/sitemap.md");
-    expect(markdown).toContain("/index.md");
+    expect(markdown).toContain("/research.md");
+
+    const imageLessArticle = getResearchArticle("why-car-rides-make-you-sleepy");
+    if (imageLessArticle === undefined) throw new Error("Expected image-free guide.");
+    const imageLessMarkdown = researchArticleMarkdown(imageLessArticle);
+    expect(imageLessMarkdown).not.toContain("/editorial/research/");
+    expect(imageLessMarkdown).toContain(`# ${imageLessArticle.title}`);
   });
 
   test("keeps 404 recovery copy pointed at discovery files", () => {
@@ -216,7 +208,7 @@ describe("agent discovery documents", () => {
     expect(body).toContain("# Page not found");
     expect(body).toContain("/llms.txt");
     expect(body).toContain("/sitemap.md");
-    expect(body).toContain("/index.md");
+    expect(body).toContain("/research.md");
     expect(body).toContain("/noise.md");
   });
 });
@@ -253,40 +245,49 @@ describe("markdown negotiation", () => {
     expect(noise.headers.get("link")).toBe(
       "<https://sleepy.land/noise>; rel=\"canonical\"",
     );
-    const legacyResearch = await negotiated("/research.md");
-    expect(legacyResearch.headers.get("link")).toBe(
-      "<https://sleepy.land/>; rel=\"canonical\"",
+    const research = await negotiated("/research.md");
+    expect(research.headers.get("link")).toBe(
+      "<https://sleepy.land/research>; rel=\"canonical\"",
     );
+    expect(research.body).toBe(researchIndexMarkdown());
     const privacy = await negotiated("/privacy", { accept: "text/markdown" });
     const privacySibling = await negotiated("/privacy.md");
     const privacyPage = PRODUCT_PAGES.find((page) => page.slug === "privacy");
     if (privacyPage === undefined) throw new Error("Expected privacy page.");
     expect(privacy.body).toBe(productPageMarkdown(privacyPage));
     expect(privacySibling.body).toBe(privacy.body);
-    const reading = await negotiated("/reading/good-ideas", { accept: "text/markdown" });
-    const readingSibling = await negotiated("/reading/good-ideas.md");
-    const readingNote = READING_NOTES.find((note) => note.slug === "good-ideas");
-    if (readingNote === undefined) throw new Error("Expected good-ideas reading note.");
-    expect(reading.body).toBe(productPageMarkdown(readingNote));
-    expect(readingSibling.body).toBe(reading.body);
-    const habit = await negotiated("/reading/habit-and-rest", { accept: "text/markdown" });
-    const habitSibling = await negotiated("/reading/habit-and-rest.md");
-    const habitNote = READING_NOTES.find((note) => note.slug === "habit-and-rest");
-    if (habitNote === undefined) throw new Error("Expected habit-and-rest reading note.");
-    expect(habit.body).toBe(productPageMarkdown(habitNote));
-    expect(habitSibling.body).toBe(habit.body);
-    const agency = await negotiated("/reading/anger-anxiety-agency", { accept: "text/markdown" });
-    const agencySibling = await negotiated("/reading/anger-anxiety-agency.md");
-    const agencyNote = READING_NOTES.find((note) => note.slug === "anger-anxiety-agency");
-    if (agencyNote === undefined) throw new Error("Expected anger-anxiety-agency reading note.");
-    expect(agency.body).toBe(productPageMarkdown(agencyNote));
-    expect(agencySibling.body).toBe(agency.body);
-    const language = await negotiated("/reading/weird-is-a-weird-word", { accept: "text/markdown" });
-    const languageSibling = await negotiated("/reading/weird-is-a-weird-word.md");
-    const languageNote = READING_NOTES.find((note) => note.slug === "weird-is-a-weird-word");
-    if (languageNote === undefined) throw new Error("Expected weird-is-a-weird-word reading note.");
-    expect(language.body).toBe(productPageMarkdown(languageNote));
-    expect(languageSibling.body).toBe(language.body);
+  });
+
+  test("propagates health-review noindex to every Markdown representation", async () => {
+    const quarantined = researchArticles.filter(
+      (article) => !isIndexableResearchArticle(article),
+    );
+
+    expect(quarantined.map((article) => article.slug)).toEqual(
+      [...CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS],
+    );
+
+    for (const article of quarantined) {
+      const path = researchArticlePath(article.slug);
+      const [negotiatedCanonical, markdownSibling] = await Promise.all([
+        negotiated(path, { accept: "text/markdown" }),
+        negotiated(`${path}.md`),
+      ]);
+
+      expect(negotiatedCanonical.status).toBe(200);
+      expect(markdownSibling.status).toBe(200);
+      expect(negotiatedCanonical.headers.get("x-robots-tag")).toBe("noindex");
+      expect(markdownSibling.headers.get("x-robots-tag")).toBe("noindex");
+    }
+
+    const indexable = researchArticles.find(isIndexableResearchArticle);
+    if (indexable === undefined) {
+      throw new Error("Expected at least one indexable research guide.");
+    }
+    const indexableMarkdown = await negotiated(
+      `${researchArticlePath(indexable.slug)}.md`,
+    );
+    expect(indexableMarkdown.headers.get("x-robots-tag")).toBeNull();
   });
 
   test("returns a markdown 404 with recovery links for unknown paths", async () => {
@@ -300,6 +301,16 @@ describe("markdown negotiation", () => {
     expect(missing.body).toBe(notFoundMarkdown());
     expect(missingSibling.status).toBe(404);
     expect(missingSibling.body).toContain("/llms.txt");
+
+    for (const retiredPath of [
+      "/reading.md",
+      "/reading/good-ideas.md",
+      "/research/blue-light-scatter-and-visual-detail.md",
+    ]) {
+      const retired = await negotiated(retiredPath);
+      expect(retired.status).toBe(404);
+      expect(retired.body).toBe(notFoundMarkdown());
+    }
   });
 
   test("returns 406 when every produced type is rejected", async () => {

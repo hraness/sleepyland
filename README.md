@@ -5,17 +5,17 @@
 
 [Sleepyland](https://sleepy.land) gives readers a direct answer, the sources behind it, and the limit of the evidence before they make a sleep decision. The same site includes a [private browser sound machine](https://sleepy.land/noise) for sleep, relaxation, and focus.
 
-The publication covers insomnia, supplements, medications, circadian light, routines, environmental sound, and common wellness claims. It is educational publishing, not medical advice.
+The admitted publication covers insomnia, circadian light, routines, environmental sound, and common wellness claims. It is educational publishing, not medical advice. Medication, supplement-safety, and other higher-risk pages remain outside discovery until their exact claims receive documented qualified review.
 
 ## First proof
 
-[Why Blue Light Blurs Fine Detail More Than Other Colors](https://sleepy.land/research/blue-light-scatter-and-visual-detail) leads with a qualified answer, labels its evidence as wavelength-dependent blur in young adults rather than a sleep trial, links eight sources, and publishes its revision date. Its HTML, structured data, social image, RSS record, sitemap entry, and [Markdown representation](https://sleepy.land/research/blue-light-scatter-and-visual-detail.md) come from the same typed article and image registries.
+[Does White Noise Help You Sleep? What Three 2026 Studies Found](https://sleepy.land/research/noise-and-sleep-2026) leads with a qualified answer, compares three recent studies without forcing a single verdict, links its sources, and publishes its revision date. Its HTML, structured data, social image, RSS record, sitemap entry, and [Markdown representation](https://sleepy.land/research/noise-and-sleep-2026.md) come from the same typed article and image registries.
 
 Request the canonical page as Markdown:
 
 ```sh
 curl -H 'Accept: text/markdown' \
-  https://sleepy.land/research/blue-light-scatter-and-visual-detail
+  https://sleepy.land/research/noise-and-sleep-2026
 ```
 
 ## Working model
@@ -36,7 +36,7 @@ Sleepyland does not publish an API, OAuth flow, GraphQL endpoint, MCP server, de
 
 ## Evidence and generated surfaces
 
-`app/research/articles.ts` and its focused expansion modules own article titles, direct answers, evidence labels, sources, dates, topics, and related reading. `app/editorial-images.ts` owns literal alt text, visible captions, credits, dimensions, and content hashes for the registered WebP assets.
+`app/research/articles.ts` and its focused expansion modules own article titles, direct answers, evidence labels, sources, dates, topics, and related reading. `app/research/admissions.ts` owns the case-specific reader job, contribution, overlap decision, evidence fit, risk, score, and reassessment that permit an article into discovery. `app/editorial-images.ts` owns literal alt text, visible captions, credits, dimensions, and content hashes for the registered WebP assets.
 
 Those registries generate or feed:
 
@@ -51,7 +51,7 @@ Substantive research changes must keep those surfaces aligned. Read [the editori
 ## Boundaries
 
 - **Evidence:** Sleepyland distinguishes direct findings, mechanism, inference, and experience. It does not claim clinician review that did not happen.
-- **Review:** Software can help collect and synthesize material, but published wording is checked against the linked source.
+- **Review:** Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.
 - **Health:** Sleepyland does not diagnose, prescribe, provide individualized dosing, or promise an outcome.
 - **Sound:** The sound machine synthesizes brown, pink, and white noise, procedural ocean surf, slow spatial movement, and spectrum pulses with the Web Audio API. It uses no recorded audio, product account, microphone input, uploaded mix, or server-side sound generation.
 - **Privacy:** Settings remain on the device. Canonical production analytics are cookieless, omit session replay and person profiles, and admit only the checked categorical event schema.
@@ -62,9 +62,9 @@ Substantive research changes must keep those surfaces aligned. Read [the editori
 
 No audio is uploaded or generated on a server. Settings stay in browser-local storage. Bounded anonymous analytics can include categorical mode and session kind, but not tuning values, exact playback duration, or spectrum gestures.
 
-### How is software-assisted research checked?
+### How is AI-drafted research checked?
 
-Software can help organize and compare sources. Before publication, material wording is checked against the linked source, and inference stays labeled as inference.
+An AI agent can organize and compare sources. Before publication, a separate Codex AI reviewer checks material wording against the linked sources, and inference stays labeled as inference. No human clinical review is claimed.
 
 ### How do I challenge a claim?
 
@@ -106,6 +106,7 @@ Code, accessibility improvements, research corrections, source additions, reprod
 - `styles/` contains the fixed-viewport sound-machine and serif publication systems.
 - `public/` contains the IndexNow proof, silent product demo, and registered editorial images.
 - `docs/editorial-method.md` defines how research claims and sources are reviewed.
+- `docs/editorial-lifecycle.md` records clinical quarantine and durable merge history.
 
 ## License
 

@@ -85,14 +85,6 @@ export const PRODUCT_PAGES = [
             link("Support", "/support"),
             " does not provide medical advice, hearing-safety certification, or crisis services.",
           ],
-          [
-            "It is also not a supplement calculator. A ",
-            link(
-              "Hraness reading note on creatine and cognition",
-              "https://hraness.com/reading/does-creatine-make-you-smarter",
-            ),
-            " records that the cognitive-enhancement case is weak: later trials and reviews point, at most, to a small uncertain mental benefit, and large effects in healthy adults are unlikely. Sleepyland does not recommend, dose, or track creatine or any other supplement. It generates sound in the browser.",
-          ],
         ],
       },
       {
@@ -114,23 +106,6 @@ export const PRODUCT_PAGES = [
             " shows mode selection, Tune, playback, and the live spectrum. The ",
             link("interactive sound machine", "/noise"),
             " is the product itself.",
-          ],
-          [
-            "A separate ",
-            link("reading note", "/reading/good-ideas"),
-            " discusses rest as a practiced state that keeps unfashionable ideas alive, starting from Henrik and Johanna Karlsson’s essay on how new ideas are born. Another ",
-            link("reading take on habit and rest", "/reading/habit-and-rest"),
-            " starts from William James: a rest environment is not a habit until the first small act starts. A later ",
-            link(
-              "reading take on rest as a place where anxiety can become curiosity",
-              "/reading/anger-anxiety-agency",
-            ),
-            " starts from Armin Ronacher. A later ",
-            link(
-              "reading take on rest as practiced attention to language",
-              "/reading/weird-is-a-weird-word",
-            ),
-            " starts from Colin Gorrie’s essay on English weird.",
           ],
         ],
       },

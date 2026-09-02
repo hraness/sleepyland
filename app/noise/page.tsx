@@ -8,19 +8,9 @@ import {
   markdownAlternatePath,
 } from "../agent-access";
 import {
-  readingEditorialImage,
-  researchEditorialImage,
-} from "../editorial-images";
-import {
   NoiseStudio,
   type StudioResourceGroup,
 } from "../noise-studio";
-import { READING_NOTES } from "../reading-notes";
-import {
-  getResearchArticle,
-  researchArticlePath,
-  type ResearchSlug,
-} from "../research/articles";
 import {
   applicationFeatures,
   defaultSocialImage,
@@ -28,37 +18,13 @@ import {
   webApplicationJsonLd,
 } from "../seo";
 import { noiseDescription, noiseTitle, site } from "../site";
-
-const FEATURED_RESEARCH_SLUGS = [
-  "best-sleep-sounds",
-  "morning-sunlight-and-sleep",
-  "why-you-sleep-badly-in-hotels",
-] as const satisfies readonly ResearchSlug[];
+import { featuredResearchResources } from "./research-resources";
 
 const studioResourceGroups = [
   {
-    allPath: "/",
+    allPath: "/research",
     label: "Research",
-    resources: FEATURED_RESEARCH_SLUGS.map((slug) => {
-      const article = getResearchArticle(slug);
-      if (article === undefined) throw new Error(`Missing featured research: ${slug}`);
-      return {
-        description: article.dek,
-        image: researchEditorialImage(slug),
-        path: researchArticlePath(slug),
-        title: article.title,
-      };
-    }),
-  },
-  {
-    allPath: "/reading",
-    label: "Reading notes",
-    resources: READING_NOTES.toReversed().map((note) => ({
-      description: note.description,
-      image: readingEditorialImage(note.slug),
-      path: note.path,
-      title: note.heading,
-    })),
+    resources: featuredResearchResources(),
   },
 ] as const satisfies readonly StudioResourceGroup[];
 

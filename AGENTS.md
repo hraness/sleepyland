@@ -5,6 +5,7 @@
 - `styles/` contains the compact sound-machine and publication visual systems.
 - `public/` contains static public assets.
 - `docs/editorial-method.md` defines the public research-review method.
+- `app/research/admissions.ts` is the executable admission, overlap, source-check, review-state, ownership, lifecycle, and reassessment registry for indexable editorial routes; `docs/editorial-lifecycle.md` records clinical quarantine and detailed consolidation history.
 - `STYLE.md` defines the public and reader-facing prose contract.
 - `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, and `CODE_OF_CONDUCT.md` define the public project and contribution boundaries.
 
@@ -16,8 +17,11 @@
 - Keep the sound machine compact, dark, warm, responsive to the visual viewport, and free of document overflow on narrow portrait or short landscape screens.
 - Preserve semantic controls, visible focus, reduced-motion behavior, conservative output gain, and smooth audio fades.
 - Treat sleep and wellness content as health-adjacent. Source material claims, distinguish evidence from mechanism and inference, and never diagnose, prescribe, provide individualized dosing, or guarantee an outcome.
+- Keep medication guides and comparisons, supplement interaction or adverse-effect guidance, other material health-safety instructions, controlled-substance topics, and dangerous-use queries noindex and out of every discovery surface until the exact claims have a documented clinical or pharmacist review.
+- Curate at most eight research guides on the homepage, choose them by first-time-reader utility rather than recency, and route the complete accepted registry through `/research`.
 - Follow `STYLE.md` for public research, product copy, documentation, and README prose.
-- Follow `docs/editorial-method.md` and `CONTRIBUTING.md` for research changes. Update the typed article and source registries rather than generated output.
+- Follow `docs/editorial-method.md` and `CONTRIBUTING.md` for research changes. Update the typed article, source, and admission registries rather than generated output.
+- Admit an indexable research route only at 9/12 or higher with no zero across reader utility, original evidence, factual confidence, Sleepyland fit, voice integrity, and maintenance value. Never use word, source, link, image, keyword, recency, or publishing-count quotas as proxies for usefulness.
 - Keep public files self-contained. Never commit credentials, private analytics, personal health information, provider tokens, local absolute paths, or unpublished operational records.
 - Use `apply_patch` for edits. Run focused tests while working and `bun run check` before handoff.
 

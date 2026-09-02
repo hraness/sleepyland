@@ -11,7 +11,7 @@ export function EditorialImageFigure({
   image: EditorialImage;
   preload?: boolean;
   sizes?: string;
-  variant?: "banner" | "interstitial" | "reading";
+  variant?: "banner" | "interstitial";
 }>) {
   return (
     <figure

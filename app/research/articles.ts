@@ -2,6 +2,7 @@ import {
   SLEEP_HEALTH_ARTICLES,
   SLEEP_HEALTH_SOURCES,
 } from "./sleep-health-expansion";
+import { isResearchSlugAdmitted } from "./admissions";
 
 export const RESEARCH_SLUGS = [
   "best-magnesium-for-sleep",
@@ -9,10 +10,7 @@ export const RESEARCH_SLUGS = [
   "kava-for-sleep",
   "benadryl-diphenhydramine-for-sleep",
   "screens-blue-light-glasses-and-sleep",
-  "blue-light-scatter-and-visual-detail",
   "z-drugs-zaleplon-zolpidem-eszopiclone",
-  "ghb-sodium-oxybate-and-sleep",
-  "kratom-after-no-sleep",
   "how-to-quiet-a-racing-mind-at-night",
   "best-sleep-sounds",
   "what-frequency-helps-you-sleep",
@@ -23,7 +21,6 @@ export const RESEARCH_SLUGS = [
   "sound-masking-vs-earplugs-vs-noise-cancelling",
   "why-fan-noise-helps-sleep",
   "white-pink-brown-noise-for-sleep",
-  "binaural-beats-for-sleep",
   "ocean-waves-for-sleep",
   "why-car-rides-make-you-sleepy",
   "airplane-sound-for-sleep",
@@ -35,6 +32,26 @@ export const RESEARCH_SLUGS = [
 ] as const;
 
 export type ResearchSlug = (typeof RESEARCH_SLUGS)[number];
+
+export const HOMEPAGE_RESEARCH_SLUGS = [
+  "noise-and-sleep-2026",
+  "best-sleep-sounds",
+  "how-sound-masking-works",
+  "sound-masking-vs-earplugs-vs-noise-cancelling",
+  "is-eight-hours-of-sleep-necessary",
+  "morning-sunlight-and-sleep",
+  "why-you-sleep-badly-in-hotels",
+  "how-to-quiet-a-racing-mind-at-night",
+] as const satisfies readonly ResearchSlug[];
+
+export const CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS = [
+  "best-magnesium-for-sleep",
+  "l-theanine-valerian-california-poppy-for-sleep",
+  "kava-for-sleep",
+  "benadryl-diphenhydramine-for-sleep",
+  "z-drugs-zaleplon-zolpidem-eszopiclone",
+  "does-grounding-help-sleep",
+] as const satisfies readonly ResearchSlug[];
 
 export const RESEARCH_TAGS = [
   { id: "sleep", label: "Sleep" },
@@ -999,18 +1016,18 @@ export const researchArticles = [
     tags: ["sleep", "sound", "wellness-claims"],
     evidenceLabel: "Frequency terms are real; single-Hz sleep claims are unproven",
     publishedAt: "2026-08-28",
-    updatedAt: "2026-08-28",
+    updatedAt: "2026-09-01",
     sourceIds: [
       "sleepBrainOscillations2021",
       "brainStimulationReview2023",
       "binauralReview2026",
+      "binauralTrial2026",
       "dynamicBinaural2024",
       "tuning432Pilot2020",
       "auditoryReview2022",
       "safeListening2026",
     ],
     relatedSlugs: [
-      "binaural-beats-for-sleep",
       "white-pink-brown-noise-for-sleep",
       "best-sleep-sounds",
     ],
@@ -1097,6 +1114,36 @@ export const researchArticles = [
           RESEARCH_SOURCES.dynamicBinaural2024.url,
         ),
         " reported early questionnaire and biosignal findings with changing low-frequency differences. Those studies justify better trials, not a universal beat prescription. Headphones are also a separate comfort and exposure decision for overnight use.",
+      ),
+      paragraph(
+        "A separate ",
+        link(
+          "2026 randomized college-student trial",
+          RESEARCH_SOURCES.binauralTrial2026.url,
+        ),
+        " compared pink noise with the same noise plus a 3 Hz binaural beat. Sleep-quality scores improved from baseline in both groups, but the between-group difference was not statistically significant. The result does not isolate a binaural advantage: a bedtime ritual, pink noise, expectancy, or a smaller effect all remain possible explanations.",
+      ),
+      heading("How to evaluate a binaural track without buying the entrainment story"),
+      unordered(
+        item(
+          strong("Treat relaxation as the claim. "),
+          "A steady pulse may narrow attention or become a learned wind-down cue without forcing a matching sleep stage.",
+        ),
+        item(
+          strong("Remember the carrier. "),
+          "Pink noise, music, or ambience mixed under the beat may contribute as much as the binaural difference.",
+        ),
+        item(
+          strong("Test comfort before overnight use. "),
+          "Classic binaural playback depends on separated left- and right-ear signals, usually through headphones. Pressure, heat, ringing, and sleep disruption are reasons to stop.",
+        ),
+        item(
+          strong("Judge the morning, not the label. "),
+          "Sleep onset, awakenings, comfort, and alertness are more useful observations than whether a playlist says delta or deep sleep.",
+        ),
+      ),
+      paragraph(
+        "Binaural beats are therefore a poor universal sound-machine default. Broadband noise and procedural waves work through speakers and have a clearer masking or soundscape job. A person who enjoys a quiet binaural track can still use it as a preference; the evidence does not support selling it as a guaranteed shortcut into deep sleep.",
       ),
       heading("What the 432 Hz evidence actually shows"),
       paragraph(
@@ -2509,137 +2556,6 @@ export const researchArticles = [
     ],
   },
   {
-    slug: "binaural-beats-for-sleep",
-    title: "Binaural Beats for Sleep: Promising Signal or Overstated Claim?",
-    dek:
-      "Binaural beats are a real auditory illusion. The leap from hearing a phantom pulse to reliably “entraining” the sleeping brain is where the evidence becomes much less certain.",
-    seoDescription:
-      "Do binaural beats help sleep? Learn how they work, what 2026 studies found, why headphones matter, and where brainwave-entrainment claims overreach.",
-    focusPhrase: "binaural beats for sleep evidence",
-    keywords: [
-      "binaural beats sleep research",
-      "delta waves for sleep",
-      "brainwave entrainment sleep",
-      "binaural beats headphones",
-    ],
-    tags: ["sleep", "sound", "wellness-claims"],
-    evidenceLabel: "Early and heterogeneous evidence",
-    publishedAt: "2026-07-24",
-    updatedAt: "2026-07-24",
-    sourceIds: [
-      "binauralReview2026",
-      "binauralTrial2026",
-      "dynamicBinaural2024",
-      "auditoryReview2022",
-      "safeListening2026",
-    ],
-    relatedSlugs: [
-      "what-frequency-helps-you-sleep",
-      "white-pink-brown-noise-for-sleep",
-      "noise-and-sleep-2026",
-    ],
-    body: [
-      callout(
-        "The useful verdict",
-        "Binaural beats may be relaxing for some listeners, and recent studies justify more research. They are not yet a clearly superior sleep intervention, and claims that a chosen beat frequency reliably puts the brain into a matching sleep stage are too strong.",
-      ),
-      heading("What a binaural beat actually is"),
-      paragraph(
-        "Play a steady 250 Hz tone to the left ear and 253 Hz to the right ear and many listeners perceive a slow 3 Hz fluctuation. No speaker is physically producing that 3 Hz sound. The auditory system derives a binaural difference from the separate inputs, creating an internal rhythmic percept.",
-      ),
-      paragraph(
-        "That separation is essential. Ordinary stereo speakers mix in the room and both ears receive both tones, weakening the classic effect. Headphones are therefore part of most binaural-beat protocols. A pulsing tone played from one speaker may still be calming, but it is amplitude modulation or an isochronic pulse, not the same binaural illusion.",
-      ),
-      heading("The seductive brainwave story"),
-      paragraph(
-        "Sleep stages contain recognizable ranges of electrical activity, including slow delta-range activity during deep NREM sleep. Marketing often reverses that observation: if a person hears a 3 Hz binaural beat, the story says, the brain should synchronize to 3 Hz and enter deep sleep. That is a hypothesis, not a settled chain of cause and effect.",
-      ),
-      paragraph(
-        "Neural activity is distributed, state-dependent, and measured with more complexity than one frequency label suggests. A perceived auditory rhythm can affect attention or arousal without forcing the cortex into a corresponding sleep stage. “Delta beat” describes the difference between tones; it does not certify delta sleep.",
-      ),
-      heading("What the 2026 evidence adds"),
-      paragraph(
-        "A ",
-        link(
-          "2026 systematic review",
-          RESEARCH_SOURCES.binauralReview2026.url,
-        ),
-        " reported modest improvements across anxiety, stress physiology, mood, sleep, or cognition in many music and rhythm-based studies of young adults. The scope is both its strength and its limitation: music therapy, binaural beats, and related auditory interventions are not interchangeable, and a positive result in any one domain is not proof of improved objective sleep.",
-      ),
-      paragraph(
-        "A separate ",
-        link(
-          "2026 randomized college-student trial",
-          RESEARCH_SOURCES.binauralTrial2026.url,
-        ),
-        " compared pink noise with a pink-noise mix containing a 3 Hz binaural beat. Both groups’ sleep-quality scores improved from baseline, while the difference between groups was not statistically significant. That result is compatible with a helpful bedtime sound ritual, a pink-noise effect, expectancy, a binaural contribution too small to detect, or some combination.",
-      ),
-      paragraph(
-        "A ",
-        link(
-          "2024 dynamic-binaural proof of concept",
-          RESEARCH_SOURCES.dynamicBinaural2024.url,
-        ),
-        " also reported encouraging questionnaire and biosignal changes. Small exploratory studies are valuable for generating hypotheses, but effect sizes and protocols need independent replication in larger, well-blinded trials.",
-      ),
-      heading("Why binaural tracks can still feel effective"),
-      unordered(
-        item(
-          strong("Attentional narrowing: "),
-          "a simple pulse gives the mind one low-information object instead of many thoughts or room sounds.",
-        ),
-        item(
-          strong("Rhythmic predictability: "),
-          "steady repetition can feel safer and less demanding than speech, music with transitions, or an irregular environment.",
-        ),
-        item(
-          strong("Expectancy and ritual: "),
-          "believing that a track marks bedtime can reinforce a genuine learned wind-down response without proving neural entrainment.",
-        ),
-        item(
-          strong("The carrier sound: "),
-          "many products combine beats with pink noise, music, or ambience. The pleasant carrier may contribute as much as the binaural difference.",
-        ),
-      ),
-      heading("Binaural beats are not closed-loop sleep stimulation"),
-      paragraph(
-        "Some laboratory studies detect a sleeper’s ongoing slow waves with EEG and deliver brief, precisely timed sound pulses at a particular phase. That is closed-loop auditory stimulation. It uses measurement, timing, and short events to interact with an existing brain state. A continuous “3 Hz sleep track” without EEG feedback is a fundamentally different intervention.",
-      ),
-      paragraph(
-        "Confusing these methods is one reason sleep-frequency claims sound more mature than they are. Evidence that carefully timed pulses can alter measured oscillations does not transfer automatically to every binaural playlist labeled delta, theta, or deep sleep.",
-      ),
-      heading("Should a sound machine make binaural beats the default?"),
-      paragraph(
-        "Probably not. A default should work through speakers, avoid requiring overnight headphones, and make the fewest speculative assumptions. Conventional broadband noise and procedural waves can be explained as masking and soundscape design. Binaural beats introduce a headphone dependency and a less certain mechanism without clear evidence of superior sleep outcomes.",
-      ),
-      paragraph(
-        "That is why Sleepyland does not hide a binaural “sleep frequency” behind its default. The generator focuses on adjustable spectra, slow surf, low levels, and a timer. A listener who enjoys binaural audio can still use it elsewhere as a personal relaxation preference; it simply should not be sold as a guaranteed route into a chosen brain state.",
-      ),
-      heading("If you try binaural beats"),
-      ordered(
-        item(
-          "Use comfortable, conservative volume and avoid turning up the carrier to make the beat feel stronger.",
-        ),
-        item(
-          "Test them while winding down rather than assuming headphones must remain on all night.",
-        ),
-        item(
-          "Choose simple tracks without sudden transitions, spoken claims, or ads that can become the real sleep disruption.",
-        ),
-        item(
-          "Judge the next morning: sleep onset, awakenings, comfort, and alertness matter more than whether the track was labeled delta.",
-        ),
-        item(
-          "Stop if headphones cause pressure, heat, ringing, or poorer sleep.",
-        ),
-      ),
-      paragraph(
-        emphasis("Real auditory illusion, plausible relaxation tool, unproven shortcut to deep sleep"),
-        " is a less exciting slogan than “entrain your brain.” It is also the fairest reading of the evidence in 2026.",
-      ),
-    ],
-  },
-  {
     slug: "ocean-waves-for-sleep",
     title: "Why Ocean Waves Feel Calming—and What Sleep Research Can Prove",
     dek:
@@ -3860,6 +3776,44 @@ export function getResearchArticle(slug: string): ResearchArticle | undefined {
   return researchArticles.find((article) => article.slug === slug);
 }
 
+export function curateHomepageResearchArticles(
+  articles: readonly ResearchArticle[],
+  slugs: readonly string[] = HOMEPAGE_RESEARCH_SLUGS,
+): readonly ResearchArticle[] {
+  return slugs.flatMap((slug) => {
+    const article = articles.find((candidate) => candidate.slug === slug);
+    return article === undefined || !isIndexableResearchArticle(article)
+      ? []
+      : [article];
+  });
+}
+
+export function homepageResearchArticles(): readonly ResearchArticle[] {
+  return curateHomepageResearchArticles(researchArticles);
+}
+
+export function isIndexableResearchArticle(article: ResearchArticle): boolean {
+  return isResearchSlugAdmitted(article.slug)
+    && !CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS.some(
+      (slug) => slug === article.slug,
+    );
+}
+
+export function discoverableResearchArticles(
+  articles: readonly ResearchArticle[],
+): readonly ResearchArticle[] {
+  return articles.filter(isIndexableResearchArticle);
+}
+
+export function relatedResearchArticles(
+  article: ResearchArticle,
+): readonly ResearchArticle[] {
+  return article.relatedSlugs
+    .map(getResearchArticle)
+    .filter((candidate) => candidate !== undefined)
+    .filter(isIndexableResearchArticle);
+}
+
 export function headingId(text: string): string {
   return text
     .toLowerCase()
@@ -3899,7 +3853,7 @@ export function articleReadingMinutes(article: ResearchArticle): number {
 }
 
 export function latestResearchUpdatedAt(): string {
-  return researchArticles.reduce<string>(
+  return discoverableResearchArticles(researchArticles).reduce<string>(
     (latest, article) => article.updatedAt > latest ? article.updatedAt : latest,
     researchArticles[0]?.updatedAt ?? "1970-01-01",
   );

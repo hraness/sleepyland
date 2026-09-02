@@ -23,7 +23,7 @@ export function ResearchShell({
       <SkipLink href="#research-content">Skip to research</SkipLink>
       <header className="plain-header">
         <div className="plain-header__inner">
-          <Link className="plain-wordmark" href="/">
+          <Link className="plain-wordmark" href="/research">
             Sleepyland Research
           </Link>
           <div className="plain-header__actions">
@@ -43,7 +43,6 @@ export function ResearchShell({
       {children}
       <nav aria-label="Sleepyland research resources" className="sleepyland-resource-nav">
         <Link href="/noise">Sound machine</Link>
-        <Link href="/reading">Reading</Link>
         <Link href="/about">About</Link>
         <Link href="/privacy">Privacy</Link>
         <Link href="/support">Support</Link>

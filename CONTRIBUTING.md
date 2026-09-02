@@ -32,7 +32,7 @@ Research corrections, stronger sources, and new article proposals are especially
 1. Identify one distinct reader decision or question rather than a keyword permutation.
 2. Lead with a concise, qualified answer.
 3. Prefer systematic reviews, controlled human studies, current labels, public-health guidance, and primary research.
-4. Use at least five useful sources for a new article, with each material claim supported near where it appears.
+4. Match every material claim to evidence that supports its exact wording; source quantity does not compensate for weak fit.
 5. Distinguish direct findings from mechanism, inference, historical use, preference, and crowdsourced experience.
 6. Explain study population, intervention, comparator, outcome, duration, and important limitations when they affect interpretation.
 7. Add original value such as a decision table, evidence comparison, protocol audit, calculation, or reproducible analysis.
@@ -41,7 +41,7 @@ Research corrections, stronger sources, and new article proposals are especially
 
 Crowdsourced reports can reveal questions, vocabulary, and failure modes. They cannot establish efficacy, prevalence, or safety. Historical use provides cultural context, not proof that an intervention works.
 
-Read [the editorial method](docs/editorial-method.md) before changing an article or source record. Article data lives in `app/research/articles.ts` and focused expansions beside it. The registry drives routes, metadata, structured data, RSS, sitemaps, Markdown alternatives, and related reading, so update the typed source rather than generated output.
+Read [the editorial method](docs/editorial-method.md) before changing an article or source record. Article data lives in `app/research/articles.ts` and focused expansions beside it; `app/research/admissions.ts` owns the case-specific decision to index and distribute each route. Those registries drive routes, metadata, structured data, RSS, sitemaps, Markdown alternatives, and related reading, so update the typed sources rather than generated output.
 
 ## Pull requests
 

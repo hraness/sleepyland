@@ -31,7 +31,6 @@ export default function ProductInfoLayout({
               <Link href="/about">About</Link>
               <Link href="/demo">Demo</Link>
               <Link href="/">Research</Link>
-              <Link href="/reading">Reading</Link>
               <Link href="/noise">Sound machine</Link>
               <Link href="/support">Support</Link>
             </nav>
@@ -44,7 +43,6 @@ export default function ProductInfoLayout({
         <Link href="/">Research</Link>
         <Link href="/noise">Sound machine</Link>
         <Link href="/about">About</Link>
-        <Link href="/reading">Reading</Link>
         <Link href="/privacy">Privacy</Link>
         <Link href="/accessibility">Accessibility</Link>
         <Link href="/license">License</Link>

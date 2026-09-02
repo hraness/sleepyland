@@ -20,7 +20,7 @@ test("the outcome-first studio keeps detailed tuning available on demand", () =>
     '<h1 class="wordmark">sleepy.land<span class="wordmark__tagline"> – noise machine</span></h1>',
   );
   expect(markup).not.toContain("listening-stats");
-  expect(markup).toContain('<a class="header-research-link" href="/">Research</a>');
+  expect(markup).toContain('<a class="header-research-link" href="/research">Research</a>');
   expect(markup).toContain('aria-label="How Sleepyland works"');
   expect(markup).toContain('class="control-deck__primary"');
   expect(markup).toContain('class="sound-mode-picker"');

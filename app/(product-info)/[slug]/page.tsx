@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { Fragment } from "react";
 
 import { markdownAlternatePath } from "../../agent-access";
-import { SleepylandAskAiAboutThis } from "../../ask-ai-about-this";
 import {
   LAUNCH_DEMO_PATH,
   PRODUCT_PAGES,
@@ -129,7 +128,6 @@ export default async function ProductInfoPage({ params }: ProductPageParams) {
           </section>
         );
       })}
-      <SleepylandAskAiAboutThis path={page.path} />
     </main>
   );
 }

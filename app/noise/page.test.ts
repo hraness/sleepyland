@@ -4,8 +4,14 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
 import NoisePage, { metadata } from "./page";
+import {
+  CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS,
+  isIndexableResearchArticle,
+  getResearchArticle,
+} from "../research/articles";
 import { defaultSocialImage } from "../seo";
 import { noiseDescription, noiseTitle } from "../site";
+import { featuredResearchResources } from "./research-resources";
 
 describe("Sleepyland sound-machine route", () => {
   test("owns the /noise canonical and generator metadata", () => {
@@ -35,5 +41,21 @@ describe("Sleepyland sound-machine route", () => {
     expect(markup).toContain('href="/"');
     expect(markup).toContain("Read Sleepyland Research");
     expect(markup).toContain("sleepyland-visually-hidden");
+  });
+
+  test("fails closed when a quarantined guide is proposed for the product surface", () => {
+    const resources = featuredResearchResources([
+      "best-sleep-sounds",
+      ...CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS,
+    ]);
+
+    expect(resources.map((resource) => resource.path)).toEqual([
+      "/research/best-sleep-sounds",
+    ]);
+    for (const resource of resources) {
+      const article = getResearchArticle(resource.path.slice("/research/".length));
+      expect(article).toBeDefined();
+      expect(article === undefined ? false : isIndexableResearchArticle(article)).toBeTrue();
+    }
   });
 });

@@ -73,15 +73,9 @@ describe("Sleepyland public product records", () => {
     expect(markup).toContain("Sleep, Relax, or Focus");
     expect(markup).toContain("Energy scales movement depth and pace without changing volume");
     expect(markup).toContain("not a medical device");
-    expect(markup).toContain("not a supplement calculator");
     expect(markup).toContain('href="https://hraness.com"');
-    expect(markup).toContain('href="https://hraness.com/reading/does-creatine-make-you-smarter"');
     expect(markup).toContain('href="/"');
     expect(markup).toContain('href="/noise"');
-    expect(markup).toContain('href="/reading/good-ideas"');
-    expect(markup).toContain('href="/reading/habit-and-rest"');
-    expect(markup).toContain('href="/reading/anger-anxiety-agency"');
-    expect(markup).toContain('href="/reading/weird-is-a-weird-word"');
     expect(markup).toContain('href="https://github.com/hraness/sleepyland"');
     expect(markup).toContain("research contributions are welcome");
     expect(markup).not.toMatch(/(?:cure|treat insomnia|clinically proven|guaranteed sleep)/iu);

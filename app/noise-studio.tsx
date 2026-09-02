@@ -83,7 +83,7 @@ type Brand = Readonly<{
 
 export type StudioResource = Readonly<{
   description: string;
-  image: EditorialImage;
+  image?: EditorialImage;
   path: string;
   title: string;
 }>;
@@ -290,7 +290,7 @@ export function NoiseInfo() {
           </p>
           <nav aria-label="Product information" className="noise-info__links">
             <Link href="/about">About</Link>
-            <Link href="/">Research</Link>
+            <Link href="/research">Research</Link>
             <Link href="/demo">Demo</Link>
             <Link href="/privacy">Privacy</Link>
             <Link href="/support">Support</Link>
@@ -320,7 +320,7 @@ export function StudioResources({
       </Button>
       <Modal
         className="studio-resources-modal"
-        description="Evidence-led guides and reading notes for quieter sleep, rest, and attention."
+        description="Evidence-led guides to sleep, sound, light, and routines."
         size="large"
         surfaceClassName="studio-resources-modal__surface"
         title="Sleepyland library"
@@ -334,13 +334,18 @@ export function StudioResources({
               </header>
               <div className="studio-resources__grid">
                 {group.resources.map((resource) => (
-                  <article className="studio-resource" key={resource.path}>
-                    <Link className="studio-resource__image" href={resource.path}>
-                      <EditorialImageThumbnail
-                        image={resource.image}
-                        sizes="(max-width: 46rem) calc(100vw - 3rem), 14rem"
-                      />
-                    </Link>
+                  <article
+                    className={`studio-resource${resource.image === undefined ? " studio-resource--without-image" : ""}`}
+                    key={resource.path}
+                  >
+                    {resource.image === undefined ? null : (
+                      <Link className="studio-resource__image" href={resource.path}>
+                        <EditorialImageThumbnail
+                          image={resource.image}
+                          sizes="(max-width: 46rem) calc(100vw - 3rem), 14rem"
+                        />
+                      </Link>
+                    )}
                     <div>
                       <h4><Link href={resource.path}>{resource.title}</Link></h4>
                       <p>{resource.description}</p>
@@ -1421,7 +1426,7 @@ export function NoiseStudio({
           <span className="wordmark__tagline"> – {brand.tagline}</span>
         </h1>
         <div className="header-actions">
-          <Link className="header-research-link" href="/">Research</Link>
+          <Link className="header-research-link" href="/research">Research</Link>
           <StudioResources groups={resourceGroups} />
           <NoiseInfo />
         </div>
