@@ -44,6 +44,7 @@ export const HOMEPAGE_RESEARCH_SLUGS = [
 ] as const satisfies readonly ResearchSlug[];
 
 export const CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS = [
+  "benadryl-diphenhydramine-for-sleep",
   "z-drugs-zaleplon-zolpidem-eszopiclone",
 ] as const satisfies readonly ResearchSlug[];
 

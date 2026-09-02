@@ -266,6 +266,39 @@ describe("markdown negotiation", () => {
     expect(privacySibling.body).toBe(privacy.body);
   });
 
+  test("propagates health-review noindex to every Markdown representation", async () => {
+    const quarantined = researchArticles.filter(
+      (article) => !isIndexableResearchArticle(article),
+    );
+
+    expect(quarantined.map((article) => article.slug)).toEqual([
+      "benadryl-diphenhydramine-for-sleep",
+      "z-drugs-zaleplon-zolpidem-eszopiclone",
+    ]);
+
+    for (const article of quarantined) {
+      const path = researchArticlePath(article.slug);
+      const [negotiatedCanonical, markdownSibling] = await Promise.all([
+        negotiated(path, { accept: "text/markdown" }),
+        negotiated(`${path}.md`),
+      ]);
+
+      expect(negotiatedCanonical.status).toBe(200);
+      expect(markdownSibling.status).toBe(200);
+      expect(negotiatedCanonical.headers.get("x-robots-tag")).toBe("noindex");
+      expect(markdownSibling.headers.get("x-robots-tag")).toBe("noindex");
+    }
+
+    const indexable = researchArticles.find(isIndexableResearchArticle);
+    if (indexable === undefined) {
+      throw new Error("Expected at least one indexable research guide.");
+    }
+    const indexableMarkdown = await negotiated(
+      `${researchArticlePath(indexable.slug)}.md`,
+    );
+    expect(indexableMarkdown.headers.get("x-robots-tag")).toBeNull();
+  });
+
   test("returns a markdown 404 with recovery links for unknown paths", async () => {
     const missing = await negotiated("/this-path-does-not-exist-agentic", {
       accept: "text/markdown",

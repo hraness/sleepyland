@@ -49,7 +49,11 @@ describe("Sleepyland search discovery", () => {
         expect(item).toContain(editorialImage.alt);
       }
     }
-    expect(xml).not.toContain("z-drugs-zaleplon-zolpidem-eszopiclone");
+    for (const article of researchArticles.filter(
+      (candidate) => !isIndexableResearchArticle(candidate),
+    )) {
+      expect(xml).not.toContain(article.slug);
+    }
   });
 
   test("builds an authenticated same-origin IndexNow payload", async () => {

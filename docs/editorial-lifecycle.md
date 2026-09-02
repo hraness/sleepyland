@@ -4,6 +4,13 @@ This ledger records why an indexable editorial route deserves a separate URL and
 
 Each record names the reader job, non-obvious answer, canonical host, original contribution, three nearest routes and their overlap, consolidation decision, primary evidence and checked date, claim-risk review state, voice evidence, homepage slot, owner, six admission scores, and reassessment date. Retired routes remain in the merge history of their canonical owner so a later contributor does not recreate them as keyword variants.
 
+## Clinical-review quarantine
+
+- **Routes:** `/research/benadryl-diphenhydramine-for-sleep` and `/research/z-drugs-zaleplon-zolpidem-eszopiclone`.
+- **Review state:** No clinical or pharmacist review of the exact published claims is documented.
+- **Indexing state:** Keep the public HTML and Markdown representations `noindex` and omit both routes from the homepage, research archive, feeds, sitemaps, and proactive indexing.
+- **Exit condition:** A named clinician or pharmacist reviews the exact claims and the review scope and date are recorded here before either route becomes indexable.
+
 ## What frequency helps you sleep?
 
 - **Canonical route:** `/research/what-frequency-helps-you-sleep`

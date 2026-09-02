@@ -107,6 +107,7 @@ describe("Sleepyland Research content", () => {
     for (const tag of RESEARCH_TAGS) {
       expect(markup).toContain(`>${tag.label}</button>`);
     }
+    expect(markup).not.toContain("benadryl-diphenhydramine-for-sleep");
     expect(markup).not.toContain("z-drugs-zaleplon-zolpidem-eszopiclone");
 
     const homepageMarkup = renderToStaticMarkup(createElement(ResearchIndex));
@@ -287,6 +288,13 @@ describe("Sleepyland Research content", () => {
     const zDrugText = JSON.stringify(zDrugs?.body);
     const racingMindText = JSON.stringify(racingMind?.body);
 
+    expect(antihistamine).toBeDefined();
+    expect(zDrugs).toBeDefined();
+    if (antihistamine === undefined || zDrugs === undefined) {
+      throw new Error("Expected both medication guides to remain available.");
+    }
+    expect(isIndexableResearchArticle(antihistamine)).toBeFalse();
+    expect(isIndexableResearchArticle(zDrugs)).toBeFalse();
     expect(magnesium?.dek).toContain("no head-to-head sleep trial proves one form is best");
     expect(antihistamineText).toContain("associated with increased risk, not proven to cause");
     expect(screensText).toContain("no significant improvement");
@@ -391,6 +399,14 @@ describe("Sleepyland Research content", () => {
     expect(structuredData).not.toHaveProperty("image");
     const collection = researchCollectionJsonLd([imageLessArticle], "/research");
     expect(collection.mainEntity.itemListElement[0]).not.toHaveProperty("image");
+  });
+
+  test("lets explicit article metadata own optional social images", async () => {
+    const fileBasedOverride = Bun.file(
+      new URL("./[slug]/opengraph-image.tsx", import.meta.url),
+    );
+
+    expect(await fileBasedOverride.exists()).toBeFalse();
   });
 });
 

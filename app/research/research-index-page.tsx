@@ -80,7 +80,7 @@ export function ResearchIndexPage({
           <header className="plain-publication__hero">
             <p className="plain-publication__eyebrow">Sleepyland Research</p>
             <h1>All research guides</h1>
-            <p>Browse accepted, evidence-led guides by topic. Medication comparisons awaiting clinical review stay out of this archive.</p>
+            <p>Browse accepted, evidence-led guides by topic. Medication guides awaiting clinical review stay out of this archive.</p>
           </header>
           <ResearchIndexList articles={visibleIndexArticles} tagOptions={RESEARCH_TAGS} />
         </div>

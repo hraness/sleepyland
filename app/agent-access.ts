@@ -752,6 +752,16 @@ function markdownHeaders(canonicalPath: string): Headers {
     "Link": `<${absoluteUrl(canonicalPath)}>; rel="canonical"`,
     "Vary": "Accept",
   });
+
+  if (canonicalPath.startsWith("/research/")) {
+    const article = getResearchArticle(
+      canonicalPath.slice("/research/".length),
+    );
+    if (article !== undefined && !isIndexableResearchArticle(article)) {
+      headers.set("X-Robots-Tag", "noindex");
+    }
+  }
+
   return headers;
 }
 

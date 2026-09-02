@@ -44,7 +44,7 @@ Do not diagnose, prescribe, provide individualized treatment, recommend dangerou
 
 Persistent insomnia, breathing symptoms during sleep, severe daytime impairment, medication questions, substance dependence, or immediate danger deserves qualified help beyond this publication.
 
-Medication comparisons, controlled-substance topics, and dangerous-use queries stay `noindex` and out of feeds, sitemaps, home modules, and proactive indexing until a documented clinical or pharmacist review approves the exact claims. Community reports may identify a safety question, but they are not a mandate to publish an acquisition page.
+Medication guides and comparisons, controlled-substance topics, and dangerous-use queries stay `noindex` and out of feeds, sitemaps, home modules, and proactive indexing until a documented clinical or pharmacist review approves the exact claims. This applies to every public representation, including negotiated and `.md` Markdown. Community reports may identify a safety question, but they are not a mandate to publish an acquisition page.
 
 ## Review before publication
 
