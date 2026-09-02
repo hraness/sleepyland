@@ -7,6 +7,7 @@ import { serializeJsonLd } from "../../seo";
 import { EditorialImageFigure } from "../../editorial-image";
 import { researchEditorialImage } from "../../editorial-images";
 import { ArticleBody } from "../article-body";
+import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "../editorial-disclosure";
 import {
   RESEARCH_SOURCES,
   articleReadingMinutes,
@@ -179,8 +180,7 @@ export default async function ResearchArticlePage({
             claims when stronger evidence appears.
           </p>
           <p className="plain-publication__disclosure">
-            This guide was prepared with software-assisted synthesis and checked
-            against the linked sources. No human clinical review is claimed.
+            {RESEARCH_AUTHORSHIP_DISCLOSURE}
           </p>
           <p className="plain-publication__disclosure">
             Found a stronger source or a claim that needs review? Research

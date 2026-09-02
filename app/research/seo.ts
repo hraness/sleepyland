@@ -2,6 +2,7 @@ import { INDEXABLE_ROBOTS, NOINDEX_ROBOTS } from "@hraness/web-discovery";
 import type { Metadata } from "next";
 
 import { researchEditorialImage } from "../editorial-images";
+import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "./editorial-disclosure";
 import {
   RESEARCH_SOURCES,
   discoverableResearchArticles,
@@ -16,7 +17,7 @@ import { absoluteUrl, isoDateTime } from "../seo";
 import { homepageUpdatedAt, site } from "../site";
 
 export const researchDescription =
-  "Evidence-led guides to insomnia, sleep supplements, light, routines, sound, circadian rhythm, and the limits of current research.";
+  "Evidence-led guides to insomnia, light, routines, sound, circadian rhythm, and the limits of current research.";
 export const RESEARCH_SOCIAL_IMAGE_PATH = "/research/opengraph-image";
 
 export function researchArticleImagePath(slug: ResearchSlug): string | undefined {
@@ -142,8 +143,7 @@ export function researchArticleJsonLd(article: ResearchArticle) {
       name: "Sleepyland Research",
       url: absoluteUrl("/#editorial-method"),
     },
-    creditText:
-      "Software-assisted evidence synthesis checked against the linked sources; no human clinical review is claimed.",
+    creditText: RESEARCH_AUTHORSHIP_DISCLOSURE,
     publisher: { "@id": `${site.canonicalUrl}/#organization` },
     isPartOf: { "@id": `${site.canonicalUrl}/#website` },
     isAccessibleForFree: true,

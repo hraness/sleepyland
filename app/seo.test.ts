@@ -54,7 +54,7 @@ describe("Sleepyland search surface", () => {
     expect(site.title.length).toBeLessThanOrEqual(60);
     expect(site.description.length).toBeLessThanOrEqual(160);
     expect(site.description.toLowerCase()).toContain("insomnia");
-    expect(site.description.toLowerCase()).toContain("supplements");
+    expect(site.description.toLowerCase()).not.toContain("supplements");
     expect(noiseTitle).toContain("White Noise");
     expect(noiseDescription.toLowerCase()).toContain("brown");
     expect(noiseDescription.toLowerCase()).toContain("pink");

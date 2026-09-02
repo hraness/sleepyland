@@ -97,6 +97,10 @@ html body:has(> .noise-app) {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.sleepyland-home-research .sleepyland-home-research__disclosure {
+  margin: -8px 0 20px;
+}
+
 .sleepyland-home-research h3 {
   font-size: 15px;
 }

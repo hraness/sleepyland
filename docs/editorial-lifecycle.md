@@ -6,10 +6,11 @@ Typed admission entries name the reader job, original contribution, three neares
 
 ## Clinical-review quarantine
 
-- **Routes:** `/research/benadryl-diphenhydramine-for-sleep` and `/research/z-drugs-zaleplon-zolpidem-eszopiclone`.
+- **Routes:** `/research/best-magnesium-for-sleep`, `/research/l-theanine-valerian-california-poppy-for-sleep`, `/research/kava-for-sleep`, `/research/benadryl-diphenhydramine-for-sleep`, `/research/z-drugs-zaleplon-zolpidem-eszopiclone`, and `/research/does-grounding-help-sleep`.
 - **Review state:** No clinical or pharmacist review of the exact published claims is documented.
-- **Indexing state:** Keep the public HTML and Markdown representations `noindex` and omit both routes from the homepage, research archive, feeds, sitemaps, and proactive indexing.
-- **Exit condition:** A named clinician or pharmacist reviews the exact claims and the review scope and date are recorded here before either route becomes indexable.
+- **Indexing state:** Keep the public HTML and Markdown representations `noindex` and omit all six routes from the homepage, research archive, feeds, sitemaps, and proactive indexing.
+- **Why these routes are held:** The medication pages discuss labeled risks and comparative use. The magnesium and botanical pages include supplement limits, interactions, or adverse-effect guidance. The grounding page includes product and physical-safety advice. Source links and a separate Codex AI review do not substitute for qualified domain review of those exact claims.
+- **Exit condition:** A named clinician or pharmacist reviews the exact claims and the review scope and date are recorded here before any route becomes indexable. Its page-specific admission must then be authored or restored independently; removing a slug from the quarantine list is not enough.
 
 ## What frequency helps you sleep?
 

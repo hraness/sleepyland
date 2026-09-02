@@ -5,6 +5,7 @@ import Link from "next/link";
 import { NOISE_DOCUMENT_PARAGRAPHS, NOISE_HEADING, markdownAlternatePath } from "./agent-access";
 import { NoiseStudio, type StudioResourceGroup } from "./noise-studio";
 import { featuredResearchResources } from "./noise/research-resources";
+import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "./research/editorial-disclosure";
 import { applicationFeatures, defaultSocialImage, serializeJsonLd, webApplicationJsonLd } from "./seo";
 import { noiseDescription, noiseTitle, site } from "./site";
 
@@ -71,6 +72,9 @@ export default function Home() {
           <h2 id="home-research-title">Research for a better sleep setup</h2>
           <Link href="/research">Browse all research</Link>
         </header>
+        <p className="sleepyland-home-research__disclosure">
+          {RESEARCH_AUTHORSHIP_DISCLOSURE}
+        </p>
         <div>
           {featuredResources.map((resource) => (
             <article key={resource.path}>

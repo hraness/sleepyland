@@ -2,7 +2,7 @@
 
 Sleepyland publishes practical, evidence-led guides for people making decisions about sleep, sound, light, routines, supplements, and medications. The publication is educational and does not provide medical advice.
 
-The current guides use software-assisted evidence synthesis. Maintainers check the resulting claims against the linked sources, but no human clinical or pharmacist review is implied unless a named review and date are recorded in the clinical-review ledger.
+Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed. A future clinical or pharmacist review must name the reviewer, scope, and date in the clinical-review ledger before the site claims it.
 
 ## Choose the reader question
 
@@ -46,7 +46,7 @@ Do not diagnose, prescribe, provide individualized treatment, recommend dangerou
 
 Persistent insomnia, breathing symptoms during sleep, severe daytime impairment, medication questions, substance dependence, or immediate danger deserves qualified help beyond this publication.
 
-Medication guides and comparisons, controlled-substance topics, and dangerous-use queries stay `noindex` and out of feeds, sitemaps, home modules, and proactive indexing until a documented clinical or pharmacist review approves the exact claims. This applies to every public representation, including negotiated and `.md` Markdown. Community reports may identify a safety question, but they are not a mandate to publish an acquisition page.
+Medication guides and comparisons, supplement interaction or adverse-effect guidance, other material health-safety instructions, controlled-substance topics, and dangerous-use queries stay `noindex` and out of feeds, sitemaps, home modules, and proactive indexing until a documented clinical or pharmacist review approves the exact claims. This applies to every public representation, including negotiated and `.md` Markdown. Community reports may identify a safety question, but they are not a mandate to publish an acquisition page.
 
 ## Review before publication
 

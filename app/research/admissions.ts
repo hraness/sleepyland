@@ -39,99 +39,6 @@ type ResearchAdmissionRegistry = Readonly<
  * images, or publication date.
  */
 const RESEARCH_ADMISSION_DECISIONS = {
-  "best-magnesium-for-sleep": {
-    claimRisk:
-      "Supplement guidance must distinguish form, elemental dose, deficiency, tolerability, interactions, and product verification without prescribing a regimen.",
-    contribution:
-      "Separates absorption, tolerability, and sleep-efficacy questions, then gives a decision path that does not crown glycinate without a head-to-head sleep trial.",
-    decision: "keep",
-    evidenceAnchor: {
-      sourceId: "magnesiumMeta2021",
-      fit:
-        "The insomnia meta-analysis supports the bounded sleep-efficacy discussion; NIH and verification sources separately support safety and product-quality claims.",
-    },
-    nearestSlugs: [
-      "l-theanine-valerian-california-poppy-for-sleep",
-      "kava-for-sleep",
-      "how-to-quiet-a-racing-mind-at-night",
-    ],
-    owner: "Sleepyland maintainers",
-    readerJob:
-      "Choose whether magnesium is a reasonable sleep experiment and evaluate form claims without mistaking popularity or absorption marketing for sleep evidence.",
-    reassessOn: "2026-10-20",
-    scores: {
-      factualConfidence: 2,
-      maintenanceValue: 1,
-      originalEvidence: 1,
-      readerUtility: 2,
-      sleepylandFit: 1,
-      voiceIntegrity: 2,
-    },
-    separation:
-      "This page owns magnesium-form and deficiency decisions. The botanical comparison owns three herbs, kava owns its cultural and liver-risk boundary, and the racing-mind guide owns behavioral insomnia tools.",
-  },
-  "l-theanine-valerian-california-poppy-for-sleep": {
-    claimRisk:
-      "Botanical traditions and mixed-product trials cannot be transferred across preparations, and the page must not imply that a combination trial identifies an active ingredient.",
-    contribution:
-      "Places three commonly bundled ingredients on separate evidence tracks and explains why plant identity, preparation, and combination design prevent a single winner.",
-    decision: "keep",
-    evidenceAnchor: {
-      sourceId: "valerianUmbrella2024",
-      fit:
-        "The umbrella review anchors the negative valerian conclusion while separate primary and regulator records bound theanine and California-poppy claims.",
-    },
-    nearestSlugs: [
-      "best-magnesium-for-sleep",
-      "kava-for-sleep",
-      "how-to-quiet-a-racing-mind-at-night",
-    ],
-    owner: "Sleepyland maintainers",
-    readerJob:
-      "Compare the evidence behind three herbal sleep ingredients that often appear together without treating their traditions or preparations as interchangeable.",
-    reassessOn: "2026-10-20",
-    scores: {
-      factualConfidence: 1,
-      maintenanceValue: 1,
-      originalEvidence: 2,
-      readerUtility: 2,
-      sleepylandFit: 1,
-      voiceIntegrity: 2,
-    },
-    separation:
-      "This is the cross-herb comparison. Magnesium has a mineral/form decision, kava needs a dedicated cultural and safety analysis, and behavioral techniques belong in the racing-mind guide.",
-  },
-  "kava-for-sleep": {
-    claimRisk:
-      "Sparse direct insomnia evidence, product ambiguity, cultural context, and liver-safety uncertainty require a cautious decision boundary rather than preparation or purchasing instructions.",
-    contribution:
-      "Separates direct sleep evidence from anxiety evidence, preserves Pacific cultural context, and tests the claim that noble cultivars or water preparation erase safety uncertainty.",
-    decision: "keep",
-    evidenceAnchor: {
-      sourceId: "nccihKava",
-      fit:
-        "The NCCIH record anchors the present evidence and safety boundary; the two trials are used only for their narrower measured outcomes.",
-    },
-    nearestSlugs: [
-      "l-theanine-valerian-california-poppy-for-sleep",
-      "best-magnesium-for-sleep",
-      "how-to-quiet-a-racing-mind-at-night",
-    ],
-    owner: "Sleepyland maintainers",
-    readerJob:
-      "Decide what kava evidence can support for sleep while accounting for tradition, preparation differences, market confusion, and liver risk.",
-    reassessOn: "2026-10-20",
-    scores: {
-      factualConfidence: 1,
-      maintenanceValue: 1,
-      originalEvidence: 2,
-      readerUtility: 2,
-      sleepylandFit: 1,
-      voiceIntegrity: 2,
-    },
-    separation:
-      "Kava's cultural history and safety controversy need their own treatment. The three-herb page owns comparison among theanine, valerian, and California poppy; magnesium owns mineral-form claims.",
-  },
   "screens-blue-light-glasses-and-sleep": {
     claimRisk:
       "Product transmission data and circadian mechanisms must not become a universal treatment or a claim that one consumer lens improves sleep.",
@@ -689,37 +596,6 @@ const RESEARCH_ADMISSION_DECISIONS = {
     },
     separation:
       "This page owns daytime circadian light. Duration guidance owns sleep opportunity, field sleep owns environmental timing across societies, and the screen guide owns evening device exposure and filters.",
-  },
-  "does-grounding-help-sleep": {
-    claimRisk:
-      "Small conflicted studies and speculative mechanisms must not be presented as established treatment, and within-group improvements cannot replace sham-controlled comparisons.",
-    contribution:
-      "Audits sample inconsistencies, baseline imbalance, funding, outcome choice, and between-group results in the newest trial against two earlier signals and stronger insomnia evidence.",
-    decision: "keep",
-    evidenceAnchor: {
-      sourceId: "groundingTrial2025",
-      fit:
-        "The sham-controlled pilot is the strongest direct test and supports only an uncertain signal; guidelines and umbrella evidence define what it does not establish.",
-    },
-    nearestSlugs: [
-      "morning-sunlight-and-sleep",
-      "is-eight-hours-of-sleep-necessary",
-      "how-to-quiet-a-racing-mind-at-night",
-    ],
-    owner: "Sleepyland maintainers",
-    readerJob:
-      "Decide whether grounding is worth a low-stakes personal experiment after inspecting the strongest sleep studies and their reporting limits.",
-    reassessOn: "2026-10-27",
-    scores: {
-      factualConfidence: 1,
-      maintenanceValue: 2,
-      originalEvidence: 2,
-      readerUtility: 2,
-      sleepylandFit: 1,
-      voiceIntegrity: 2,
-    },
-    separation:
-      "This page owns the grounding evidence audit. Morning light has a circadian mechanism and stronger literature, duration owns sleep opportunity, and racing mind owns behavioral insomnia tools.",
   },
 } as const;
 

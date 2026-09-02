@@ -30,6 +30,7 @@ import {
 } from "./homepage-content";
 import { PRODUCT_PAGES } from "./product-pages";
 import {
+  CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS,
   getResearchArticle,
   isIndexableResearchArticle,
   researchArticlePath,
@@ -182,8 +183,9 @@ describe("agent discovery documents", () => {
     expect(markdown).toContain(`canonical_url: "https://sleepy.land${researchArticlePath(article.slug)}"`);
     expect(markdown).toContain(`# ${article.title}`);
     expect(markdown).toContain(article.dek);
-    expect(markdown).toContain("Software-assisted evidence synthesis");
-    expect(markdown).toContain("no human clinical review is claimed");
+    expect(markdown).toContain(
+      "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
+    );
     expect(markdown).toContain(
       `https://sleepy.land/editorial/research/${article.slug}.webp`,
     );
@@ -261,10 +263,9 @@ describe("markdown negotiation", () => {
       (article) => !isIndexableResearchArticle(article),
     );
 
-    expect(quarantined.map((article) => article.slug)).toEqual([
-      "benadryl-diphenhydramine-for-sleep",
-      "z-drugs-zaleplon-zolpidem-eszopiclone",
-    ]);
+    expect(quarantined.map((article) => article.slug)).toEqual(
+      [...CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS],
+    );
 
     for (const article of quarantined) {
       const path = researchArticlePath(article.slug);

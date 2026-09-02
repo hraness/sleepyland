@@ -36,6 +36,7 @@ import {
 import {
   ResearchIndexPage as ResearchIndex,
   researchIndexArticles,
+  researchIndexTagOptions,
 } from "./research-index-page";
 import { ResearchIndexList } from "./research-index-list";
 import {
@@ -129,9 +130,11 @@ describe("Sleepyland Research content", () => {
     expect(augustArticle).toBeLessThan(julyArticle);
     expect(markup).toContain('aria-label="Filter articles by topic"');
     expect(markup).toContain('aria-pressed="true"');
-    for (const tag of RESEARCH_TAGS) {
+    for (const tag of researchIndexTagOptions) {
       expect(markup).toContain(`>${tag.label}</button>`);
     }
+    expect(markup).not.toContain(">Supplements</button>");
+    expect(markup).not.toContain(">Medications</button>");
     expect(markup).not.toContain("benadryl-diphenhydramine-for-sleep");
     expect(markup).not.toContain("z-drugs-zaleplon-zolpidem-eszopiclone");
 
@@ -443,15 +446,40 @@ describe("Sleepyland Research content", () => {
     expect(getResearchArticle("blue-light-scatter-and-visual-detail")).toBeUndefined();
   });
 
-  test("keeps quarantined medication guides out of every related discovery block", async () => {
+  test("keeps every unreviewed health and safety guide out of discovery", async () => {
     const quarantined = researchArticles.filter(
       (article) => !isIndexableResearchArticle(article),
     );
 
     expect(quarantined.map((article) => article.slug)).toEqual([
+      "best-magnesium-for-sleep",
+      "l-theanine-valerian-california-poppy-for-sleep",
+      "kava-for-sleep",
       "benadryl-diphenhydramine-for-sleep",
       "z-drugs-zaleplon-zolpidem-eszopiclone",
+      "does-grounding-help-sleep",
     ]);
+    expect(quarantined.map((article) => article.slug)).toEqual(
+      [...CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS],
+    );
+
+    const discoveryText = [
+      homepageMarkdown(),
+      researchIndexMarkdown(),
+      llmsTxt(),
+      sitemapMarkdown(),
+      researchFeedXml(),
+      JSON.stringify(buildSitemap()),
+      JSON.stringify(researchDiscoveryPaths()),
+    ].join("\n");
+
+    for (const quarantinedArticle of quarantined) {
+      expect(getResearchAdmission(quarantinedArticle.slug)).toBeUndefined();
+      expect(researchArticleMetadata(quarantinedArticle).robots).toEqual(
+        NOINDEX_ROBOTS,
+      );
+      expect(discoveryText).not.toContain(quarantinedArticle.slug);
+    }
 
     for (const article of researchArticles) {
       const related = relatedResearchArticles(article);
@@ -507,6 +535,10 @@ describe("Sleepyland Research content", () => {
       Bun.file(new URL("./[slug]/page.tsx", import.meta.url)).text(),
     ]);
     const indexMarkup = renderToStaticMarkup(createElement(ResearchIndex));
+    const articlePage = await ResearchArticlePage({
+      params: Promise.resolve({ slug: researchArticles[0].slug }),
+    });
+    const articleMarkup = renderToStaticMarkup(articlePage);
 
     expect(indexSource).toContain("Editorial boundary");
     expect(indexMarkup).toContain("Educational evidence synthesis, not medical advice");
@@ -517,8 +549,10 @@ describe("Sleepyland Research content", () => {
     expect(indexSource).toContain('href="/noise"');
     expect(articleSource).toContain("Open the calming sound machine");
     expect(articleSource).toContain("Educational evidence synthesis");
-    expect(articleSource).toContain("software-assisted synthesis");
-    expect(articleSource).toContain("No human clinical review is claimed");
+    expect(articleSource).toContain("RESEARCH_AUTHORSHIP_DISCLOSURE");
+    expect(articleMarkup).toContain(
+      "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
+    );
     expect(articleSource).toContain("contributions are <a");
     expect(articleSource).toContain('href="/#editorial-method"');
     expect(articleSource).toContain("Published ");
@@ -710,7 +744,7 @@ describe("Sleepyland Research search surface", () => {
         dateModified: `${article.updatedAt}T00:00:00.000Z`,
         isAccessibleForFree: true,
         creditText:
-          "Software-assisted evidence synthesis checked against the linked sources; no human clinical review is claimed.",
+          "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
       });
       expect(structuredData.citation).toEqual(
         article.sourceIds.map((sourceId) => RESEARCH_SOURCES[sourceId].url),

@@ -40,6 +40,9 @@ describe("Sleepyland product homepage", () => {
     expect(markup).toContain('aria-label="Play sound"');
     expect(markup).toContain(featured.title);
     expect(markup).toContain('href="/research"');
+    expect(markup).toContain(
+      "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
+    );
     const orderedMarkers = ['aria-label="Sound controls"', featured.title];
     const positions = orderedMarkers.map((marker) => markup.indexOf(marker));
     expect(positions.every((position) => position >= 0)).toBeTrue();

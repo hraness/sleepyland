@@ -19,6 +19,7 @@ import {
 } from "./articles";
 import { ResearchIndexList } from "./research-index-list";
 import { breadcrumbJsonLd, researchCollectionJsonLd } from "./seo";
+import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "./editorial-disclosure";
 
 export const researchIndexArticles = discoverableResearchArticles(
   researchArticlesNewestFirst,
@@ -32,6 +33,13 @@ export const researchIndexArticles = discoverableResearchArticles(
   tags: article.tags.map((id) => ({ id, label: researchTagLabel(id) })),
   title: article.title,
 }));
+
+const discoverableTagIds = new Set(
+  researchIndexArticles.flatMap((article) => article.tags.map((tag) => tag.id)),
+);
+
+export const researchIndexTagOptions = RESEARCH_TAGS.filter((tag) =>
+  discoverableTagIds.has(tag.id));
 
 export function ResearchIndexPage({
   showAll = false,
@@ -59,9 +67,13 @@ export function ResearchIndexPage({
           <header className="plain-publication__hero">
             <p className="plain-publication__eyebrow">Sleepyland Research</p>
             <h1>All research guides</h1>
-            <p>Browse accepted, evidence-led guides by topic. Medication guides awaiting clinical review stay out of this archive.</p>
+            <p>Browse accepted, evidence-led guides by topic. Medication, supplement-safety, and other higher-risk guides awaiting qualified review stay out of this archive.</p>
+            <p>{RESEARCH_AUTHORSHIP_DISCLOSURE}</p>
           </header>
-          <ResearchIndexList articles={visibleIndexArticles} tagOptions={RESEARCH_TAGS} />
+          <ResearchIndexList
+            articles={visibleIndexArticles}
+            tagOptions={researchIndexTagOptions}
+          />
         </div>
       </main>
     );
@@ -137,7 +149,7 @@ export function ResearchIndexPage({
 
         <ResearchIndexList
           articles={visibleIndexArticles.filter((article) => article.slug !== featuredArticle.slug)}
-          tagOptions={RESEARCH_TAGS}
+          tagOptions={researchIndexTagOptions}
         />
         <p className="plain-publication__browse-all">
           <Link href="/research">Browse every research guide</Link>

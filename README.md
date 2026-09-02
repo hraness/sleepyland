@@ -5,7 +5,7 @@
 
 [Sleepyland](https://sleepy.land) gives readers a direct answer, the sources behind it, and the limit of the evidence before they make a sleep decision. The same site includes a [private browser sound machine](https://sleepy.land/noise) for sleep, relaxation, and focus.
 
-The admitted publication covers insomnia, supplements, circadian light, routines, environmental sound, and common wellness claims. It is educational publishing, not medical advice. Medication pages remain outside discovery until their exact claims receive documented clinical review.
+The admitted publication covers insomnia, circadian light, routines, environmental sound, and common wellness claims. It is educational publishing, not medical advice. Medication, supplement-safety, and other higher-risk pages remain outside discovery until their exact claims receive documented qualified review.
 
 ## First proof
 
@@ -51,7 +51,7 @@ Substantive research changes must keep those surfaces aligned. Read [the editori
 ## Boundaries
 
 - **Evidence:** Sleepyland distinguishes direct findings, mechanism, inference, and experience. It does not claim clinician review that did not happen.
-- **Review:** Software can help collect and synthesize material, but published wording is checked against the linked source.
+- **Review:** Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.
 - **Health:** Sleepyland does not diagnose, prescribe, provide individualized dosing, or promise an outcome.
 - **Sound:** The sound machine synthesizes brown, pink, and white noise, procedural ocean surf, slow spatial movement, and spectrum pulses with the Web Audio API. It uses no recorded audio, product account, microphone input, uploaded mix, or server-side sound generation.
 - **Privacy:** Settings remain on the device. Canonical production analytics are cookieless, omit session replay and person profiles, and admit only the checked categorical event schema.
@@ -62,9 +62,9 @@ Substantive research changes must keep those surfaces aligned. Read [the editori
 
 No audio is uploaded or generated on a server. Settings stay in browser-local storage. Bounded anonymous analytics can include categorical mode and session kind, but not tuning values, exact playback duration, or spectrum gestures.
 
-### How is software-assisted research checked?
+### How is AI-drafted research checked?
 
-Software can help organize and compare sources. Before publication, material wording is checked against the linked source, and inference stays labeled as inference.
+An AI agent can organize and compare sources. Before publication, a separate Codex AI reviewer checks material wording against the linked sources, and inference stays labeled as inference. No human clinical review is claimed.
 
 ### How do I challenge a claim?
 

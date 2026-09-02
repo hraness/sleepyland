@@ -45,8 +45,12 @@ export const HOMEPAGE_RESEARCH_SLUGS = [
 ] as const satisfies readonly ResearchSlug[];
 
 export const CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS = [
+  "best-magnesium-for-sleep",
+  "l-theanine-valerian-california-poppy-for-sleep",
+  "kava-for-sleep",
   "benadryl-diphenhydramine-for-sleep",
   "z-drugs-zaleplon-zolpidem-eszopiclone",
+  "does-grounding-help-sleep",
 ] as const satisfies readonly ResearchSlug[];
 
 export const RESEARCH_TAGS = [

@@ -4,6 +4,7 @@ import {
 } from "@hraness/web-discovery";
 
 import { researchEditorialImage } from "./editorial-images";
+import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "./research/editorial-disclosure";
 import {
   discoverableResearchArticles,
   latestResearchUpdatedAt,
@@ -69,8 +70,8 @@ export function researchFeedXml(
         `      <link>${xmlEscape(url)}</link>`,
         `      <guid isPermaLink="true">${xmlEscape(url)}</guid>`,
         `      <pubDate>${new Date(isoDateTime(article.publishedAt)).toUTCString()}</pubDate>`,
-        `      <description>${xmlEscape(article.dek)}</description>`,
-        "      <dc:creator>Sleepyland Research; software-assisted evidence synthesis checked against the linked sources; no human clinical review claimed</dc:creator>",
+        `      <description>${xmlEscape(`${article.dek} ${RESEARCH_AUTHORSHIP_DISCLOSURE}`)}</description>`,
+        "      <dc:creator>Sleepyland Research</dc:creator>",
         ...(editorialImage === undefined ? [] : [
           `      <media:content height="${editorialImage.height}" medium="image" type="image/webp" url="${xmlEscape(absoluteUrl(editorialImage.src))}" width="${editorialImage.width}">`,
           `        <media:description type="plain">${xmlEscape(editorialImage.alt)}</media:description>`,

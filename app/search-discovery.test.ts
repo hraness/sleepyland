@@ -41,7 +41,10 @@ describe("Sleepyland search discovery", () => {
       const itemStart = xml.indexOf(`<link>${articleUrl}</link>`);
       const itemEnd = xml.indexOf("</item>", itemStart);
       const item = xml.slice(itemStart, itemEnd);
-      expect(item).toContain("software-assisted evidence synthesis");
+      expect(item).toContain(
+        "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
+      );
+      expect(item).toContain("<dc:creator>Sleepyland Research</dc:creator>");
       if (editorialImage === undefined) {
         expect(item).not.toContain("<media:content");
       } else {
