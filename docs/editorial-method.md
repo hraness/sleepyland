@@ -6,7 +6,7 @@ Sleepyland publishes practical, evidence-led guides for people making decisions 
 
 One page should own one decision. Search language helps identify unresolved questions, but it does not justify thin pages or wording variants. A new article must have a distinct reader job, sufficient evidence, and an original contribution that an existing page cannot absorb cleanly.
 
-Before drafting an indexable route, record the reader's concrete job, its canonical owner, the original decision aid or inspectable result, the three nearest existing pages, why consolidation is insufficient, the primary evidence, claim-risk reviewer, and next evidence-refresh date. Source count and word count do not establish usefulness. A page that only restates a caveat, targets a wording variant, or forces an unrelated essay into Sleepyland's product vocabulary should be merged or rejected.
+Before drafting an indexable route, add a record to `docs/editorial-lifecycle.md` with the reader's concrete job, its canonical owner, the original decision aid or inspectable result, the three nearest existing pages, why consolidation is insufficient, the primary evidence, claim-risk reviewer, owner, score, and next evidence-refresh and reassessment dates. Source count and word count do not establish usefulness. A page that only restates a caveat, targets a wording variant, or forces an unrelated essay into Sleepyland's product vocabulary should be merged or rejected.
 
 Score reader utility, original evidence, factual confidence, Sleepyland fit,
 voice integrity, and maintenance value from 0–2. An indexable route needs at

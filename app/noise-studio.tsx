@@ -83,7 +83,7 @@ type Brand = Readonly<{
 
 export type StudioResource = Readonly<{
   description: string;
-  image: EditorialImage;
+  image?: EditorialImage;
   path: string;
   title: string;
 }>;
@@ -334,13 +334,18 @@ export function StudioResources({
               </header>
               <div className="studio-resources__grid">
                 {group.resources.map((resource) => (
-                  <article className="studio-resource" key={resource.path}>
-                    <Link className="studio-resource__image" href={resource.path}>
-                      <EditorialImageThumbnail
-                        image={resource.image}
-                        sizes="(max-width: 46rem) calc(100vw - 3rem), 14rem"
-                      />
-                    </Link>
+                  <article
+                    className={`studio-resource${resource.image === undefined ? " studio-resource--without-image" : ""}`}
+                    key={resource.path}
+                  >
+                    {resource.image === undefined ? null : (
+                      <Link className="studio-resource__image" href={resource.path}>
+                        <EditorialImageThumbnail
+                          image={resource.image}
+                          sizes="(max-width: 46rem) calc(100vw - 3rem), 14rem"
+                        />
+                      </Link>
+                    )}
                     <div>
                       <h4><Link href={resource.path}>{resource.title}</Link></h4>
                       <p>{resource.description}</p>

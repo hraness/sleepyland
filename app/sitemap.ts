@@ -10,13 +10,23 @@ import {
 import { PRODUCT_PAGES } from "./product-pages";
 import { homepageUpdatedAt, site } from "./site";
 
+function researchImageUrls(
+  articles: ReturnType<typeof homepageResearchArticles>,
+): string[] {
+  return articles.flatMap((article) => {
+    const image = researchEditorialImage(article.slug);
+    return image === undefined ? [] : [`${site.canonicalUrl}${image.src}`];
+  });
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: site.canonicalUrl,
       lastModified: new Date(homepageUpdatedAt),
-      images: homepageResearchArticles().filter(isIndexableResearchArticle).map((article) =>
-        `${site.canonicalUrl}${researchEditorialImage(article.slug).src}`),
+      images: researchImageUrls(
+        homepageResearchArticles().filter(isIndexableResearchArticle),
+      ),
     },
     {
       url: `${site.canonicalUrl}/noise`,
@@ -25,17 +35,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${site.canonicalUrl}/research`,
       lastModified: new Date(homepageUpdatedAt),
-      images: researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) =>
-        `${site.canonicalUrl}${researchEditorialImage(article.slug).src}`),
+      images: researchImageUrls(
+        researchArticlesNewestFirst.filter(isIndexableResearchArticle),
+      ),
     },
     ...PRODUCT_PAGES.map((page) => ({
       url: `${site.canonicalUrl}${page.path}`,
       lastModified: new Date(`${page.updatedAt}T00:00:00.000Z`),
     })),
-    ...researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) => ({
-      url: `${site.canonicalUrl}${researchArticlePath(article.slug)}`,
-      lastModified: new Date(`${article.updatedAt}T00:00:00.000Z`),
-      images: [`${site.canonicalUrl}${researchEditorialImage(article.slug).src}`],
-    })),
+    ...researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) => {
+      const image = researchEditorialImage(article.slug);
+      return {
+        url: `${site.canonicalUrl}${researchArticlePath(article.slug)}`,
+        lastModified: new Date(`${article.updatedAt}T00:00:00.000Z`),
+        ...(image === undefined
+          ? {}
+          : { images: [`${site.canonicalUrl}${image.src}`] }),
+      };
+    }),
   ];
 }

@@ -119,7 +119,7 @@ export function ResearchIndexPage({
 
         <section
           aria-labelledby="first-proof-title"
-          className="sleepyland-home__proof"
+          className={`sleepyland-home__proof${featuredImage === undefined ? " sleepyland-home__proof--without-image" : ""}`}
           id="first-proof"
         >
           <div className="sleepyland-home__proof-copy">
@@ -144,7 +144,9 @@ export function ResearchIndexPage({
               Read the guide and sources <span aria-hidden="true">→</span>
             </Link>
           </div>
-          <EditorialImageFigure image={featuredImage} variant="interstitial" />
+          {featuredImage === undefined ? null : (
+            <EditorialImageFigure image={featuredImage} variant="interstitial" />
+          )}
         </section>
 
         <MarketingSection

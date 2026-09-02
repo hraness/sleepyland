@@ -25,7 +25,7 @@ export type EditorialImage<
 type EditorialImageRecord<
   Kind extends EditorialImageKind,
   Slug extends string,
-> = Readonly<{ [Key in Slug]: EditorialImage<Kind, Key> }>;
+> = Readonly<Partial<{ [Key in Slug]: EditorialImage<Kind, Key> }>>;
 
 function image<Kind extends EditorialImageKind, Slug extends string>(
   kind: Kind,
@@ -160,13 +160,6 @@ export const RESEARCH_EDITORIAL_IMAGES = {
     "White, pink, and brown describe different spectral slopes—not different medicines.",
     "171afc3f3a3d97b94977216bcb34fbac38c0130ba8cec93419c07aa8866e0a28",
   ),
-  "binaural-beats-for-sleep": image(
-    "research",
-    "binaural-beats-for-sleep",
-    "Separate coiled tone fields forming a subtle pulse in the space between them.",
-    "The central rhythm is presented as a perceptual effect, not a picture of brain entrainment.",
-    "8e713efe396e8349d3989a2db9ba1e20d103cf282fa6416f4111777c277926e7",
-  ),
   "ocean-waves-for-sleep": image(
     "research",
     "ocean-waves-for-sleep",
@@ -227,8 +220,10 @@ export const RESEARCH_EDITORIAL_IMAGES = {
 
 export function researchEditorialImage(
   slug: ResearchSlug,
-): EditorialImage<"research", ResearchSlug> {
-  return RESEARCH_EDITORIAL_IMAGES[slug];
+): EditorialImage<"research", ResearchSlug> | undefined {
+  const images: EditorialImageRecord<"research", ResearchSlug> =
+    RESEARCH_EDITORIAL_IMAGES;
+  return images[slug];
 }
 
 export const editorialImages = [

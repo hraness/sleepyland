@@ -900,6 +900,10 @@ input {
   min-width: 0;
 }
 
+.studio-resource.studio-resource--without-image {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .studio-resource__image {
   display: block;
   overflow: hidden;

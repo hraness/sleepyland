@@ -9,7 +9,7 @@ describe("site migration redirects", () => {
     }
 
     const redirects = await nextConfig.redirects();
-    expect(redirects.map((redirect) => ({
+    expect(redirects.filter((redirect) => redirect.has !== undefined).map((redirect) => ({
       destination: redirect.destination,
       host: redirect.has?.find((condition) => condition.type === "host")?.value,
       permanent: redirect.permanent,
@@ -38,6 +38,26 @@ describe("site migration redirects", () => {
         host: "www.sleepy.land",
         permanent: true,
         source: "/:path*",
+      },
+    ]);
+  });
+
+  test("consolidates the retired binaural guide into the frequency canonical", async () => {
+    if (nextConfig.redirects === undefined) {
+      throw new Error("Next.js redirects are not configured.");
+    }
+
+    const redirects = await nextConfig.redirects();
+    expect(redirects.filter(({ source }) => source.includes("binaural-beats"))).toEqual([
+      {
+        destination: "/research/what-frequency-helps-you-sleep",
+        permanent: true,
+        source: "/research/binaural-beats-for-sleep",
+      },
+      {
+        destination: "/research/what-frequency-helps-you-sleep.md",
+        permanent: true,
+        source: "/research/binaural-beats-for-sleep.md",
       },
     ]);
   });

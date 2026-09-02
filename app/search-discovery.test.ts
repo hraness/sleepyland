@@ -17,7 +17,7 @@ import {
 import { PRODUCT_PAGES } from "./product-pages";
 
 describe("Sleepyland search discovery", () => {
-  test("publishes every research article in a static RSS feed", async () => {
+  test("publishes every indexable article with optional image parity", async () => {
     const response = getResearchFeed();
     const xml = await response.text();
 
@@ -33,13 +33,21 @@ describe("Sleepyland search discovery", () => {
 
     for (const article of indexableArticles) {
       const editorialImage = researchEditorialImage(article.slug);
+      const articleUrl = `https://sleepy.land${researchArticlePath(article.slug)}`;
       expect(xml).toContain(
-        `https://sleepy.land${researchArticlePath(article.slug)}`,
+        articleUrl,
       );
-      expect(xml).toContain(
-        `url="https://sleepy.land${editorialImage.src}"`,
-      );
-      expect(xml).toContain(editorialImage.alt);
+      const itemStart = xml.indexOf(`<link>${articleUrl}</link>`);
+      const itemEnd = xml.indexOf("</item>", itemStart);
+      const item = xml.slice(itemStart, itemEnd);
+      if (editorialImage === undefined) {
+        expect(item).not.toContain("<media:content");
+      } else {
+        expect(item).toContain(
+          `url="https://sleepy.land${editorialImage.src}"`,
+        );
+        expect(item).toContain(editorialImage.alt);
+      }
     }
     expect(xml).not.toContain("z-drugs-zaleplon-zolpidem-eszopiclone");
   });

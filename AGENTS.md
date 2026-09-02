@@ -5,6 +5,7 @@
 - `styles/` contains the compact sound-machine and publication visual systems.
 - `public/` contains static public assets.
 - `docs/editorial-method.md` defines the public research-review method.
+- `docs/editorial-lifecycle.md` is the durable admission, overlap, ownership, and reassessment ledger for editorial routes.
 - `STYLE.md` defines the public and reader-facing prose contract.
 - `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, and `CODE_OF_CONDUCT.md` define the public project and contribution boundaries.
 

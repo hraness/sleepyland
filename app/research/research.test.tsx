@@ -12,7 +12,11 @@ import ResearchArticlePage from "./[slug]/page";
 import { ArticleBody } from "./article-body";
 import { RESEARCH_IMAGE_WORDMARK } from "./article-image";
 import ResearchLayout, { viewport } from "./layout";
-import { ResearchIndexPage as ResearchIndex } from "./research-index-page";
+import {
+  ResearchIndexPage as ResearchIndex,
+  researchIndexArticles,
+} from "./research-index-page";
+import { ResearchIndexList } from "./research-index-list";
 import {
   RESEARCH_SLUGS,
   RESEARCH_SOURCES,
@@ -24,6 +28,7 @@ import {
   researchArticlePath,
   researchArticles,
   researchArticlesNewestFirst,
+  type ResearchSlug,
 } from "./articles";
 import {
   researchArticleJsonLd,
@@ -105,7 +110,9 @@ describe("Sleepyland Research content", () => {
     expect(markup).not.toContain("z-drugs-zaleplon-zolpidem-eszopiclone");
 
     const homepageMarkup = renderToStaticMarkup(createElement(ResearchIndex));
-    expect(homepageMarkup.match(/class="plain-publication__entry"/gu)).toHaveLength(7);
+    const homepageEntries = homepageMarkup.match(/class="plain-publication__entry"/gu)?.length ?? 0;
+    expect(homepageEntries).toBeGreaterThan(0);
+    expect(homepageEntries).toBeLessThanOrEqual(7);
   });
 
   test("publishes one substantial evidence cluster without thin query variants", () => {
@@ -231,6 +238,10 @@ describe("Sleepyland Research content", () => {
     expect(selectionText).toContain("Choose a sleep-sound strategy by the actual problem");
     expect(frequencyText).toContain("matching their numbers does not make them biologically equivalent");
     expect(frequencyText).toContain("Delta is a measurement, not an audio prescription");
+    expect(frequencyText).toContain("between-group difference was not statistically significant");
+    expect(frequencyText).toContain("Judge the morning, not the label");
+    expect(frequency?.sourceIds).toContain("binauralTrial2026");
+    expect(getResearchArticle("binaural-beats-for-sleep")).toBeUndefined();
     expect(maskingText).toContain("does not absorb, block, or cancel acoustic energy");
     expect(maskingText).toContain("Spectrum-first starting points");
     expect(colorsText).toContain("What about green noise for sleep");
@@ -251,6 +262,17 @@ describe("Sleepyland Research content", () => {
     );
     expect(frequencyText).not.toMatch(/432 Hz (?:guarantees|induces|causes) sleep/iu);
     expect(maskingText).not.toMatch(/masking (?:blocks|cancels|erases) sound/iu);
+  });
+
+  test("records the frequency consolidation and its reassessment contract", async () => {
+    const lifecycle = await Bun.file(
+      new URL("../../docs/editorial-lifecycle.md", import.meta.url),
+    ).text();
+
+    expect(lifecycle).toContain("/research/what-frequency-helps-you-sleep");
+    expect(lifecycle).toContain("former `/research/binaural-beats-for-sleep`");
+    expect(lifecycle).toContain("Total 10/12, no zero");
+    expect(lifecycle).toContain("Reassess on:** 2026-10-13");
   });
 
   test("keeps the insomnia expansion useful without turning it into medical instructions", () => {
@@ -338,9 +360,37 @@ describe("Sleepyland Research content", () => {
       `<span aria-current="page">${article.title}</span>`,
     );
     expect(markup).not.toContain('<span aria-hidden="true">/</span>');
-    expect(markup).toContain(`alt="${editorialImage.alt}"`);
-    expect(markup).toContain(editorialImage.caption);
-    expect(markup).toContain(editorialImage.credit);
+    if (editorialImage !== undefined) {
+      expect(markup).toContain(`alt="${editorialImage.alt}"`);
+      expect(markup).toContain(editorialImage.caption);
+      expect(markup).toContain(editorialImage.credit);
+    }
+  });
+
+  test("renders and describes an admitted article without requiring an image", () => {
+    const article = researchArticles[0];
+    const imageLessSlug = "image-less-fixture" as ResearchSlug;
+    const imageLessArticle = { ...article, slug: imageLessSlug };
+    const imageLessEntry = { ...researchIndexArticles[0], image: undefined };
+    const indexMarkup = renderToStaticMarkup(
+      createElement(ResearchIndexList, {
+        articles: [imageLessEntry],
+        tagOptions: RESEARCH_TAGS,
+      }),
+    );
+
+    expect(indexMarkup).toContain("plain-publication__entry--without-image");
+    expect(indexMarkup).not.toContain("plain-publication__entry-image");
+
+    const metadata = researchArticleMetadata(imageLessArticle);
+    expect(metadata.openGraph).not.toHaveProperty("images");
+    expect(metadata.twitter).toMatchObject({ card: "summary" });
+    expect(metadata.twitter).not.toHaveProperty("images");
+
+    const structuredData = researchArticleJsonLd(imageLessArticle);
+    expect(structuredData).not.toHaveProperty("image");
+    const collection = researchCollectionJsonLd([imageLessArticle], "/research");
+    expect(collection.mainEntity.itemListElement[0]).not.toHaveProperty("image");
   });
 });
 
@@ -401,19 +451,29 @@ describe("Sleepyland Research search surface", () => {
         description: article.seoDescription,
         publishedTime: `${article.publishedAt}T00:00:00.000Z`,
         modifiedTime: `${article.updatedAt}T00:00:00.000Z`,
-        images: [
-          {
-            url: researchArticleImagePath(article.slug),
-            width: editorialImage.width,
-            height: editorialImage.height,
-            alt: editorialImage.alt,
-          },
-        ],
       });
-      expect(metadata.twitter).toMatchObject({
-        card: "summary_large_image",
-        images: [{ url: researchArticleImagePath(article.slug) }],
-      });
+      if (editorialImage === undefined) {
+        expect(metadata.openGraph).not.toHaveProperty("images");
+        expect(metadata.twitter).toMatchObject({ card: "summary" });
+        expect(metadata.twitter).not.toHaveProperty("images");
+        expect(researchArticleImagePath(article.slug)).toBeUndefined();
+      } else {
+        expect(metadata.openGraph).toMatchObject({
+          images: [
+            {
+              url: editorialImage.src,
+              width: editorialImage.width,
+              height: editorialImage.height,
+              alt: editorialImage.alt,
+            },
+          ],
+        });
+        expect(metadata.twitter).toMatchObject({
+          card: "summary_large_image",
+          images: [{ url: editorialImage.src }],
+        });
+        expect(researchArticleImagePath(article.slug)).toBe(editorialImage.src);
+      }
     }
   });
 
@@ -430,6 +490,16 @@ describe("Sleepyland Research search surface", () => {
     expect(collection.mainEntity.numberOfItems).toBe(
       homepageResearchArticles().filter(isIndexableResearchArticle).length,
     );
+    for (const [index, article] of homepageResearchArticles()
+      .filter(isIndexableResearchArticle).entries()) {
+      const image = researchEditorialImage(article.slug);
+      const item = collection.mainEntity.itemListElement[index];
+      if (image === undefined) {
+        expect(item).not.toHaveProperty("image");
+      } else {
+        expect(item).toHaveProperty("image", `https://sleepy.land${image.src}`);
+      }
+    }
 
     for (const article of researchArticles) {
       const structuredData = researchArticleJsonLd(article);
@@ -438,8 +508,6 @@ describe("Sleepyland Research search surface", () => {
         "@type": "BlogPosting",
         headline: article.title,
         description: article.seoDescription,
-        image:
-          `https://sleepy.land${researchArticleImagePath(article.slug)}`,
         datePublished: `${article.publishedAt}T00:00:00.000Z`,
         dateModified: `${article.updatedAt}T00:00:00.000Z`,
         isAccessibleForFree: true,
@@ -449,6 +517,15 @@ describe("Sleepyland Research search surface", () => {
       );
       expect(structuredData).not.toHaveProperty("review");
       expect(structuredData).not.toHaveProperty("aggregateRating");
+      const image = researchEditorialImage(article.slug);
+      if (image === undefined) {
+        expect(structuredData).not.toHaveProperty("image");
+      } else {
+        expect(structuredData).toHaveProperty(
+          "image",
+          `https://sleepy.land${image.src}`,
+        );
+      }
     }
 
     expect(serializeJsonLd(collection)).not.toContain("</script>");

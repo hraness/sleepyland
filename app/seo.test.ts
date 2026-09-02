@@ -102,6 +102,11 @@ describe("Sleepyland search surface", () => {
   });
 
   test("advertises the generator and every research route through the sitemap", () => {
+    const imageUrls = (articles: ReturnType<typeof homepageResearchArticles>) =>
+      articles.flatMap((article) => {
+        const image = researchEditorialImage(article.slug);
+        return image === undefined ? [] : [`https://sleepy.land${image.src}`];
+      });
     expect(robots()).toEqual({
       rules: [
         {
@@ -132,8 +137,9 @@ describe("Sleepyland search surface", () => {
     expect(entries[0]).toEqual({
       url: "https://sleepy.land",
       lastModified: new Date(homepageUpdatedAt),
-      images: homepageResearchArticles().filter(isIndexableResearchArticle).map((article) =>
-        `https://sleepy.land${researchEditorialImage(article.slug).src}`),
+      images: imageUrls(
+        homepageResearchArticles().filter(isIndexableResearchArticle),
+      ),
     });
     expect(entries[1]).toEqual({
       url: "https://sleepy.land/noise",
@@ -142,8 +148,9 @@ describe("Sleepyland search surface", () => {
     expect(entries[2]).toEqual({
       url: "https://sleepy.land/research",
       lastModified: new Date(homepageUpdatedAt),
-      images: researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) =>
-        `https://sleepy.land${researchEditorialImage(article.slug).src}`),
+      images: imageUrls(
+        researchArticlesNewestFirst.filter(isIndexableResearchArticle),
+      ),
     });
     expect(entries.slice(3, 3 + PRODUCT_PAGES.length)).toEqual(
       PRODUCT_PAGES.map((page) => ({
@@ -152,12 +159,16 @@ describe("Sleepyland search surface", () => {
       })),
     );
     expect(entries.slice(3 + PRODUCT_PAGES.length)).toEqual(
-      researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) =>
-        ({
+      researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) => {
+        const image = researchEditorialImage(article.slug);
+        return {
           url: `https://sleepy.land${researchArticlePath(article.slug)}`,
           lastModified: new Date(`${article.updatedAt}T00:00:00.000Z`),
-          images: [`https://sleepy.land${researchEditorialImage(article.slug).src}`],
-        })),
+          ...(image === undefined
+            ? {}
+            : { images: [`https://sleepy.land${image.src}`] }),
+        };
+      }),
     );
   });
 });

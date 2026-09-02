@@ -70,6 +70,7 @@ export default async function ResearchArticlePage({
       ? [{ text: block.text }]
       : []);
   const path = researchArticlePath(article.slug);
+  const editorialImage = researchEditorialImage(article.slug);
   return (
     <main className="plain-publication__article" id="research-content">
       <script
@@ -122,12 +123,11 @@ export default async function ResearchArticlePage({
         </p>
       </header>
 
-      <div className="plain-publication__article-banner plain-publication__shell">
-        <EditorialImageFigure
-          image={researchEditorialImage(article.slug)}
-          preload
-        />
-      </div>
+      {editorialImage === undefined ? null : (
+        <div className="plain-publication__article-banner plain-publication__shell">
+          <EditorialImageFigure image={editorialImage} preload />
+        </div>
+      )}
 
       <div className="plain-publication__article-layout plain-publication__shell">
         <nav aria-label="In this article" className="plain-publication__toc">

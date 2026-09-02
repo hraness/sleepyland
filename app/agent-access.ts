@@ -353,6 +353,7 @@ function renderInline(content: InlineContent): string {
 function renderBlock(block: ResearchBlock): string {
   if (block.type === "editorial-image") {
     const image = researchEditorialImage(block.imageSlug);
+    if (image === undefined) return "";
     return `![${image.alt}](${absoluteUrl(image.src)})\n\n*${image.caption} ${image.credit}.*`;
   }
 
@@ -563,10 +564,12 @@ export function researchArticleMarkdown(article: ResearchArticle): string {
     "",
     article.dek,
     "",
-    `![${editorialImage.alt}](${absoluteUrl(editorialImage.src)})`,
-    "",
-    `*${editorialImage.caption} ${editorialImage.credit}.*`,
-    "",
+    ...(editorialImage === undefined ? [] : [
+      `![${editorialImage.alt}](${absoluteUrl(editorialImage.src)})`,
+      "",
+      `*${editorialImage.caption} ${editorialImage.credit}.*`,
+      "",
+    ]),
     `By [Sleepyland Research](${absoluteUrl("/index.md")}). Published ${article.publishedAt}. Updated ${article.updatedAt}. ${article.evidenceLabel}. Tags: ${article.tags.map(researchTagLabel).join(", ")}.`,
     "",
     ...article.body.flatMap((block) => [renderBlock(block), ""]),

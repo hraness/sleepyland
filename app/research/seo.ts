@@ -18,8 +18,8 @@ export const researchDescription =
   "Evidence-led guides to insomnia, sleep supplements, medications, light, routines, sound, circadian rhythm, and the limits of current research.";
 export const RESEARCH_SOCIAL_IMAGE_PATH = "/research/opengraph-image";
 
-export function researchArticleImagePath(slug: ResearchSlug): string {
-  return researchEditorialImage(slug).src;
+export function researchArticleImagePath(slug: ResearchSlug): string | undefined {
+  return researchEditorialImage(slug)?.src;
 }
 
 export function researchArticleMetadata(
@@ -28,8 +28,6 @@ export function researchArticleMetadata(
   const path = researchArticlePath(article.slug);
   const title = article.title;
   const editorialImage = researchEditorialImage(article.slug);
-  const imagePath = editorialImage.src;
-  const imageAlt = editorialImage.alt;
 
   return {
     title,
@@ -63,20 +61,24 @@ export function researchArticleMetadata(
         ...article.tags.map(researchTagLabel),
         ...article.keywords,
       ],
-      images: [
-        {
-          url: imagePath,
-          width: editorialImage.width,
-          height: editorialImage.height,
-          alt: imageAlt,
-        },
-      ],
+      ...(editorialImage === undefined ? {} : {
+        images: [
+          {
+            url: editorialImage.src,
+            width: editorialImage.width,
+            height: editorialImage.height,
+            alt: editorialImage.alt,
+          },
+        ],
+      }),
     },
     twitter: {
-      card: "summary_large_image",
+      card: editorialImage === undefined ? "summary" : "summary_large_image",
       title,
       description: article.seoDescription,
-      images: [{ url: imagePath, alt: imageAlt }],
+      ...(editorialImage === undefined ? {} : {
+        images: [{ url: editorialImage.src, alt: editorialImage.alt }],
+      }),
     },
   };
 }
@@ -102,19 +104,23 @@ export function researchCollectionJsonLd(
     mainEntity: {
       "@type": "ItemList",
       numberOfItems: collectionArticles.length,
-      itemListElement: collectionArticles.map((article, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        name: article.title,
-        image: absoluteUrl(researchEditorialImage(article.slug).src),
-        url: absoluteUrl(researchArticlePath(article.slug)),
-      })),
+      itemListElement: collectionArticles.map((article, index) => {
+        const image = researchEditorialImage(article.slug);
+        return {
+          "@type": "ListItem",
+          position: index + 1,
+          name: article.title,
+          ...(image === undefined ? {} : { image: absoluteUrl(image.src) }),
+          url: absoluteUrl(researchArticlePath(article.slug)),
+        };
+      }),
     },
   } as const;
 }
 
 export function researchArticleJsonLd(article: ResearchArticle) {
   const url = absoluteUrl(researchArticlePath(article.slug));
+  const imagePath = researchArticleImagePath(article.slug);
 
   return {
     "@context": "https://schema.org",
@@ -126,7 +132,7 @@ export function researchArticleJsonLd(article: ResearchArticle) {
     },
     headline: article.title,
     description: article.seoDescription,
-    image: absoluteUrl(researchArticleImagePath(article.slug)),
+    ...(imagePath === undefined ? {} : { image: absoluteUrl(imagePath) }),
     datePublished: isoDateTime(article.publishedAt),
     dateModified: isoDateTime(article.updatedAt),
     author: {

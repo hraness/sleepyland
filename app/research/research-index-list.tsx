@@ -15,7 +15,7 @@ export interface ResearchIndexTag {
 export interface ResearchIndexArticle {
   readonly dek: string;
   readonly evidenceLabel: string;
-  readonly image: EditorialImage<"research", ResearchSlug>;
+  readonly image?: EditorialImage<"research", ResearchSlug>;
   readonly publishedAt: string;
   readonly readingMinutes: number;
   readonly slug: ResearchSlug;
@@ -44,18 +44,22 @@ function ResearchIndexEntry({
   article,
 }: Readonly<{ article: ResearchIndexArticle }>) {
   return (
-    <article className="plain-publication__entry">
-      <Link
-        aria-label={`Read ${article.title}`}
-        className="plain-publication__entry-image"
-        href={`/research/${article.slug}`}
-        tabIndex={-1}
-      >
-        <EditorialImageThumbnail
-          image={article.image}
-          sizes="(max-width: 42rem) 7rem, 10rem"
-        />
-      </Link>
+    <article
+      className={`plain-publication__entry${article.image === undefined ? " plain-publication__entry--without-image" : ""}`}
+    >
+      {article.image === undefined ? null : (
+        <Link
+          aria-label={`Read ${article.title}`}
+          className="plain-publication__entry-image"
+          href={`/research/${article.slug}`}
+          tabIndex={-1}
+        >
+          <EditorialImageThumbnail
+            image={article.image}
+            sizes="(max-width: 42rem) 7rem, 10rem"
+          />
+        </Link>
+      )}
       <div className="plain-publication__entry-copy">
         <h3>
           <Link href={`/research/${article.slug}`}>{article.title}</Link>

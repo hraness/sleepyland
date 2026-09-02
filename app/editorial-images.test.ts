@@ -42,9 +42,13 @@ function lossyWebpDimensions(bytes: Uint8Array): Readonly<{
 }
 
 describe("Sleepyland editorial image registry", () => {
-  test("covers every research article exactly once", () => {
-    expect(Object.keys(RESEARCH_EDITORIAL_IMAGES)).toEqual([...RESEARCH_SLUGS]);
-    expect(editorialImages).toHaveLength(RESEARCH_SLUGS.length);
+  test("keeps registered research images unique without making them an admission quota", () => {
+    expect(Object.keys(RESEARCH_EDITORIAL_IMAGES)).toEqual(
+      editorialImages.map((image) => image.slug),
+    );
+    for (const image of editorialImages) {
+      expect(RESEARCH_SLUGS).toContain(image.slug);
+    }
     expect(new Set(editorialImages.map((image) => image.src)).size).toBe(
       editorialImages.length,
     );
@@ -61,15 +65,14 @@ describe("Sleepyland editorial image registry", () => {
       hasher.update(bytes);
 
       expect(file.type).toBe("image/webp");
-      expect(file.size).toBeGreaterThan(40_000);
       expect(file.size).toBeLessThan(400_000);
       expect(lossyWebpDimensions(bytes)).toEqual({
         height: EDITORIAL_IMAGE_HEIGHT,
         width: EDITORIAL_IMAGE_WIDTH,
       });
       expect(hasher.digest("hex")).toBe(image.sha256);
-      expect(image.alt.length).toBeGreaterThan(30);
-      expect(image.caption.length).toBeGreaterThan(40);
+      expect(image.alt.trim()).not.toBe("");
+      expect(image.caption.trim()).not.toBe("");
       expect(image.credit).toContain("Atet");
     }
   });

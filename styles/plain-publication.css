@@ -203,6 +203,11 @@
   scroll-margin-block-start: 1rem;
 }
 
+.plain-site.plain-publication
+  .sleepyland-home__proof.sleepyland-home__proof--without-image {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .plain-site.plain-publication .sleepyland-home__proof-copy {
   min-width: 0;
 }
@@ -344,6 +349,11 @@
   align-items: start;
   padding: 1.4rem 0;
   border-top: 0;
+}
+
+.plain-site.plain-publication
+  .plain-publication__entry.plain-publication__entry--without-image {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .plain-site.plain-publication .plain-publication__entry-image {

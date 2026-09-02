@@ -66,10 +66,12 @@ export function researchFeedXml(): string {
         `      <guid isPermaLink="true">${xmlEscape(url)}</guid>`,
         `      <pubDate>${new Date(isoDateTime(article.publishedAt)).toUTCString()}</pubDate>`,
         `      <description>${xmlEscape(article.dek)}</description>`,
-        `      <media:content height="${editorialImage.height}" medium="image" type="image/webp" url="${xmlEscape(absoluteUrl(editorialImage.src))}" width="${editorialImage.width}">`,
-        `        <media:description type="plain">${xmlEscape(editorialImage.alt)}</media:description>`,
-        `        <media:credit role="creator">${xmlEscape(editorialImage.credit)}</media:credit>`,
-        "      </media:content>",
+        ...(editorialImage === undefined ? [] : [
+          `      <media:content height="${editorialImage.height}" medium="image" type="image/webp" url="${xmlEscape(absoluteUrl(editorialImage.src))}" width="${editorialImage.width}">`,
+          `        <media:description type="plain">${xmlEscape(editorialImage.alt)}</media:description>`,
+          `        <media:credit role="creator">${xmlEscape(editorialImage.credit)}</media:credit>`,
+          "      </media:content>",
+        ]),
         ...article.tags.map((tagId) =>
           `      <category>${xmlEscape(researchTagLabel(tagId))}</category>`),
         "    </item>",

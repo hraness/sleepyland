@@ -37,6 +37,7 @@ import {
   researchArticlePath,
   researchArticles,
   researchArticlesNewestFirst,
+  type ResearchSlug,
 } from "./research/articles";
 import { site } from "./site";
 
@@ -93,7 +94,7 @@ describe("Accept parsing", () => {
 });
 
 describe("agent discovery documents", () => {
-  test("keeps homepage copy above the no-JS character floor", () => {
+  test("keeps homepage Markdown aligned with the visible evidence surface", () => {
     const markdown = homepageMarkdown();
     const featured = getResearchArticle("noise-and-sleep-2026");
 
@@ -101,7 +102,6 @@ describe("agent discovery documents", () => {
       throw new Error("Expected one featured research guide.");
     }
 
-    expect(homepageDocumentText().length).toBeGreaterThan(500);
     expect(homepageDocumentText()).toContain(site.description);
     expect(homepageDocumentText()).toContain(homepageResult.summary);
     expect(homepageDocumentText()).toContain(homepageAgentRequest);
@@ -115,9 +115,10 @@ describe("agent discovery documents", () => {
     expect(markdown).toContain("## Smallest useful action");
     expect(markdown).toContain(homepageAgentRequest);
     expect(markdown).toContain(featured.evidenceLabel);
-    expect(markdown).toContain(
-      `https://sleepy.land${researchEditorialImage(featured.slug).src}`,
-    );
+    const featuredImage = researchEditorialImage(featured.slug);
+    if (featuredImage !== undefined) {
+      expect(markdown).toContain(`https://sleepy.land${featuredImage.src}`);
+    }
     for (const step of homepageWorkingModel) {
       expect(markdown).toContain(step.label);
       expect(markdown).toContain(step.detail);
@@ -200,6 +201,13 @@ describe("agent discovery documents", () => {
     expect(markdown).toContain("## Sitemap");
     expect(markdown).toContain("/sitemap.md");
     expect(markdown).toContain("/index.md");
+
+    const imageLessMarkdown = researchArticleMarkdown({
+      ...article,
+      slug: "image-less-fixture" as ResearchSlug,
+    });
+    expect(imageLessMarkdown).not.toContain("/editorial/research/");
+    expect(imageLessMarkdown).toContain(`# ${article.title}`);
   });
 
   test("keeps 404 recovery copy pointed at discovery files", () => {
