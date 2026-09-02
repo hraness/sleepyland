@@ -3,22 +3,18 @@ import { INDEXABLE_ROBOTS } from "@hraness/web-discovery";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { researchEditorialImage } from "./editorial-images";
-import { homepageMethod, homepageResult } from "./homepage-content";
 import Home, { metadata } from "./page";
 import { getResearchArticle } from "./research/articles";
-import { RESEARCH_FEED_PATH } from "./search-discovery";
-import { publicationDescription, publicationTitle } from "./site";
+import { noiseDescription, noiseTitle } from "./site";
 
-describe("Sleepyland publication homepage", () => {
-  test("owns the root canonical, publication metadata, and feed alternate", () => {
+describe("Sleepyland product homepage", () => {
+  test("owns the root canonical and sound-machine metadata", () => {
     expect(metadata).toMatchObject({
-      title: publicationTitle,
-      description: publicationDescription,
+      title: noiseTitle,
+      description: noiseDescription,
       alternates: {
         canonical: "/",
         types: {
-          "application/rss+xml": RESEARCH_FEED_PATH,
           "text/markdown": "/index.md",
         },
       },
@@ -26,53 +22,25 @@ describe("Sleepyland publication homepage", () => {
       openGraph: {
         type: "website",
         url: "/",
-        title: publicationTitle,
-        description: publicationDescription,
+        title: noiseTitle,
+        description: noiseDescription,
       },
     });
   });
 
-  test("server-renders the outcome, inspectable proof, and bounded action path", () => {
+  test("puts the sound controls before a compact research module", () => {
     const markup = renderToStaticMarkup(createElement(Home));
-    const featured = getResearchArticle("noise-and-sleep-2026");
+    const featured = getResearchArticle("best-sleep-sounds");
 
     if (featured === undefined) {
       throw new Error("Expected one featured research guide.");
     }
 
-    const featuredImage = researchEditorialImage(featured.slug);
-
-    expect(markup).toContain(`<h1>${homepageResult.heading}</h1>`);
-    expect(markup).toContain(homepageResult.summary);
+    expect(markup).toContain('aria-label="Sound controls"');
+    expect(markup).toContain('aria-label="Play sound"');
     expect(markup).toContain(featured.title);
-    expect(markup).toContain(featured.evidenceLabel);
-    expect(markup).not.toMatch(/\d+ linked sources/iu);
-    if (featuredImage !== undefined) {
-      expect(markup).toContain(`alt="${featuredImage.alt}"`);
-      expect(markup).toContain(featuredImage.caption);
-    }
-    expect(markup).toContain('href="/noise"');
-    expect(markup).toContain(homepageMethod.heading);
-    expect(markup).toContain(homepageMethod.detail);
-    expect(markup).toContain(homepageMethod.boundary);
-    expect(markup).toContain('href="https://github.com/hraness/sleepyland"');
-    expect(markup).toContain("open source on GitHub");
-    expect(markup).toContain('class="plain-publication__entry"');
-    expect(markup).not.toContain('data-hraness-marketing="flow"');
-    expect(markup).not.toContain('data-hraness-marketing="interfaces"');
-    expect(markup).not.toContain('data-hraness-marketing="trust"');
-    expect(markup).not.toContain('data-hraness-marketing="questions"');
-    expect(markup).not.toContain('data-hraness-marketing="cta"');
-    expect(markup).not.toContain("Accept: text/markdown");
-    expect(markup).not.toContain("llms.txt");
-    expect(markup).not.toContain("sleepyland-visually-hidden");
-
-    const orderedMarkers = [
-      `<h1>${homepageResult.heading}</h1>`,
-      'id="first-proof"',
-      'id="research-guides"',
-      'id="editorial-method"',
-    ];
+    expect(markup).toContain('href="/research"');
+    const orderedMarkers = ['aria-label="Sound controls"', featured.title];
     const positions = orderedMarkers.map((marker) => markup.indexOf(marker));
     expect(positions.every((position) => position >= 0)).toBeTrue();
     expect(positions).toEqual([...positions].toSorted((left, right) => left - right));

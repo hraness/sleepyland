@@ -30,6 +30,7 @@ describe("Sleepyland search discovery", () => {
     const indexableArticles = researchArticles.filter(isIndexableResearchArticle);
     expect(xml.match(/<item>/g)?.length).toBe(indexableArticles.length);
     expect(xml).toContain('xmlns:media="http://search.yahoo.com/mrss/"');
+    expect(xml).toContain('xmlns:dc="http://purl.org/dc/elements/1.1/"');
 
     for (const article of indexableArticles) {
       const editorialImage = researchEditorialImage(article.slug);
@@ -40,6 +41,7 @@ describe("Sleepyland search discovery", () => {
       const itemStart = xml.indexOf(`<link>${articleUrl}</link>`);
       const itemEnd = xml.indexOf("</item>", itemStart);
       const item = xml.slice(itemStart, itemEnd);
+      expect(item).toContain("software-assisted evidence synthesis");
       if (editorialImage === undefined) {
         expect(item).not.toContain("<media:content");
       } else {

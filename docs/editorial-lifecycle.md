@@ -2,7 +2,7 @@
 
 `app/research/admissions.ts` is the executable, authored registry for why each indexable route deserves a separate URL and when that decision must be revisited. This document records clinical quarantine and the longer merge history that should remain readable after a route disappears. Neither record substitutes for independent evidence and rendered-page review under `docs/editorial-method.md`.
 
-Typed admission entries name the reader job, original contribution, three nearest routes and their separation, decision, primary evidence fit, claim risk, owner, six admission scores, and reassessment date. Retired routes remain in the merge history of their canonical owner here so a later contributor does not recreate them as keyword variants.
+Typed admission entries name the reader job, original contribution, three nearest routes and their separation, decision, primary evidence fit and type, claim risk, owner, source-check date, human-review state, lifecycle, six admission scores, and reassessment date. Retired routes remain in the merge history of their canonical owner here so a later contributor does not recreate them as keyword variants.
 
 ## Clinical-review quarantine
 
@@ -26,6 +26,6 @@ Typed admission entries name the reader job, original contribution, three neares
 - **Voice evidence:** Organizational evidence synthesis with software assistance disclosed on the public editorial-method surface; no personal experience or first-person endorsement.
 - **Homepage slot:** None. Discovery is through the complete research archive and relevant canonical pages.
 - **Owner:** Sleepyland maintainers.
-- **Admission score:** Reader utility 2; original evidence 1; factual confidence 2; Sleepyland fit 2; voice integrity 2; maintenance value 1. Total 10/12, no zero.
+- **Admission score:** Reader utility 2; original evidence 1; factual confidence 1; Sleepyland fit 2; voice integrity 2; maintenance value 1. Total 9/12, no zero. The broad 2026 review combines multiple auditory interventions and outcomes, so it does not justify high confidence by itself.
 - **Next source check:** 2026-10-13.
 - **Reassess on:** 2026-10-13; choose keep, revise, merge, noindex, or remove after checking overlap and new controlled evidence.

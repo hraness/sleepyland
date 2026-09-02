@@ -12,8 +12,12 @@ export interface ResearchAdmission {
   }>;
   readonly nearestSlugs: readonly [ResearchSlug, ResearchSlug, ResearchSlug];
   readonly owner: "Sleepyland maintainers";
+  readonly evidenceType: "evidence synthesis";
+  readonly humanReview: "not documented";
+  readonly lifecycle: "active" | "keep-after-consolidation";
   readonly readerJob: string;
   readonly reassessOn: string;
+  readonly sourceCheckedOn: string;
   readonly scores: Readonly<{
     factualConfidence: AdmissionScore;
     maintenanceValue: AdmissionScore;
@@ -34,7 +38,7 @@ type ResearchAdmissionRegistry = Readonly<
  * judgment, not data derived from article length, source count, keywords,
  * images, or publication date.
  */
-export const RESEARCH_ADMISSIONS = {
+const RESEARCH_ADMISSION_DECISIONS = {
   "best-magnesium-for-sleep": {
     claimRisk:
       "Supplement guidance must distinguish form, elemental dose, deficiency, tolerability, interactions, and product verification without prescribing a regimen.",
@@ -242,7 +246,7 @@ export const RESEARCH_ADMISSIONS = {
       "Determine what a sleep-audio frequency label measures and evaluate the evidence without treating a shared number as a prescription.",
     reassessOn: "2026-10-13",
     scores: {
-      factualConfidence: 2,
+      factualConfidence: 1,
       maintenanceValue: 1,
       originalEvidence: 1,
       readerUtility: 2,
@@ -717,7 +721,26 @@ export const RESEARCH_ADMISSIONS = {
     separation:
       "This page owns the grounding evidence audit. Morning light has a circadian mechanism and stronger literature, duration owns sleep opportunity, and racing mind owns behavioral insomnia tools.",
   },
-} as const satisfies ResearchAdmissionRegistry;
+} as const;
+
+const SOURCE_CHECKED_ON = "2026-09-01";
+
+export const RESEARCH_ADMISSIONS = Object.fromEntries(
+  Object.entries(RESEARCH_ADMISSION_DECISIONS).map(([slug, admission]) => [
+    slug,
+    {
+      ...admission,
+      evidenceType: "evidence synthesis" as const,
+      humanReview: "not documented" as const,
+      lifecycle: admission.decision === "keep-after-consolidation"
+        ? "keep-after-consolidation" as const
+        : "active" as const,
+      sourceCheckedOn: SOURCE_CHECKED_ON,
+    },
+  ]),
+) as ResearchAdmissionRegistry & {
+  readonly [Slug in keyof typeof RESEARCH_ADMISSION_DECISIONS]: ResearchAdmission;
+};
 
 export type AdmittedResearchSlug = keyof typeof RESEARCH_ADMISSIONS;
 
@@ -735,10 +758,18 @@ export function researchAdmissionScore(admission: ResearchAdmission): number {
   );
 }
 
+export function isResearchAdmissionValid(admission: ResearchAdmission): boolean {
+  const validDate = /^\d{4}-\d{2}-\d{2}$/u;
+  return admission.evidenceType === "evidence synthesis"
+    && admission.humanReview === "not documented"
+    && ["active", "keep-after-consolidation"].includes(admission.lifecycle)
+    && validDate.test(admission.sourceCheckedOn)
+    && validDate.test(admission.reassessOn)
+    && Object.values(admission.scores).every((score) => score > 0)
+    && researchAdmissionScore(admission) >= 9;
+}
+
 export function isResearchSlugAdmitted(slug: string): boolean {
   const admission = getResearchAdmission(slug);
-  if (admission === undefined) return false;
-
-  return Object.values(admission.scores).every((score) => score > 0)
-    && researchAdmissionScore(admission) >= 9;
+  return admission !== undefined && isResearchAdmissionValid(admission);
 }

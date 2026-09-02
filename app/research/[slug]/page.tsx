@@ -77,7 +77,7 @@ export default async function ResearchArticlePage({
           __html: serializeJsonLd([
             researchArticleJsonLd(article),
             breadcrumbJsonLd([
-              { name: "Research", path: "/" },
+              { name: "Research", path: "/research" },
               { name: article.title, path },
             ]),
           ]),
@@ -91,7 +91,7 @@ export default async function ResearchArticlePage({
           aria-label="Breadcrumb"
           className="plain-publication__breadcrumbs"
           items={[
-            { href: "/", id: "research", label: "Research" },
+            { href: "/research", id: "research", label: "Research" },
             { id: article.slug, label: article.title },
           ]}
         />
@@ -179,6 +179,10 @@ export default async function ResearchArticlePage({
             claims when stronger evidence appears.
           </p>
           <p className="plain-publication__disclosure">
+            This guide was prepared with software-assisted synthesis and checked
+            against the linked sources. No human clinical review is claimed.
+          </p>
+          <p className="plain-publication__disclosure">
             Found a stronger source or a claim that needs review? Research
             contributions are <a href={researchContributionUrl}>welcome on GitHub</a>.
           </p>
@@ -188,7 +192,7 @@ export default async function ResearchArticlePage({
       <footer className="plain-publication__related plain-publication__shell">
         <div className="plain-publication__section-heading">
           <h2>Continue researching</h2>
-          <Link href="/">All research</Link>
+          <Link href="/research">All research</Link>
         </div>
         <div className="plain-publication__related-grid">
           {relatedArticles.map((relatedArticle) => (

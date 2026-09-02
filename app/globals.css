@@ -66,6 +66,54 @@ html body:has(> .noise-app) {
   --noise-header-height: calc(60px + var(--noise-header-inset));
 }
 
+.sleepyland-home-research {
+  background: #0f0b07;
+  color: #e6aa65;
+  padding: clamp(28px, 5vw, 56px) max(20px, calc((100vw - 960px) / 2));
+}
+
+.sleepyland-home-research > header {
+  align-items: baseline;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sleepyland-home-research h2,
+.sleepyland-home-research h3,
+.sleepyland-home-research p {
+  margin: 0;
+}
+
+.sleepyland-home-research > header a,
+.sleepyland-home-research h3 a {
+  color: inherit;
+}
+
+.sleepyland-home-research > div {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.sleepyland-home-research h3 {
+  font-size: 15px;
+}
+
+.sleepyland-home-research p {
+  color: #aa7745;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+@media (max-width: 46rem) {
+  .sleepyland-home-research > div {
+    grid-template-columns: 1fr;
+  }
+}
+
 button,
 input {
   -webkit-tap-highlight-color: transparent;

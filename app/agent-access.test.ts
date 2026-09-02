@@ -5,6 +5,8 @@ import { GET as getSitemapMarkdown } from "./sitemap.md/route";
 import {
   AI_CRAWLER_USER_AGENTS,
   MARKDOWN_CONTENT_TYPE,
+  NOISE_DOCUMENT_PARAGRAPHS,
+  NOISE_HEADING,
   PLAIN_TEXT_CONTENT_TYPE,
   appendVaryAccept,
   homepageDocumentText,
@@ -23,11 +25,8 @@ import {
   researchIndexMarkdown,
   sitemapMarkdown,
 } from "./agent-access";
-import { researchEditorialImage } from "./editorial-images";
 import {
   homepageAgentRequest,
-  homepageMethod,
-  homepageResult,
 } from "./homepage-content";
 import { PRODUCT_PAGES } from "./product-pages";
 import {
@@ -36,9 +35,7 @@ import {
   researchArticlePath,
   researchArticles,
   researchArticlesNewestFirst,
-  type ResearchSlug,
 } from "./research/articles";
-import { site } from "./site";
 
 function request(
   path: string,
@@ -93,7 +90,7 @@ describe("Accept parsing", () => {
 });
 
 describe("agent discovery documents", () => {
-  test("keeps homepage Markdown aligned with the visible evidence surface", () => {
+  test("keeps homepage Markdown product-first with a compact research module", () => {
     const markdown = homepageMarkdown();
     const featured = getResearchArticle("noise-and-sleep-2026");
 
@@ -101,18 +98,15 @@ describe("agent discovery documents", () => {
       throw new Error("Expected one featured research guide.");
     }
 
-    expect(homepageDocumentText()).toContain(site.description);
-    expect(homepageDocumentText()).toContain(homepageResult.summary);
-    expect(homepageDocumentText()).toContain(homepageMethod.detail);
-    expect(homepageDocumentText()).toContain(homepageMethod.boundary);
+    expect(homepageDocumentText()).toContain(NOISE_HEADING);
+    for (const paragraph of NOISE_DOCUMENT_PARAGRAPHS) {
+      expect(homepageDocumentText()).toContain(paragraph);
+      expect(markdown).toContain(paragraph);
+    }
     expect(homepageDocumentText()).not.toContain(homepageAgentRequest);
     expect(homepageDocumentText()).not.toContain("There are no media files");
-    expect(markdown).toContain("## First proof");
-    expect(markdown).toContain("## Evidence library");
-    expect(markdown).toContain("## Editorial boundary");
-    expect(markdown).toContain(homepageMethod.heading);
-    expect(markdown).toContain(homepageMethod.detail);
-    expect(markdown).toContain(homepageMethod.boundary);
+    expect(markdown).toContain("## What you can do");
+    expect(markdown).toContain("## Featured research");
     expect(markdown).not.toContain("## Working model");
     expect(markdown).not.toContain("## Interfaces");
     expect(markdown).not.toContain("## Questions");
@@ -120,10 +114,7 @@ describe("agent discovery documents", () => {
     expect(markdown).not.toContain(homepageAgentRequest);
     expect(markdown).not.toMatch(/\d+ linked sources/iu);
     expect(markdown).toContain(featured.evidenceLabel);
-    const featuredImage = researchEditorialImage(featured.slug);
-    if (featuredImage !== undefined) {
-      expect(markdown).toContain(`https://sleepy.land${featuredImage.src}`);
-    }
+    expect(markdown).not.toContain("![");
     expect(markdown).toContain("## Sitemap");
     expect(markdown).toContain("/sitemap.md");
   });
@@ -191,6 +182,8 @@ describe("agent discovery documents", () => {
     expect(markdown).toContain(`canonical_url: "https://sleepy.land${researchArticlePath(article.slug)}"`);
     expect(markdown).toContain(`# ${article.title}`);
     expect(markdown).toContain(article.dek);
+    expect(markdown).toContain("Software-assisted evidence synthesis");
+    expect(markdown).toContain("no human clinical review is claimed");
     expect(markdown).toContain(
       `https://sleepy.land/editorial/research/${article.slug}.webp`,
     );
@@ -198,14 +191,13 @@ describe("agent discovery documents", () => {
     expect(markdown).toContain("## Sources");
     expect(markdown).toContain("## Sitemap");
     expect(markdown).toContain("/sitemap.md");
-    expect(markdown).toContain("/index.md");
+    expect(markdown).toContain("/research.md");
 
-    const imageLessMarkdown = researchArticleMarkdown({
-      ...article,
-      slug: "image-less-fixture" as ResearchSlug,
-    });
+    const imageLessArticle = getResearchArticle("why-car-rides-make-you-sleepy");
+    if (imageLessArticle === undefined) throw new Error("Expected image-free guide.");
+    const imageLessMarkdown = researchArticleMarkdown(imageLessArticle);
     expect(imageLessMarkdown).not.toContain("/editorial/research/");
-    expect(imageLessMarkdown).toContain(`# ${article.title}`);
+    expect(imageLessMarkdown).toContain(`# ${imageLessArticle.title}`);
   });
 
   test("keeps 404 recovery copy pointed at discovery files", () => {
@@ -214,7 +206,7 @@ describe("agent discovery documents", () => {
     expect(body).toContain("# Page not found");
     expect(body).toContain("/llms.txt");
     expect(body).toContain("/sitemap.md");
-    expect(body).toContain("/index.md");
+    expect(body).toContain("/research.md");
     expect(body).toContain("/noise.md");
   });
 });

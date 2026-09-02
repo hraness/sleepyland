@@ -23,7 +23,7 @@ export function ResearchShell({
       <SkipLink href="#research-content">Skip to research</SkipLink>
       <header className="plain-header">
         <div className="plain-header__inner">
-          <Link className="plain-wordmark" href="/">
+          <Link className="plain-wordmark" href="/research">
             Sleepyland Research
           </Link>
           <div className="plain-header__actions">

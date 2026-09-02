@@ -142,6 +142,8 @@ export function researchArticleJsonLd(article: ResearchArticle) {
       name: "Sleepyland Research",
       url: absoluteUrl("/#editorial-method"),
     },
+    creditText:
+      "Software-assisted evidence synthesis checked against the linked sources; no human clinical review is claimed.",
     publisher: { "@id": `${site.canonicalUrl}/#organization` },
     isPartOf: { "@id": `${site.canonicalUrl}/#website` },
     isAccessibleForFree: true,

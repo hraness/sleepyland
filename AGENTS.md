@@ -5,7 +5,7 @@
 - `styles/` contains the compact sound-machine and publication visual systems.
 - `public/` contains static public assets.
 - `docs/editorial-method.md` defines the public research-review method.
-- `app/research/admissions.ts` is the executable admission, overlap, ownership, and reassessment registry for indexable editorial routes; `docs/editorial-lifecycle.md` records clinical quarantine and detailed consolidation history.
+- `app/research/admissions.ts` is the executable admission, overlap, source-check, review-state, ownership, lifecycle, and reassessment registry for indexable editorial routes; `docs/editorial-lifecycle.md` records clinical quarantine and detailed consolidation history.
 - `STYLE.md` defines the public and reader-facing prose contract.
 - `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, and `CODE_OF_CONDUCT.md` define the public project and contribution boundaries.
 

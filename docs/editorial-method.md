@@ -2,11 +2,13 @@
 
 Sleepyland publishes practical, evidence-led guides for people making decisions about sleep, sound, light, routines, supplements, and medications. The publication is educational and does not provide medical advice.
 
+The current guides use software-assisted evidence synthesis. Maintainers check the resulting claims against the linked sources, but no human clinical or pharmacist review is implied unless a named review and date are recorded in the clinical-review ledger.
+
 ## Choose the reader question
 
 One page should own one decision. Search language helps identify unresolved questions, but it does not justify thin pages or wording variants. A new article must have a distinct reader job, sufficient evidence, and an original contribution that an existing page cannot absorb cleanly.
 
-Before drafting an indexable route, add an authored record to `app/research/admissions.ts` with the reader's concrete job, original contribution, three nearest existing pages, why their decisions remain separate, a primary evidence anchor and its exact fit, claim risk, owner, score, and reassessment date. The registry fails closed: a typed article without a valid admission remains `noindex` and outside every discovery surface. Use `docs/editorial-lifecycle.md` for clinical quarantine and detailed merge history. Source count and word count do not establish usefulness. A page that only restates a caveat, targets a wording variant, or forces an unrelated essay into Sleepyland's product vocabulary should be merged or rejected.
+Before drafting an indexable route, add an authored record to `app/research/admissions.ts` with the reader's concrete job, original contribution, three nearest existing pages, why their decisions remain separate, a primary evidence anchor and its exact fit, evidence type, claim risk, owner, source-check date, human-review state, lifecycle, score, and reassessment date. The registry fails closed: a typed article without a valid admission remains `noindex` and outside every discovery surface. Use `docs/editorial-lifecycle.md` for clinical quarantine and detailed merge history. Source count and word count do not establish usefulness. A page that only restates a caveat, targets a wording variant, or forces an unrelated essay into Sleepyland's product vocabulary should be merged or rejected.
 
 Score reader utility, original evidence, factual confidence, Sleepyland fit,
 voice integrity, and maintenance value from 0–2. An indexable route needs at

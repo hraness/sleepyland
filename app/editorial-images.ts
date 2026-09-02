@@ -167,13 +167,6 @@ export const RESEARCH_EDITORIAL_IMAGES = {
     "Varying swell groups evoke procedural surf without implying a therapeutic dose.",
     "be79e86fb37bd10986acd716940992d83cf0fd6354c3df347dbe2e9551159ed1",
   ),
-  "why-car-rides-make-you-sleepy": image(
-    "research",
-    "why-car-rides-make-you-sleepy",
-    "A dark road-like current passing through layered vibration and rocking arcs.",
-    "The layers separate physical motion and vibration from the softer acoustic cue.",
-    "7fe2f06eb621bcd4f902c343d0a25e4d2945c2d018bcfe6ad1680df440c04acc",
-  ),
   "airplane-sound-for-sleep": image(
     "research",
     "airplane-sound-for-sleep",

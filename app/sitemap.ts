@@ -3,7 +3,6 @@ import type { MetadataRoute } from "next";
 import { researchEditorialImage } from "./editorial-images";
 import {
   discoverableResearchArticles,
-  homepageResearchArticles,
   researchArticlePath,
   researchArticlesNewestFirst,
   type ResearchArticle,
@@ -22,16 +21,13 @@ function researchImageUrls(
 
 export function buildSitemap(
   candidateArticles: readonly ResearchArticle[] = researchArticlesNewestFirst,
-  homepageCandidates: readonly ResearchArticle[] = homepageResearchArticles(),
 ): MetadataRoute.Sitemap {
   const admittedArticles = discoverableResearchArticles(candidateArticles);
-  const admittedHomepageArticles = discoverableResearchArticles(homepageCandidates);
 
   return [
     {
       url: site.canonicalUrl,
       lastModified: new Date(homepageUpdatedAt),
-      images: researchImageUrls(admittedHomepageArticles),
     },
     {
       url: `${site.canonicalUrl}/noise`,

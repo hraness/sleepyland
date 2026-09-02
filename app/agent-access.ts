@@ -1,10 +1,6 @@
 import { applicationFeatures, absoluteUrl } from "./seo";
 import { researchEditorialImage } from "./editorial-images";
-import {
-  homepageAgentRequest,
-  homepageMethod,
-  homepageResult,
-} from "./homepage-content";
+import { homepageAgentRequest } from "./homepage-content";
 import { RESEARCH_FEED_PATH } from "./search-discovery";
 import {
   RESEARCH_SOURCES,
@@ -40,15 +36,6 @@ import {
 export const MARKDOWN_CONTENT_TYPE = "text/markdown; charset=utf-8";
 export const PLAIN_TEXT_CONTENT_TYPE = "text/plain; charset=utf-8";
 export const PRODUCED_MEDIA_TYPES = ["text/html", "text/markdown"] as const;
-
-export const HOMEPAGE_HEADING = "Sleepyland Research";
-export const HOMEPAGE_DOCUMENT_PARAGRAPHS = [
-  site.description,
-  homepageResult.summary,
-  homepageMethod.detail,
-  homepageMethod.boundary,
-  "Sleepyland is open source under the MIT License. Code, research corrections, stronger sources, and carefully scoped article proposals are welcome at https://github.com/hraness/sleepyland.",
-] as const;
 
 export const NOISE_HEADING = "Sleepyland sound machine";
 export const NOISE_DOCUMENT_PARAGRAPHS = [
@@ -91,11 +78,10 @@ export type NegotiationDecision =
 
 export function homepageDocumentText(): string {
   return [
-    HOMEPAGE_HEADING,
-    ...HOMEPAGE_DOCUMENT_PARAGRAPHS,
-    researchDescription,
-    "Guides",
-    ...homepageResearchArticles().map((article) => article.title),
+    NOISE_HEADING,
+    ...NOISE_DOCUMENT_PARAGRAPHS,
+    "Featured research",
+    ...homepageResearchArticles().slice(0, 3).map((article) => article.title),
   ].join("\n");
 }
 
@@ -415,62 +401,27 @@ function withFrontmatter(
 export function homepageMarkdown(
   candidateArticles: readonly ResearchArticle[] = homepageResearchArticles(),
 ): string {
-  const homepageArticles = discoverableResearchArticles(candidateArticles);
-  const featuredArticle = homepageArticles.find(
-    (article) => article.slug === "noise-and-sleep-2026",
-  ) ?? homepageArticles[0];
-  const featuredImage = featuredArticle === undefined
-    ? undefined
-    : researchEditorialImage(featuredArticle.slug);
+  const homepageArticles = discoverableResearchArticles(candidateArticles).slice(0, 3);
 
   return withFrontmatter({
     canonicalPath: "/",
-    description: site.description,
+    description: noiseDescription,
     lastUpdated: homepageUpdatedAt,
-    title: HOMEPAGE_HEADING,
+    title: NOISE_HEADING,
   }, [
-    `# ${homepageResult.heading}`,
+    `# ${NOISE_HEADING}`,
     "",
-    homepageResult.summary,
+    ...NOISE_DOCUMENT_PARAGRAPHS.flatMap((paragraph) => [paragraph, ""]),
+    "## What you can do",
     "",
-    homepageResult.boundary,
+    ...applicationFeatures.map((feature) => `- ${feature}`),
     "",
-    "## First proof",
-    "",
-    ...(featuredArticle === undefined ? [
-      "Choose a guide from the evidence library below.",
-      "",
-    ] : [
-      `### [${featuredArticle.title}](${absoluteUrl(`${researchArticlePath(featuredArticle.slug)}.md`)})`,
-      "",
-      featuredArticle.dek,
-      "",
-      `Evidence: ${featuredArticle.evidenceLabel}. Revised: ${featuredArticle.updatedAt}.`,
-      "",
-      ...(featuredImage === undefined ? [] : [
-        `![${featuredImage.alt}](${absoluteUrl(featuredImage.src)})`,
-        "",
-        `*${featuredImage.caption} ${featuredImage.credit}.*`,
-        "",
-      ]),
-    ]),
-    "## Evidence library",
+    "## Featured research",
     "",
     ...homepageArticles.flatMap((article) => [
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.evidenceLabel}.`,
     ]),
     "",
-    "## Editorial boundary",
-    "",
-    `### ${homepageMethod.heading}`,
-    "",
-    homepageMethod.detail,
-    "",
-    homepageMethod.boundary,
-    "",
-    `Sleepyland is [open source on GitHub](${repositoryUrl}) under the MIT License. [Research corrections are welcome](${researchContributionUrl}).`,
-    "",
-    `- [Open the sound machine](${absoluteUrl("/noise.md")})`,
     `- [Browse every admitted guide](${absoluteUrl("/research.md")})`,
   ].join("\n"));
 }
@@ -507,7 +458,7 @@ export function noiseMarkdown(): string {
     "",
     ...applicationFeatures.map((feature) => `- ${feature}`),
     "",
-    `- [Read Sleepyland Research](${absoluteUrl("/index.md")})`,
+    `- [Read Sleepyland Research](${absoluteUrl("/research.md")})`,
     `- [View the source on GitHub](${repositoryUrl})`,
   ].join("\n"));
 }
@@ -534,7 +485,7 @@ export function researchArticleMarkdown(article: ResearchArticle): string {
       `*${editorialImage.caption} ${editorialImage.credit}.*`,
       "",
     ]),
-    `By [Sleepyland Research](${absoluteUrl("/index.md")}). Published ${article.publishedAt}. Updated ${article.updatedAt}. ${article.evidenceLabel}. Tags: ${article.tags.map(researchTagLabel).join(", ")}.`,
+    `By [Sleepyland Research](${absoluteUrl("/research.md")}). Software-assisted evidence synthesis checked against the linked sources; no human clinical review is claimed. Published ${article.publishedAt}. Updated ${article.updatedAt}. ${article.evidenceLabel}. Tags: ${article.tags.map(researchTagLabel).join(", ")}.`,
     "",
     ...article.body.flatMap((block) => [renderBlock(block), ""]),
     "## Sources",
@@ -547,7 +498,7 @@ export function researchArticleMarkdown(article: ResearchArticle): string {
     ...related.map((relatedArticle) =>
       `- [${relatedArticle.title}](${absoluteUrl(`${researchArticlePath(relatedArticle.slug)}.md`)})`),
     "",
-    `- [All research](${absoluteUrl("/index.md")})`,
+    `- [All research](${absoluteUrl("/research.md")})`,
     `- [Open the sound machine](${absoluteUrl("/noise.md")})`,
     `- [Contribute a correction or source](${researchContributionUrl})`,
     "",
@@ -576,7 +527,7 @@ export function designMarkdown(): string {
     "Three clear sound states with detailed tuning available only on demand.",
     "",
     `- [Open the sound machine](${absoluteUrl("/noise.md")})`,
-    `- [Sleepyland Research](${absoluteUrl("/index.md")})`,
+    `- [Sleepyland Research](${absoluteUrl("/research.md")})`,
   ].join("\n"));
 }
 
@@ -588,7 +539,7 @@ export function notFoundMarkdown(): string {
     "",
     "## Where to look next",
     "",
-    `- [Sleepyland Research](${absoluteUrl("/index.md")})`,
+    `- [Sleepyland Research](${absoluteUrl("/research.md")})`,
     `- [Sleepyland sound machine](${absoluteUrl("/noise.md")})`,
     `- [llms.txt](${absoluteUrl("/llms.txt")})`,
     `- [Markdown sitemap](${absoluteUrl("/sitemap.md")})`,
@@ -635,7 +586,7 @@ export function llmsTxt(
     "",
     "## Research",
     "",
-    `- [Sleepyland Research](${absoluteUrl("/index.md")}): Evidence-led guides and the editorial method.`,
+    `- [Sleepyland Research](${absoluteUrl("/research.md")}): Evidence-led guides and the editorial method.`,
     ...discoverableResearchArticles(candidateArticles).map((article) =>
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.dek}`),
     "",
@@ -660,7 +611,7 @@ export function sitemapMarkdown(
     "",
     "## Research",
     "",
-    `- [Sleepyland Research](${absoluteUrl("/index.md")})`,
+    `- [Sleepyland Research](${absoluteUrl("/research.md")})`,
     ...discoverableResearchArticles(candidateArticles).map((article) =>
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)})`),
     "",

@@ -20,8 +20,8 @@ import {
 } from "../search-discovery";
 import { serializeJsonLd } from "../seo";
 import { buildSitemap } from "../sitemap";
-import { metadata as researchIndexMetadata } from "../page";
-import { homepageUpdatedAt, publicationTitle, site } from "../site";
+import { metadata as researchIndexMetadata } from "./page";
+import { homepageUpdatedAt, site } from "../site";
 import ResearchArticlePage from "./[slug]/page";
 import { ArticleBody } from "./article-body";
 import { RESEARCH_IMAGE_WORDMARK } from "./article-image";
@@ -29,6 +29,7 @@ import ResearchLayout, { viewport } from "./layout";
 import {
   RESEARCH_ADMISSIONS,
   getResearchAdmission,
+  isResearchAdmissionValid,
   isResearchSlugAdmitted,
   researchAdmissionScore,
 } from "./admissions";
@@ -235,6 +236,9 @@ describe("Sleepyland Research content", () => {
       expect(article.sourceIds).toContain(admission.evidenceAnchor.sourceId);
       expect(admission.evidenceAnchor.fit.trim()).not.toBe("");
       expect(admission.claimRisk.trim()).not.toBe("");
+      expect(admission.evidenceType).toBe("evidence synthesis");
+      expect(admission.humanReview).toBe("not documented");
+      expect(["active", "keep-after-consolidation"]).toContain(admission.lifecycle);
       expect(admission.readerJob.trim()).not.toBe("");
       expect(admission.contribution.trim()).not.toBe("");
       expect(admission.separation.trim()).not.toBe("");
@@ -248,7 +252,22 @@ describe("Sleepyland Research content", () => {
       expect(Object.values(admission.scores).every((score) => score > 0)).toBeTrue();
       expect(researchAdmissionScore(admission)).toBeGreaterThanOrEqual(9);
       expect(admission.reassessOn).toMatch(/^\d{4}-\d{2}-\d{2}$/u);
+      expect(admission.sourceCheckedOn).toMatch(/^\d{4}-\d{2}-\d{2}$/u);
+      expect(isResearchAdmissionValid(admission)).toBeTrue();
     }
+  });
+
+  test("fails admission closed when review provenance is missing or invalid", () => {
+    const admission = getResearchAdmission("best-sleep-sounds");
+    if (admission === undefined) throw new Error("Expected admission fixture.");
+    expect(isResearchAdmissionValid({
+      ...admission,
+      sourceCheckedOn: "",
+    })).toBeFalse();
+    expect(isResearchAdmissionValid({
+      ...admission,
+      humanReview: "pending" as never,
+    })).toBeFalse();
   });
 
   test("fails closed for a typed article without an authored admission", () => {
@@ -286,7 +305,7 @@ describe("Sleepyland Research content", () => {
     expect(indexNowPayload(discoveryPaths).urlList).not.toContain(
       `https://sleepy.land${path}`,
     );
-    expect(buildSitemap([fixture], [fixture]).map((entry) => entry.url)).not.toContain(
+    expect(buildSitemap([fixture]).map((entry) => entry.url)).not.toContain(
       `https://sleepy.land${path}`,
     );
   });
@@ -389,7 +408,7 @@ describe("Sleepyland Research content", () => {
 
     expect(lifecycle).toContain("/research/what-frequency-helps-you-sleep");
     expect(lifecycle).toContain("former `/research/binaural-beats-for-sleep`");
-    expect(lifecycle).toContain("Total 10/12, no zero");
+    expect(lifecycle).toContain("Total 9/12, no zero");
     expect(lifecycle).toContain("Reassess on:** 2026-10-13");
   });
 
@@ -498,12 +517,14 @@ describe("Sleepyland Research content", () => {
     expect(indexSource).toContain('href="/noise"');
     expect(articleSource).toContain("Open the calming sound machine");
     expect(articleSource).toContain("Educational evidence synthesis");
+    expect(articleSource).toContain("software-assisted synthesis");
+    expect(articleSource).toContain("No human clinical review is claimed");
     expect(articleSource).toContain("contributions are <a");
     expect(articleSource).toContain('href="/#editorial-method"');
     expect(articleSource).toContain("Published ");
     expect(articleSource).toContain("Updated ");
     expect(articleSource).toContain('href="/noise"');
-    expect(articleSource).toContain('href="/"');
+    expect(articleSource).toContain('href="/research"');
   });
 
   test("renders article trails through the shared breadcrumb primitive", async () => {
@@ -528,11 +549,15 @@ describe("Sleepyland Research content", () => {
     }
   });
 
-  test("renders and describes image omission independently of admission", () => {
-    const article = researchArticles[0];
-    const imageLessSlug = "image-less-fixture" as ResearchSlug;
-    const imageLessArticle = { ...article, slug: imageLessSlug };
-    const imageLessEntry = { ...researchIndexArticles[0], image: undefined };
+  test("keeps one real admitted guide image-free across every representation", async () => {
+    const imageLessArticle = getResearchArticle("why-car-rides-make-you-sleepy");
+    if (imageLessArticle === undefined) throw new Error("Expected image-free guide.");
+    expect(isIndexableResearchArticle(imageLessArticle)).toBeTrue();
+    expect(researchEditorialImage(imageLessArticle.slug)).toBeUndefined();
+    const imageLessEntry = researchIndexArticles.find(
+      (entry) => entry.slug === imageLessArticle.slug,
+    );
+    if (imageLessEntry === undefined) throw new Error("Expected image-free index entry.");
     const indexMarkup = renderToStaticMarkup(
       createElement(ResearchIndexList, {
         articles: [imageLessEntry],
@@ -543,6 +568,12 @@ describe("Sleepyland Research content", () => {
     expect(indexMarkup).toContain("plain-publication__entry--without-image");
     expect(indexMarkup).not.toContain("plain-publication__entry-image");
 
+    const page = await ResearchArticlePage({
+      params: Promise.resolve({ slug: imageLessArticle.slug }),
+    });
+    const pageMarkup = renderToStaticMarkup(page);
+    expect(pageMarkup).not.toContain("plain-publication__article-banner");
+
     const metadata = researchArticleMetadata(imageLessArticle);
     expect(metadata.openGraph).not.toHaveProperty("images");
     expect(metadata.twitter).toMatchObject({ card: "summary" });
@@ -552,6 +583,14 @@ describe("Sleepyland Research content", () => {
     expect(structuredData).not.toHaveProperty("image");
     const collection = researchCollectionJsonLd([imageLessArticle], "/research");
     expect(collection.mainEntity.itemListElement[0]).not.toHaveProperty("image");
+    expect(researchArticleMarkdown(imageLessArticle)).not.toContain("![");
+    const feedItem = researchFeedXml([imageLessArticle]);
+    expect(feedItem).toContain(imageLessArticle.slug);
+    expect(feedItem).not.toContain("<media:content");
+    const articleSitemapEntry = buildSitemap([imageLessArticle])
+      .find((entry) => entry.url.endsWith(imageLessArticle.slug));
+    expect(articleSitemapEntry).toBeDefined();
+    expect(articleSitemapEntry).not.toHaveProperty("images");
   });
 
   test("lets explicit article metadata own optional social images", async () => {
@@ -566,19 +605,9 @@ describe("Sleepyland Research content", () => {
 describe("Sleepyland Research search surface", () => {
 
   test("gives the research index its own indexable identity", () => {
-    expect(researchIndexMetadata.title).toBe(publicationTitle);
+    expect(researchIndexMetadata.title).toBe("All sleep research guides | Sleepyland");
     expect(researchIndexMetadata.robots).toEqual(INDEXABLE_ROBOTS);
-    expect(researchIndexMetadata.alternates).toMatchObject({
-      canonical: "/",
-      types: {
-        "application/rss+xml": RESEARCH_FEED_PATH,
-        "text/markdown": "/index.md",
-      },
-    });
-    expect(researchIndexMetadata.openGraph).toMatchObject({
-      url: "/",
-      title: publicationTitle,
-    });
+    expect(researchIndexMetadata.alternates).toEqual({ canonical: "/research" });
   });
   test("keeps the filesystem-independent image wordmark aligned", () => {
     expect(RESEARCH_IMAGE_WORDMARK).toBe(site.shortName);
@@ -680,6 +709,8 @@ describe("Sleepyland Research search surface", () => {
         datePublished: `${article.publishedAt}T00:00:00.000Z`,
         dateModified: `${article.updatedAt}T00:00:00.000Z`,
         isAccessibleForFree: true,
+        creditText:
+          "Software-assisted evidence synthesis checked against the linked sources; no human clinical review is claimed.",
       });
       expect(structuredData.citation).toEqual(
         article.sourceIds.map((sourceId) => RESEARCH_SOURCES[sourceId].url),

@@ -137,9 +137,6 @@ describe("Sleepyland search surface", () => {
     expect(entries[0]).toEqual({
       url: "https://sleepy.land",
       lastModified: new Date(homepageUpdatedAt),
-      images: imageUrls(
-        homepageResearchArticles().filter(isIndexableResearchArticle),
-      ),
     });
     expect(entries[1]).toEqual({
       url: "https://sleepy.land/noise",

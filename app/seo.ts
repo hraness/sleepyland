@@ -61,12 +61,12 @@ export function websiteJsonLd() {
   } as const;
 }
 
-export function webApplicationJsonLd() {
+export function webApplicationJsonLd(path: "/" | "/noise" = "/noise") {
   return {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: noiseTitle,
-    url: absoluteUrl("/noise"),
+    url: absoluteUrl(path),
     description: noiseDescription,
     applicationCategory: "LifestyleApplication",
     operatingSystem: "Any",

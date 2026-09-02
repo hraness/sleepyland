@@ -22,7 +22,7 @@ import { featuredResearchResources } from "./research-resources";
 
 const studioResourceGroups = [
   {
-    allPath: "/",
+    allPath: "/research",
     label: "Research",
     resources: featuredResearchResources(),
   },

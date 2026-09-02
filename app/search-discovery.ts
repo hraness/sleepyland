@@ -70,6 +70,7 @@ export function researchFeedXml(
         `      <guid isPermaLink="true">${xmlEscape(url)}</guid>`,
         `      <pubDate>${new Date(isoDateTime(article.publishedAt)).toUTCString()}</pubDate>`,
         `      <description>${xmlEscape(article.dek)}</description>`,
+        "      <dc:creator>Sleepyland Research; software-assisted evidence synthesis checked against the linked sources; no human clinical review claimed</dc:creator>",
         ...(editorialImage === undefined ? [] : [
           `      <media:content height="${editorialImage.height}" medium="image" type="image/webp" url="${xmlEscape(absoluteUrl(editorialImage.src))}" width="${editorialImage.width}">`,
           `        <media:description type="plain">${xmlEscape(editorialImage.alt)}</media:description>`,
@@ -84,7 +85,7 @@ export function researchFeedXml(
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
-    '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">',
+    '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:media="http://search.yahoo.com/mrss/">',
     "  <channel>",
     `    <title>${site.shortName} Research</title>`,
     `    <link>${xmlEscape(channelUrl)}</link>`,
