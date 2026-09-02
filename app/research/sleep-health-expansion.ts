@@ -64,10 +64,6 @@ function strong(text: string): InlinePart {
   return { text, emphasis: "strong" };
 }
 
-function emphasis(text: string): InlinePart {
-  return { text, emphasis: "em" };
-}
-
 function link(text: string, href: string): InlinePart {
   return { text, href };
 }
