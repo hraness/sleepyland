@@ -39,12 +39,18 @@ describe("site migration redirects", () => {
         permanent: true,
         source: "/:path*",
       },
-      {
-        destination: "/",
-        host: undefined,
-        permanent: true,
-        source: "/research",
-      },
     ]);
+  });
+
+  test("does not redirect retired editorial routes to unrelated pages", async () => {
+    if (nextConfig.redirects === undefined) {
+      throw new Error("Next.js redirects are not configured.");
+    }
+
+    const redirects = await nextConfig.redirects();
+    expect(redirects.some(({ source }) => source.startsWith("/reading"))).toBe(false);
+    expect(redirects.some(({ source }) =>
+      source === "/research/blue-light-scatter-and-visual-detail"
+    )).toBe(false);
   });
 });

@@ -31,16 +31,6 @@ const nextConfig: NextConfig = {
         permanent: true,
         source: "/:path*",
       },
-      {
-        destination: "/",
-        permanent: true,
-        source: "/reading/:path*",
-      },
-      {
-        destination: "/research/screens-blue-light-glasses-and-sleep",
-        permanent: true,
-        source: "/research/blue-light-scatter-and-visual-detail",
-      },
     ];
   },
   webpack(config) {

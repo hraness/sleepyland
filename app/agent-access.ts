@@ -13,6 +13,7 @@ import {
   RESEARCH_SOURCES,
   getResearchArticle,
   homepageResearchArticles,
+  isIndexableResearchArticle,
   researchArticlePath,
   researchArticlesNewestFirst,
   researchTagLabel,
@@ -520,7 +521,7 @@ export function researchIndexMarkdown(): string {
     "",
     researchDescription,
     "",
-    ...researchArticlesNewestFirst.map((article) =>
+    ...researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) =>
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.evidenceLabel}. ${article.sourceIds.length} linked sources.`),
   ].join("\n"));
 }
@@ -666,7 +667,7 @@ export function llmsTxt(): string {
     "## Research",
     "",
     `- [Sleepyland Research](${absoluteUrl("/index.md")}): Evidence-led guides and the editorial method.`,
-    ...researchArticlesNewestFirst.map((article) =>
+    ...researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) =>
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.dek}`),
     "",
     "## Discovery files",
@@ -689,7 +690,7 @@ export function sitemapMarkdown(): string {
     "## Research",
     "",
     `- [Sleepyland Research](${absoluteUrl("/index.md")})`,
-    ...researchArticlesNewestFirst.map((article) =>
+    ...researchArticlesNewestFirst.filter(isIndexableResearchArticle).map((article) =>
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)})`),
     "",
     "## Sound machine",

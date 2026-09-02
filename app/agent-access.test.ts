@@ -33,6 +33,7 @@ import {
 import { PRODUCT_PAGES } from "./product-pages";
 import {
   getResearchArticle,
+  isIndexableResearchArticle,
   researchArticlePath,
   researchArticles,
   researchArticlesNewestFirst,
@@ -128,9 +129,10 @@ describe("agent discovery documents", () => {
     expect(markdown).toContain("/sitemap.md");
   });
 
-  test("lists every public research guide from the article registry", () => {
+  test("lists only indexable research guides in discovery documents", () => {
     const sitemap = sitemapMarkdown();
     const llms = llmsTxt();
+    const researchIndex = researchIndexMarkdown();
 
     expect(llms).toContain("## When to use Sleepyland");
     expect(llms).toContain("## Interfaces");
@@ -161,8 +163,15 @@ describe("agent discovery documents", () => {
 
     for (const article of researchArticlesNewestFirst) {
       const markdownUrl = `https://sleepy.land${researchArticlePath(article.slug)}.md`;
-      expect(llms).toContain(markdownUrl);
-      expect(sitemap).toContain(markdownUrl);
+      if (isIndexableResearchArticle(article)) {
+        expect(llms).toContain(markdownUrl);
+        expect(sitemap).toContain(markdownUrl);
+        expect(researchIndex).toContain(markdownUrl);
+      } else {
+        expect(llms).not.toContain(markdownUrl);
+        expect(sitemap).not.toContain(markdownUrl);
+        expect(researchIndex).not.toContain(markdownUrl);
+      }
       expect(isKnownContentPath(researchArticlePath(article.slug))).toBe(true);
     }
 
@@ -260,6 +269,16 @@ describe("markdown negotiation", () => {
     expect(missing.body).toBe(notFoundMarkdown());
     expect(missingSibling.status).toBe(404);
     expect(missingSibling.body).toContain("/llms.txt");
+
+    for (const retiredPath of [
+      "/reading.md",
+      "/reading/good-ideas.md",
+      "/research/blue-light-scatter-and-visual-detail.md",
+    ]) {
+      const retired = await negotiated(retiredPath);
+      expect(retired.status).toBe(404);
+      expect(retired.body).toBe(notFoundMarkdown());
+    }
   });
 
   test("returns 406 when every produced type is rejected", async () => {
