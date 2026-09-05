@@ -66,56 +66,109 @@ html body:has(> .noise-app) {
   --noise-header-height: calc(60px + var(--noise-header-inset));
 }
 
-.sleepyland-home-research {
-  background: #0f0b07;
-  color: #e6aa65;
-  padding: clamp(28px, 5vw, 56px) max(20px, calc((100vw - 960px) / 2));
+/*
+ * Information layer below the instrument, on the shared marketing grammar.
+ * The grammar reads the design-kit theme tokens for paper, ink, and surface;
+ * Sleepyland binds only its amber accent so both appearances mirror the
+ * instrument. Light: #9f4f0c on paper reads at 5.4:1 and carries white ink at
+ * 5.8:1. Dark: #e6aa65 on black reads at 10.3:1 and carries #1b120a ink.
+ */
+.sleepyland-home-information {
+  --hraness-site-accent: #9f4f0c;
+  --hraness-site-accent-ink: #ffffff;
+  --hraness-marketing-mono-font: var(--font-mono);
+
+  padding-block-end: clamp(2rem, 6vw, 4rem);
 }
 
-.sleepyland-home-research > header {
-  align-items: baseline;
-  display: flex;
-  gap: 16px;
-  justify-content: space-between;
-  margin-bottom: 20px;
+:root[data-theme="dark"] .sleepyland-home-information {
+  --hraness-site-accent: #e6aa65;
+  --hraness-site-accent-ink: #1b120a;
 }
 
-.sleepyland-home-research h2,
-.sleepyland-home-research h3,
-.sleepyland-home-research p {
-  margin: 0;
-}
-
-.sleepyland-home-research > header a,
-.sleepyland-home-research h3 a {
-  color: inherit;
-}
-
-.sleepyland-home-research > div {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.sleepyland-home-research .sleepyland-home-research__disclosure {
-  margin: -8px 0 20px;
-}
-
-.sleepyland-home-research h3 {
-  font-size: 15px;
-}
-
-.sleepyland-home-research p {
-  color: #aa7745;
-  font-size: 13px;
-  line-height: 1.5;
-  margin-top: 6px;
-}
-
-@media (max-width: 46rem) {
-  .sleepyland-home-research > div {
-    grid-template-columns: 1fr;
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .sleepyland-home-information {
+    --hraness-site-accent: #e6aa65;
+    --hraness-site-accent-ink: #1b120a;
   }
+}
+
+.sleepyland-home-information > .hraness-marketing-section:first-child {
+  border-block-start: 0;
+}
+
+/* Prose links take the accent; marketing actions keep their own paint. */
+.sleepyland-home-information :where(
+  .hraness-marketing-section__body,
+  .hraness-marketing-question__answer,
+  .hraness-marketing-maker__links
+) a:not(.hraness-marketing-action) {
+  color: var(--hraness-marketing-accent);
+}
+
+.sleepyland-home-features {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 0 clamp(1rem, 3vw, 2.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  list-style: none;
+}
+
+.sleepyland-home-features li {
+  min-inline-size: 0;
+  padding-block: 0.75rem;
+  border-block-start: 1px solid var(--hraness-marketing-line);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.sleepyland-home-research {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  list-style: none;
+}
+
+.sleepyland-home-research__card {
+  display: grid;
+  min-inline-size: 0;
+  align-content: start;
+  gap: 0.5rem;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  border: 1px solid var(--hraness-marketing-line);
+  border-radius: 0.875rem;
+  background: var(--hraness-marketing-surface);
+}
+
+.sleepyland-home-research__card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.sleepyland-home-research__card h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.sleepyland-home-research__card h3 a:hover {
+  text-decoration: underline;
+}
+
+.sleepyland-home-research__card p {
+  margin: 0;
+  color: var(--hraness-marketing-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.sleepyland-home-information .sleepyland-home-research__actions {
+  margin: 0.5rem 0 0;
 }
 
 button,
@@ -151,10 +204,6 @@ input {
 }
 
 .wordmark {
-  font-family: var(--font-mono);
-}
-
-.wordmark {
   display: block;
   min-width: 0;
   max-width: 100%;
@@ -162,12 +211,20 @@ input {
   overflow: hidden;
   margin: 0;
   color: var(--noise-text);
-  font-size: 12px;
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.18em;
+  font-family: var(--font-text);
+  font-size: 1rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.01em;
   line-height: 1.25;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.wordmark__tagline {
+  color: var(--noise-muted);
+  font-size: 0.92rem;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0;
 }
 
 .header-actions {
@@ -185,10 +242,11 @@ input {
   height: var(--interactive-target-min);
   align-items: center;
   justify-content: center;
-  padding: 0 7px;
+  padding: 0 8px;
+  border-radius: var(--jelly-radius-compact);
   color: var(--noise-muted);
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-family: var(--font-text);
+  font-size: 0.92rem;
   font-weight: var(--font-weight-medium);
   text-decoration: none;
 }
@@ -246,14 +304,35 @@ input {
 
 .noise-app .header-resources-button__control {
   min-height: var(--interactive-target-min);
-  padding-inline: 7px;
-  font-family: var(--font-mono);
-  font-size: 12px;
+  padding-inline: 8px;
+  font-family: var(--font-text);
+  font-size: 0.92rem;
+  font-weight: var(--font-weight-medium);
 }
 
 .noise-app .header-resources-button:is(:hover, [data-hovered]) {
   --jelly-fill: var(--noise-control);
   --jelly-label: var(--noise-text);
+}
+
+/* The shared appearance control follows the document theme; inside the fixed
+ * dark masthead it reads the studio palette instead. */
+.noise-app .header-appearance {
+  --hraness-appearance-control-background: transparent;
+  --hraness-appearance-control-foreground: var(--noise-muted);
+  --hraness-appearance-control-border: var(--noise-line);
+  --hraness-appearance-accent: var(--noise-control);
+  --hraness-appearance-accent-foreground: var(--noise-text);
+  --hraness-appearance-focus: var(--noise-text);
+  --hraness-appearance-popover-background: var(--noise-panel);
+  --hraness-appearance-popover-foreground: var(--noise-text);
+}
+
+.noise-app .header-appearance .hraness-design-theme-toggle__trigger {
+  inline-size: var(--interactive-target-min);
+  min-inline-size: var(--interactive-target-min);
+  min-block-size: var(--interactive-target-min);
+  border-radius: var(--jelly-radius-compact);
 }
 
 .noise-app .info-button__control {
@@ -295,10 +374,11 @@ input {
   margin: 0;
   padding: 7px 10px;
   border: 1px solid var(--noise-line);
+  border-radius: var(--jelly-radius-compact);
   background: rgba(15, 11, 7, 0.92);
   color: var(--noise-muted);
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-text);
+  font-size: 12px;
   overflow-wrap: anywhere;
 }
 
@@ -356,6 +436,8 @@ input {
   right: 14px;
   max-width: min(460px, calc(100vw - 28px));
   padding: 10px 12px;
+  border: 1px solid var(--noise-line);
+  border-radius: var(--jelly-radius-compact);
   background: var(--noise-control-hover);
   color: var(--noise-text);
   font-size: 12px;
@@ -496,9 +578,10 @@ input {
 
 .energy-picker legend {
   color: var(--noise-muted);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-text);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0;
 }
 
 .sound-mode-picker__surface {
@@ -576,8 +659,8 @@ input {
 
 .sound-mode-button__copy small {
   color: var(--noise-faint);
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-text);
+  font-size: 11px;
   line-height: 1.2;
 }
 
@@ -938,8 +1021,9 @@ input {
 
 .studio-resources__group > header a {
   color: #aa7745;
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-text);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
 }
 
 .studio-resources__grid {
@@ -960,6 +1044,7 @@ input {
   display: block;
   overflow: hidden;
   border: 1px solid #362214;
+  border-radius: var(--jelly-radius-compact);
   background: #080604;
 }
 
@@ -1051,8 +1136,8 @@ input {
 }
 
 .session-plan-option span {
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-text);
+  font-size: 12px;
 }
 
 .session-plan-option:focus-visible,
@@ -1277,7 +1362,7 @@ input {
 
 @media (max-width: 390px) {
   .wordmark {
-    font-size: 11px;
+    font-size: 0.95rem;
   }
 
   .wordmark__tagline {

@@ -28,7 +28,7 @@ describe("Sleepyland product homepage", () => {
     });
   });
 
-  test("puts the sound controls before a compact research module", () => {
+  test("puts the sound controls before the information layer", () => {
     const markup = renderToStaticMarkup(createElement(Home));
     const featured = getResearchArticle("best-sleep-sounds");
 
@@ -43,7 +43,14 @@ describe("Sleepyland product homepage", () => {
     expect(markup).toContain(
       "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
     );
-    const orderedMarkers = ['aria-label="Sound controls"', featured.title];
+    expect(markup).toContain('class="hraness-design-theme-toggle header-appearance"');
+    expect(markup).toContain('class="hraness-marketing-page sleepyland-home-information"');
+    const orderedMarkers = [
+      'aria-label="Sound controls"',
+      'id="home-information-title"',
+      featured.title,
+      'id="home-maker-title"',
+    ];
     const positions = orderedMarkers.map((marker) => markup.indexOf(marker));
     expect(positions.every((position) => position >= 0)).toBeTrue();
     expect(positions).toEqual([...positions].toSorted((left, right) => left - right));
