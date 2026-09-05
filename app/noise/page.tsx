@@ -78,7 +78,7 @@ export default function NoisePage() {
         <p><Link href="/">Read Sleepyland Research</Link></p>
       </section>
       <NoiseStudio
-        brand={{ domain: site.domain, tagline: "calming sound machine" }}
+        brand={{ name: site.shortName, tagline: "calming sound machine" }}
         resourceGroups={studioResourceGroups}
       />
     </>

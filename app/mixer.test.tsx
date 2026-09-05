@@ -12,12 +12,12 @@ import { createSessionProgress, INTERVAL_PLANS } from "./session-plans";
 
 test("the outcome-first studio keeps detailed tuning available on demand", () => {
   const markup = renderToStaticMarkup(createElement(NoiseStudio, {
-    brand: { domain: "sleepy.land", tagline: "noise machine" },
+    brand: { name: "Sleepyland", tagline: "noise machine" },
   }));
 
   expect(markup).toContain('aria-label="Sound controls"');
   expect(markup).toContain(
-    '<h1 class="wordmark">sleepy.land<span class="wordmark__tagline"> – noise machine</span></h1>',
+    '<h1 class="wordmark">Sleepyland<span class="wordmark__tagline"> noise machine</span></h1>',
   );
   expect(markup).not.toContain("listening-stats");
   expect(markup).toContain('<a class="header-research-link" href="/research">Research</a>');

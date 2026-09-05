@@ -1,12 +1,12 @@
+import { ThemeMenuButton } from "@hraness/design-kit/react";
 import { INDEXABLE_ROBOTS } from "@hraness/web-discovery";
 import type { Metadata, Viewport } from "next";
-import Link from "next/link";
 
 import { NOISE_DOCUMENT_PARAGRAPHS, NOISE_HEADING, markdownAlternatePath } from "./agent-access";
+import { HomeInformation } from "./home-information";
 import { NoiseStudio, type StudioResourceGroup } from "./noise-studio";
 import { featuredResearchResources } from "./noise/research-resources";
-import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "./research/editorial-disclosure";
-import { applicationFeatures, defaultSocialImage, serializeJsonLd, webApplicationJsonLd } from "./seo";
+import { defaultSocialImage, serializeJsonLd, webApplicationJsonLd } from "./seo";
 import { noiseDescription, noiseTitle, site } from "./site";
 
 const featuredResources = featuredResearchResources();
@@ -59,31 +59,15 @@ export default function Home() {
       <section aria-hidden="true" className="sleepyland-visually-hidden">
         <h1>{NOISE_HEADING}</h1>
         {NOISE_DOCUMENT_PARAGRAPHS.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-        <h2>What you can do</h2>
-        <ul>{applicationFeatures.map((feature) => <li key={feature}>{feature}</li>)}</ul>
-        <p><Link href="/research">Browse Sleepyland Research</Link></p>
       </section>
       <NoiseStudio
-        brand={{ domain: site.domain, tagline: "calming sound machine" }}
+        brand={{ name: site.shortName, tagline: "calming sound machine" }}
+        headerActions={
+          <ThemeMenuButton aria-label="Appearance" className="header-appearance" />
+        }
         resourceGroups={studioResourceGroups}
       />
-      <section aria-labelledby="home-research-title" className="sleepyland-home-research">
-        <header>
-          <h2 id="home-research-title">Research for a better sleep setup</h2>
-          <Link href="/research">Browse all research</Link>
-        </header>
-        <p className="sleepyland-home-research__disclosure">
-          {RESEARCH_AUTHORSHIP_DISCLOSURE}
-        </p>
-        <div>
-          {featuredResources.map((resource) => (
-            <article key={resource.path}>
-              <h3><Link href={resource.path}>{resource.title}</Link></h3>
-              <p>{resource.description}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      <HomeInformation research={featuredResources} />
     </>
   );
 }

@@ -20,6 +20,7 @@ import Link from "next/link";
 import {
   type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
+  type ReactNode,
   type Ref,
   useCallback,
   useEffect,
@@ -77,7 +78,7 @@ import {
 import { repositoryUrl, researchContributionUrl } from "./site";
 
 type Brand = Readonly<{
-  domain: string;
+  name: string;
   tagline: string;
 }>;
 
@@ -1007,9 +1008,12 @@ export function Spectrogram({
 
 export function NoiseStudio({
   brand,
+  headerActions,
   resourceGroups = [],
 }: Readonly<{
   brand: Brand;
+  /** Route-owned controls rendered after the studio's own masthead actions. */
+  headerActions?: ReactNode;
   resourceGroups?: readonly StudioResourceGroup[];
 }>) {
   const [soundMode, setSoundMode] = useState<SoundModeId>(
@@ -1422,13 +1426,14 @@ export function NoiseStudio({
     <ViewportFrame as="main" className="noise-app">
       <header className="app-header">
         <h1 className="wordmark">
-          {brand.domain}
-          <span className="wordmark__tagline"> – {brand.tagline}</span>
+          {brand.name}
+          <span className="wordmark__tagline"> {brand.tagline}</span>
         </h1>
         <div className="header-actions">
           <Link className="header-research-link" href="/research">Research</Link>
           <StudioResources groups={resourceGroups} />
           <NoiseInfo />
+          {headerActions}
         </div>
       </header>
 
