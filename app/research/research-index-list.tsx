@@ -95,6 +95,7 @@ export function ResearchIndexList({
     ? articles
     : articles.filter((article) =>
         article.tags.some((tag) => tag.id === selectedTag));
+  const selectedTopic = tagOptions.find((tag) => tag.id === selectedTag)?.label;
 
   return (
     <section aria-labelledby="research-guides" className="plain-publication__list">
@@ -102,6 +103,7 @@ export function ResearchIndexList({
         <h2 id="research-guides">Research library</h2>
         <p aria-atomic="true" aria-live="polite">
           {visibleArticles.length} {visibleArticles.length === 1 ? "article" : "articles"}
+          {selectedTopic === undefined ? null : ` · ${selectedTopic}`}
         </p>
       </div>
 
@@ -111,6 +113,7 @@ export function ResearchIndexList({
         role="group"
       >
         <button
+          aria-controls="research-articles"
           aria-pressed={selectedTag === "all"}
           onClick={() => setSelectedTag("all")}
           type="button"
@@ -119,6 +122,7 @@ export function ResearchIndexList({
         </button>
         {tagOptions.map((tag) => (
           <button
+            aria-controls="research-articles"
             aria-pressed={selectedTag === tag.id}
             key={tag.id}
             onClick={() => setSelectedTag(tag.id)}
@@ -129,7 +133,14 @@ export function ResearchIndexList({
         ))}
       </div>
 
-      <div className="plain-publication__article-list">
+      <div className="plain-publication__article-list" id="research-articles">
+        {visibleArticles.length > 0 ? null : (
+          <p className="plain-publication__empty">
+            {selectedTag === "all" ? "New guides will appear here." : (
+              <>No articles in this topic. <button onClick={() => setSelectedTag("all")} type="button">Show all articles</button></>
+            )}
+          </p>
+        )}
         {visibleArticles.map((article) => (
           <ResearchIndexEntry article={article} key={article.slug} />
         ))}

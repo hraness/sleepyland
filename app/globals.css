@@ -236,9 +236,13 @@ input {
   gap: 6px;
 }
 
+.header-actions > * {
+  flex: 0 0 auto;
+}
+
 .header-research-link {
   display: inline-flex;
-  min-width: 0;
+  min-width: var(--interactive-target-min);
   height: var(--interactive-target-min);
   align-items: center;
   justify-content: center;

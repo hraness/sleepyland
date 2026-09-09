@@ -17,19 +17,21 @@ describe("Sleepyland product explanation", () => {
       new URL("./noise-studio.tsx", import.meta.url),
     ).text();
 
-    expect(source).toContain("Built as a sound instrument");
-    expect(source).toContain("Three states, three sound systems");
-    expect(source).toContain("Sleep combines a dark brown bed");
-    expect(source).toMatch(/steady,\s+low-salience/u);
-    expect(source).toContain("Generated, not looped");
-    expect(source).toMatch(/surge,\s+cavity\s+impact,\s+foam/u);
-    expect(source).toContain("without a repeating recording");
-    expect(source).toContain("Movement without a loudness trick");
-    expect(source).toContain("Energy never changes the");
-    expect(source).toContain("Sessions with an ending");
+    expect(source).toContain("How to use Sleepyland");
+    expect(source).toContain("Choose Sleep, Relax, or Focus. Press play");
+    expect(source).toContain("Choose a starting sound");
+    expect(source).toContain("Sleep pairs deep brown noise with slow waves");
+    expect(source).toContain("subtle, steady rhythm");
+    expect(source).toContain("Adjust the mix");
+    expect(source).toContain("The wave interval controls the time between swells");
+    expect(source).toContain("no repeating recording to download");
+    expect(source).toContain("Change the energy");
+    expect(source).toContain("Energy does not change the master volume");
+    expect(source).toContain("Set a session");
     expect(source).toContain("completed sessions finish with a quiet fade");
-    expect(source).toContain("The output stays visible");
-    expect(source).toContain("continuous filtered-noise voice");
+    expect(source).toContain("Play the visualization");
+    expect(source).toContain("hold and move to explore different pitches");
+    expect(source).not.toMatch(/low-salience|spectral slopes|cavity impact/u);
     expect(source).toContain("no accounts, ads, session replay, cloud audio");
     expect(source).toContain("anonymous, cookieless events");
     expect(source).toContain("selected state and");

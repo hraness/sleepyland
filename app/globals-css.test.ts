@@ -26,6 +26,21 @@ test("global resets leave shared control paint to the design system", () => {
   );
 });
 
+test("the compact header keeps actions usable and the complete accessible brand name", () => {
+  expect(stylesheet).toMatch(/\.wordmark\s*\{[^}]*min-width:\s*0;[^}]*flex:\s*1 1 auto;/su);
+  expect(stylesheet).toMatch(/\.header-actions > \*\s*\{[^}]*flex:\s*0 0 auto;/su);
+  expect(stylesheet).toMatch(/\.header-research-link\s*\{[^}]*min-width:\s*var\(--interactive-target-min\);/su);
+  expect(studioSource).toContain('aria-label={`${brand.name} ${brand.tagline}`}');
+});
+
+test("research filters keep full touch targets, a non-color selection cue, and narrow metadata", () => {
+  expect(publicationStylesheet).toMatch(/\.plain-publication__filters button\s*\{[^}]*min-block-size:\s*2\.75rem;/su);
+  expect(publicationStylesheet).toMatch(/\.plain-publication__filters button\s*\{[^}]*min-inline-size:\s*2\.75rem;/su);
+  expect(publicationStylesheet).toMatch(/\.plain-publication__filters button\[aria-pressed="true"\]\s*\{[^}]*text-decoration:\s*underline;/su);
+  expect(publicationStylesheet).not.toMatch(/\.plain-publication__entry-meta\s*\{[^}]*display:\s*none;/su);
+  expect(publicationStylesheet).toMatch(/\.plain-publication__empty button\s*\{[^}]*min-height:\s*2\.75rem;/su);
+});
+
 test("the product palette cannot override gallery themes at the document root", () => {
   expect(stylesheet).toMatch(/\.noise-app\s*\{[^}]*--noise-background:\s*#080604;/su);
   expect(stylesheet).toMatch(/\.noise-app\s*\{[^}]*--noise-muted:\s*#aa7745;[^}]*--noise-faint:\s*#98663b;/su);
