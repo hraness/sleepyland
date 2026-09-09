@@ -215,58 +215,58 @@ export function NoiseInfo() {
       </IconButton>
       <Modal
         className="noise-info-modal"
-        description="Choose an outcome, then shape the generated sound as much or as little as you want."
+        description="Choose Sleep, Relax, or Focus. Press play, then open Tune to adjust the mix."
         size="medium"
         surfaceClassName="noise-info-modal__surface"
-        title="Built as a sound instrument"
+        title="How to use Sleepyland"
       >
         <div className="noise-info">
           <p className="noise-info__lead">
-            Sleep, Relax, and Focus are three authored functional soundscapes, not one noise loop under different labels. Each changes spectrum, source balance, rhythm, and movement while every layer is generated locally in your browser.
+            The noise and waves are generated in your browser, with no repeating recording to download. Each mode gives you a different starting mix.
           </p>
           <div className="noise-info__features">
             <section>
               <h3>
-                Three states, three sound systems
+                Choose a starting sound
               </h3>
               <p>
-                Sleep combines a dark brown bed with slow surf. Relax opens into a softer pink field with broad spatial movement. Focus removes surf and uses a clearer pink field with steady, low-salience rhythmic movement.
+                Sleep pairs deep brown noise with slow waves. Relax uses softer pink noise and spacious waves. Focus leaves out the waves and adds a subtle, steady rhythm to brighter pink noise.
               </p>
             </section>
             <section>
               <h3>
-                Generated, not looped
+                Adjust the mix
               </h3>
               <p>
-                Brown, pink, and white noise use distinct spectral slopes. Procedural surf combines changing swell groups, surge, cavity impact, foam, wash, and undertow without a repeating recording.
+                Open Tune to choose brown, pink, or white noise, set the noise and wave volumes, and adjust warmth. The wave interval controls the time between swells.
               </p>
             </section>
             <section>
               <h3>
-                Movement without a loudness trick
+                Change the energy
               </h3>
               <p>
-                Gentle, Balanced, and Strong adjust rhythmic depth and pace inside the selected soundscape. Energy never changes the master volume, so stronger does not secretly mean louder.
+                Gentle, Balanced, and Strong change how much the sound moves and how quickly. Energy does not change the master volume.
               </p>
             </section>
             <section>
               <h3>
-                Sessions with an ending
+                Set a session
               </h3>
               <p>
-                Choose endless play, a countdown, or Focus intervals. Work and break phases advance from wall time, breaks soften gradually, and completed sessions finish with a quiet fade.
+                Leave the sound playing, set a countdown, or choose work and break intervals in Focus. Breaks soften gradually, and completed sessions finish with a quiet fade.
               </p>
             </section>
             <section>
               <h3>
-                The output stays visible
+                Play the visualization
               </h3>
               <p>
-                The rolling spectrogram reads the final limited mix you hear. Touch it to play a pulse centered on that frequency, or hold and move to shape a continuous filtered-noise voice.
+                The moving spectrum shows the sound you hear. Tap or click it to play a pulse, or hold and move to explore different pitches.
               </p>
             </section>
             <section>
-              <h3>Local sound and bounded analytics</h3>
+              <h3>What stays in your browser</h3>
               <p>
                 Your state, Energy, session, and tuning are stored in this
                 browser. There are no accounts, ads, session replay, cloud audio,
@@ -321,7 +321,7 @@ export function StudioResources({
       </Button>
       <Modal
         className="studio-resources-modal"
-        description="Evidence-led guides to sleep, sound, light, and routines."
+        description="Read about sleep, sound, and attention, with links to the evidence."
         size="large"
         surfaceClassName="studio-resources-modal__surface"
         title="Sleepyland library"
@@ -340,7 +340,7 @@ export function StudioResources({
                     key={resource.path}
                   >
                     {resource.image === undefined ? null : (
-                      <Link className="studio-resource__image" href={resource.path}>
+                      <Link aria-label={`Read ${resource.title}`} className="studio-resource__image" href={resource.path} tabIndex={-1}>
                         <EditorialImageThumbnail
                           image={resource.image}
                           sizes="(max-width: 46rem) calc(100vw - 3rem), 14rem"
@@ -1425,7 +1425,7 @@ export function NoiseStudio({
   return (
     <ViewportFrame as="main" className="noise-app">
       <header className="app-header">
-        <h1 className="wordmark">
+        <h1 aria-label={`${brand.name} ${brand.tagline}`} className="wordmark">
           {brand.name}
           <span className="wordmark__tagline"> {brand.tagline}</span>
         </h1>
