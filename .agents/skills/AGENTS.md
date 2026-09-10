@@ -4,7 +4,7 @@
 - `refresh-kb/` – knowledge-graph refresh and validation.
 - `percolate-kb/` – evidence-backed concept and relationship promotion.
 - `percolate-reading/` – reviewed capture-to-public-reading projection.
-- `import-substack-writing/` – reviewed Wrench-to-Tiff Substack essay imports.
+- `import-substack-writing/` – reviewed Ghostget-to-Tiff Substack essay imports.
 - `posthog-lookup/` – aggregate Tiff analytics lookup with a read-only Vercel false-zero fallback.
 - `plan-kb/` – durable implementation planning in the knowledge base.
 - `riff/` – faithful cleanup of dictated or stream-of-consciousness notes.
