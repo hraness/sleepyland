@@ -8,8 +8,8 @@ const publication = await Bun.file(new URL("../styles/plain-publication.css", im
 
 test("uses the released Nebula Sans default without replacing serif or mono roles", () => {
   expect(packageJson.dependencies).toMatchObject({
-    "@hraness/design-kit": "github:hraness/design-kit#v0.4.0",
-    "@hraness/ui": "github:hraness/ui#v0.4.10",
+    "@hraness/design-kit": "github:hraness/design-kit#v0.6.3",
+    "@hraness/ui": "github:hraness/ui#v0.5.13",
     "@hraness/web-discovery": "github:hraness/web-discovery#v0.2.0",
   });
   expect(globals).toStartWith('@import "@hraness/design-kit/styles.css";');

@@ -25,10 +25,10 @@
     "check": "bun run test && bun run typecheck && bun run lint && bun run build"
   },
   "dependencies": {
-    "@hraness/design-kit": "github:hraness/design-kit#v0.4.0",
+    "@hraness/design-kit": "github:hraness/design-kit#v0.6.3",
     "@hraness/posthog": "github:hraness/posthog#v0.1.2",
-    "@hraness/site-footer": "github:hraness/site-footer#v0.6.1",
-    "@hraness/ui": "github:hraness/ui#v0.4.10",
+    "@hraness/site-footer": "github:hraness/site-footer#v0.6.3",
+    "@hraness/ui": "github:hraness/ui#v0.5.13",
     "@hraness/vercel-delivery": "github:hraness/vercel-delivery#v0.1.2",
     "@hraness/web-discovery": "github:hraness/web-discovery#v0.2.0",
     "next": "16.2.12",
