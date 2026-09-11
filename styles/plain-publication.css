@@ -25,14 +25,22 @@
 }
 
 .plain-site.plain-publication.sleepyland-research {
-  --foreground: var(--plain-foreground);
-  --muted: var(--plain-muted);
-  --line: var(--plain-line);
-  --surface: var(--plain-surface);
+  /* Keep the local Paper adapter authoritative over legacy saved-theme rules. */
+  --plain-background: var(--background);
+  --plain-foreground: var(--foreground);
+  --plain-muted: var(--muted);
+  --plain-line: var(--line);
+  --plain-surface: var(--surface);
+  --plain-link: var(--primary);
   --inverse: var(--plain-foreground);
   --inverse-foreground: var(--plain-background);
-  --primary: var(--plain-link);
   --font-heading: var(--publication-serif);
+}
+
+@media (forced-colors: active) {
+  .plain-site.plain-publication.sleepyland-research {
+    --plain-link: LinkText;
+  }
 }
 
 .plain-site.plain-publication > main {
