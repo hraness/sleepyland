@@ -48,15 +48,15 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   colorScheme: "light dark",
   themeColor: [
-    { color: "#ffffff", media: "(prefers-color-scheme: light)" },
-    { color: "#151515", media: "(prefers-color-scheme: dark)" },
+    { color: "#f8f7f4", media: "(prefers-color-scheme: light)" },
+    { color: "#12100f", media: "(prefers-color-scheme: dark)" },
   ],
   viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html data-theme="light" lang="en" suppressHydrationWarning>
+    <html data-hraness-theme="paper" data-theme="light" lang="en" suppressHydrationWarning>
       <body>
         <PostHogAnalytics
           apiHost={process.env.NEXT_PUBLIC_POSTHOG_HOST}

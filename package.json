@@ -15,6 +15,7 @@
     "node": "24.x"
   },
   "scripts": {
+    "check:theme": "bun scripts/check-paper-theme.mjs",
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
@@ -22,7 +23,7 @@
     "test": "bun test ./app ./lib ./next.config.test.ts",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
-    "check": "bun run test && bun run typecheck && bun run lint && bun run build"
+    "check": "bun run check:theme && bun run test && bun run typecheck && bun run lint && bun run build"
   },
   "dependencies": {
     "@hraness/design-kit": "github:hraness/design-kit#v0.4.0",

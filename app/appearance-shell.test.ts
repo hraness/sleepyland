@@ -44,7 +44,7 @@ function metaTags(html: string, name: string): readonly string[] {
 }
 
 describe("Sleepyland shared appearance contract", () => {
-  test("keeps a fixed warm-night studio inside the shared appearance runtime", async () => {
+  test("keeps a fixed dark Paper studio inside the shared appearance runtime", async () => {
     const [layout, noisePage, providers, studio, stylesheet] = await Promise.all([
       source("./layout.tsx"),
       source("./noise/page.tsx"),
@@ -53,14 +53,14 @@ describe("Sleepyland shared appearance contract", () => {
       source("./globals.css"),
     ]);
 
-    expect(layout).toContain('<html data-theme="light" lang="en" suppressHydrationWarning>');
+    expect(layout).toContain('<html data-hraness-theme="paper" data-theme="light" lang="en" suppressHydrationWarning>');
     expect(layout).toContain("<SleepylandThemeProvider>");
-    expect(layout).toContain('{ color: "#151515", media: "(prefers-color-scheme: dark)" }');
+    expect(layout).toContain('{ color: "#12100f", media: "(prefers-color-scheme: dark)" }');
     expect(providers).toContain('const isStudio = pathname === "/noise"');
     expect(providers).toContain('forcedTheme={isStudio ? "dark" : undefined}');
     expect(providers).toContain("<ThemeColorSync");
     expect(noisePage).toContain('colorScheme: "dark"');
-    expect(noisePage).toContain('themeColor: "#080604"');
+    expect(noisePage).toContain('themeColor: "#12100f"');
     expect(noisePage).toContain("<h1>{NOISE_HEADING}</h1>");
     expect(noisePage).toContain('className="sleepyland-visually-hidden"');
     expect(studio).not.toContain("ThemeMenuButton");
@@ -68,9 +68,9 @@ describe("Sleepyland shared appearance contract", () => {
     expect(studio).not.toContain("ThemedSurface");
     expect(studio).toContain('<ViewportFrame as="main" className="noise-app">');
     expect(studio.match(/<WrappingRow as="span" className="range-control__header">/gu)).toHaveLength(4);
-    expect(stylesheet).toContain("--noise-background: #080604");
-    expect(stylesheet).toContain("--noise-text: #e6aa65");
-    expect(stylesheet).toContain("--noise-action: #9f4f0c");
+    expect(stylesheet).toContain("--noise-background: var(--background)");
+    expect(stylesheet).toContain("--noise-text: var(--foreground)");
+    expect(stylesheet).toContain("--noise-action: var(--primary)");
     expect(stylesheet).not.toMatch(/(?:linear|radial|conic)-gradient/u);
     expect(stylesheet).not.toContain("--noise-accent");
   });
@@ -102,10 +102,10 @@ describe("Sleepyland shared appearance contract", () => {
     expect(notFound).toContain("showThemeToggle={false}");
     expect(researchShell).toContain('colorScheme: "light dark"');
     expect(researchShell).toContain(
-      '{ color: "#ffffff", media: "(prefers-color-scheme: light)" }',
+      '{ color: "#f8f7f4", media: "(prefers-color-scheme: light)" }',
     );
     expect(researchShell).toContain(
-      '{ color: "#151515", media: "(prefers-color-scheme: dark)" }',
+      '{ color: "#12100f", media: "(prefers-color-scheme: dark)" }',
     );
     expect(researchShell).toContain('className="plain-header__actions"');
     expect(researchShell).toContain("<ThemeMenuButton");
@@ -119,9 +119,9 @@ describe("Sleepyland shared appearance contract", () => {
     expect(localUi).not.toContain("<ThemeToggle");
     expect(stylesheet).toContain('@import "../styles/foundation.css"');
     expect(stylesheet).not.toMatch(canonicalFoundationDeclaration);
-    expect(stylesheet).toMatch(/\.noise-app\s*\{[^}]*--noise-background:\s*#080604;/su);
-    expect(foundation).toContain(':root[data-theme="dark"] body');
-    expect(foundation).toContain(':root:not([data-theme]) body');
+    expect(stylesheet).toMatch(/\.noise-app\s*\{[^}]*--noise-background:\s*var\(--background\);/su);
+    expect(foundation).toContain("background: var(--background)");
+    expect(foundation).toContain("color: var(--foreground)");
     expect(foundation).toContain(".sleepyland-route-state button {");
     expect(foundation).toContain("color: inherit");
     expect(publication).not.toContain("--plain-background: #141412");
@@ -167,10 +167,10 @@ describe("Sleepyland shared appearance contract", () => {
   });
 
   test("keeps small research metadata readable in both plain-site themes", () => {
-    const lightBackground = [255, 255, 255] as const;
-    const lightMuted = [102, 102, 102] as const;
-    const darkBackground = [21, 21, 21] as const;
-    const darkMuted = [182, 182, 182] as const;
+    const lightBackground = [248, 247, 244] as const;
+    const lightMuted = [108, 102, 95] as const;
+    const darkBackground = [18, 16, 15] as const;
+    const darkMuted = [170, 162, 154] as const;
 
     expect(contrastRatio(lightBackground, lightMuted)).toBeGreaterThanOrEqual(4.5);
     expect(contrastRatio(darkMuted, darkBackground)).toBeGreaterThanOrEqual(4.5);
