@@ -42,8 +42,8 @@ test("research filters keep full touch targets, a non-color selection cue, and n
 });
 
 test("the product palette cannot override gallery themes at the document root", () => {
-  expect(stylesheet).toMatch(/\.noise-app\s*\{[^}]*--noise-background:\s*#080604;/su);
-  expect(stylesheet).toMatch(/\.noise-app\s*\{[^}]*--noise-muted:\s*#aa7745;[^}]*--noise-faint:\s*#98663b;/su);
+  expect(stylesheet).toMatch(/\.noise-app\s*\{[^}]*--noise-background:\s*var\(--background\);/su);
+  expect(stylesheet).toMatch(/\.noise-app\s*\{[^}]*--noise-muted:\s*var\(--muted\);[^}]*--noise-faint:\s*var\(--faint\);/su);
   expect(stylesheet).toMatch(/\.noise-app\s*\{[^}]*--noise-header-inset:\s*env\(safe-area-inset-top\);/su);
   expect(stylesheet).toMatch(/\.noise-app\s*\{[^}]*overflow:\s*clip;/su);
   expect(stylesheet).not.toMatch(/\.noise-app\s*\{[^}]*overflow:\s*hidden;/su);
@@ -62,7 +62,7 @@ test("the product palette cannot override gallery themes at the document root", 
   expect(stylesheet).not.toMatch(
     /\.noise-app\s*\{[^}]*var\(--layout-edge-inset\)/su,
   );
-  expect(stylesheet).not.toMatch(/:root\s*\{[^}]*--background:\s*#080604;/su);
+  expect(stylesheet).not.toMatch(/:root\s*\{[^}]*--noise-background:/su);
 });
 
 test("the research routes use the shared plain-site document grammar", () => {
@@ -72,7 +72,7 @@ test("the research routes use the shared plain-site document grammar", () => {
   expect(stylesheet).not.toContain(".plain-publication__article-body");
   expect(publicationStylesheet).toMatch(/\.plain-site\.plain-publication\s*\{[^}]*--plain-shell-measure:\s*46rem;[^}]*background:\s*var\(--plain-background\);[^}]*color:\s*var\(--plain-foreground\);/su);
   expect(publicationStylesheet).toMatch(/\.plain-site\.plain-publication \.plain-publication__shell\s*\{[^}]*max-width:\s*var\(--plain-shell-measure\);[^}]*safe-area-inset-right[^}]*safe-area-inset-left/su);
-  expect(publicationStylesheet).toMatch(/\.plain-site\.plain-publication \.plain-publication__hero h1,[\s\S]*?font-family:\s*var\(--publication-serif\);[^}]*font-size:\s*clamp\(2\.1rem, 6vw, 3rem\);/u);
+  expect(publicationStylesheet).toMatch(/\.plain-site\.plain-publication \.plain-publication__hero h1,[\s\S]*?font-family:\s*var\(--publication-serif\);[^}]*font-size:\s*var\(--hraness-paper-heading-size\);/u);
   expect(publicationStylesheet).toMatch(/\.plain-site\.plain-publication \.plain-publication__article-body\s*\{[^}]*font-family:\s*var\(--publication-serif\);[^}]*font-size:\s*1\.08rem;[^}]*line-height:\s*1\.72;/su);
   expect(publicationStylesheet).toMatch(/:where\(\.plain-site\.plain-publication a:not\(\.sleepyland-skip-link\)\)\s*\{[^}]*text-decoration:\s*none;/su);
   expect(publicationStylesheet).toMatch(/\.plain-site\.plain-publication \.plain-publication__entry\s*\{[^}]*border-top:\s*0;/su);
@@ -107,7 +107,7 @@ test("the removed speaker-routing UI leaves no stale product styling", () => {
 test("the spectrum instrument supports precise pointer input without instructional chrome", () => {
   expect(stylesheet).toMatch(/\.spectrogram canvas\s*\{[^}]*pointer-events:\s*none;/su);
   expect(stylesheet).toMatch(/\.spectrum-instrument\s*\{[^}]*background:\s*transparent;[^}]*cursor:\s*crosshair;[^}]*touch-action:\s*none;[^}]*user-select:\s*none;/su);
-  expect(stylesheet).toMatch(/\.spectrum-instrument:is\(\[data-focus-visible\], :focus-visible\)\s*\{[^}]*outline:\s*2px solid rgba\(255, 220, 176, 0\.9\);/su);
+  expect(stylesheet).toMatch(/\.spectrum-instrument:is\(\[data-focus-visible\], :focus-visible\)\s*\{[^}]*outline:\s*2px solid var\(--focus\);/su);
   expect(stylesheet).toMatch(/\.spectrum-instrument\[data-interacting\]\s*\{[^}]*cursor:\s*none;/su);
   expect(stylesheet).not.toContain(".spectrogram-tooltip");
 });
@@ -134,10 +134,10 @@ test("the outcome-first deck keeps primary actions compact and tuning secondary"
   expect(stylesheet).toMatch(/\.noise-app \.energy-picker__surface\s*\{[^}]*display:\s*block;[^}]*width:\s*100%;[^}]*max-width:\s*none;[^}]*border-radius:\s*var\(--jelly-radius-control\);/su);
   expect(stylesheet).toMatch(/\.control-deck\s*\{[^}]*--control-height-transport:\s*72px;[^}]*--noise-action-height:\s*52px;[^}]*--noise-transport-glyph-size:\s*36px;/su);
   expect(stylesheet).toMatch(/\.transport-controls\s*\{[^}]*display:\s*grid;[^}]*width:\s*var\(--control-height-transport\);[^}]*height:\s*var\(--control-height-transport\);[^}]*place-items:\s*center;/su);
-  expect(stylesheet).toMatch(/\.noise-app \.transport-button,[\s\S]*?--jelly-fill:\s*var\(--noise-action\);[\s\S]*?--jelly-label:\s*#fff;[\s\S]*?width:\s*var\(--control-height-transport\);[\s\S]*?height:\s*var\(--control-height-transport\);/u);
+  expect(stylesheet).toMatch(/\.noise-app \.transport-button,[\s\S]*?--jelly-fill:\s*var\(--noise-action\);[\s\S]*?--jelly-label:\s*var\(--primary-foreground\);[\s\S]*?width:\s*var\(--control-height-transport\);[\s\S]*?height:\s*var\(--control-height-transport\);/u);
   expect(stylesheet).toMatch(/\.transport-button__control\s*\{[^}]*height:\s*var\(--control-height-transport\);[^}]*min-height:\s*var\(--control-height-transport\);/su);
   expect(stylesheet).toMatch(/\.transport-button__control\s*\{[^}]*border-radius:\s*var\(--radius-round\);/su);
-  expect(stylesheet).toMatch(/\.transport-button__control\[data-focus-visible\]\s*\{[^}]*outline-color:\s*#fff;/su);
+  expect(stylesheet).toMatch(/\.transport-button__control\[data-focus-visible\]\s*\{[^}]*outline-color:\s*var\(--primary-foreground\);/su);
   expect(stylesheet).not.toMatch(
     /\.transport-button:(?:hover|focus)[^{]*\{[^}]*background\s*:/su,
   );

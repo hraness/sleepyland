@@ -142,7 +142,7 @@
   margin: 0.4rem 0 0.8rem;
   color: var(--plain-foreground);
   font-family: var(--publication-serif);
-  font-size: clamp(2.1rem, 6vw, 3rem);
+  font-size: var(--hraness-paper-heading-size);
   font-weight: 500;
   letter-spacing: -0.035em;
   line-height: 1.06;

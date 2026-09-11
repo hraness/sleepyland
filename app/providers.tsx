@@ -14,8 +14,8 @@ export function SleepylandThemeProvider({ children }: Readonly<{ children: React
   return (
     <DesignThemeProvider forcedTheme={isStudio ? "dark" : undefined}>
       <ThemeColorSync
-        darkColor={isStudio ? "#080604" : "#151515"}
-        lightColor="#ffffff"
+        darkColor="#12100f"
+        lightColor="#f8f7f4"
       />
       {children}
     </DesignThemeProvider>

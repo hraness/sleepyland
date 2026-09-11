@@ -3,6 +3,7 @@
 @import "../styles/foundation.css";
 @import "../styles/plain-site.css";
 @import "../styles/plain-publication.css";
+@import "../styles/vendor/hraness-paper/paper-theme.css";
 
 .editorial-image {
   margin: 1.5rem 0 0;
@@ -46,51 +47,30 @@
 }
 
 html body:has(> .noise-app) {
-  background: #080604;
+  background: var(--background);
 }
 
 .noise-app {
   color-scheme: dark;
-  --noise-background: #080604;
-  --noise-panel: #0f0b07;
-  --noise-control: #1b120a;
-  --noise-control-hover: #28180d;
-  --noise-line: #362214;
-  --noise-text: #e6aa65;
-  --noise-muted: #aa7745;
-  --noise-faint: #98663b;
-  --noise-action: #9f4f0c;
-  --noise-action-hover: #b65d11;
-  --noise-action-pressed: #874108;
+  --noise-background: var(--background);
+  --noise-panel: var(--surface);
+  --noise-control: var(--secondary);
+  --noise-control-hover: var(--surface-hover);
+  --noise-line: var(--control-border);
+  --noise-text: var(--foreground);
+  --noise-muted: var(--muted);
+  --noise-faint: var(--faint);
+  --noise-action: var(--primary);
+  --noise-action-hover: color-mix(in oklch, var(--primary) 88%, var(--background));
+  --noise-action-pressed: color-mix(in oklch, var(--primary) 78%, var(--background));
   --noise-header-inset: env(safe-area-inset-top);
   --noise-header-height: calc(60px + var(--noise-header-inset));
 }
 
-/*
- * Information layer below the instrument, on the shared marketing grammar.
- * The grammar reads the design-kit theme tokens for paper, ink, and surface;
- * Sleepyland binds only its amber accent so both appearances mirror the
- * instrument. Light: #9f4f0c on paper reads at 5.4:1 and carries white ink at
- * 5.8:1. Dark: #e6aa65 on black reads at 10.3:1 and carries #1b120a ink.
- */
+/* Shared Paper appearance for the information layer. */
 .sleepyland-home-information {
-  --hraness-site-accent: #9f4f0c;
-  --hraness-site-accent-ink: #ffffff;
   --hraness-marketing-mono-font: var(--font-mono);
-
   padding-block-end: clamp(2rem, 6vw, 4rem);
-}
-
-:root[data-theme="dark"] .sleepyland-home-information {
-  --hraness-site-accent: #e6aa65;
-  --hraness-site-accent-ink: #1b120a;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .sleepyland-home-information {
-    --hraness-site-accent: #e6aa65;
-    --hraness-site-accent-ink: #1b120a;
-  }
 }
 
 .sleepyland-home-information > .hraness-marketing-section:first-child {
@@ -379,7 +359,7 @@ input {
   padding: 7px 10px;
   border: 1px solid var(--noise-line);
   border-radius: var(--jelly-radius-compact);
-  background: rgba(15, 11, 7, 0.92);
+  background: color-mix(in oklch, var(--surface) 92%, transparent);
   color: var(--noise-muted);
   font-family: var(--font-text);
   font-size: 12px;
@@ -425,7 +405,7 @@ input {
 }
 
 .spectrum-instrument:is([data-focus-visible], :focus-visible) {
-  outline: 2px solid rgba(255, 220, 176, 0.9);
+  outline: 2px solid var(--focus);
   outline-offset: -3px;
 }
 
@@ -525,7 +505,7 @@ input {
   border: 0;
   border-radius: var(--radius-round);
   background: var(--jelly-fill, var(--noise-action));
-  color: #fff;
+  color: var(--primary-foreground);
 }
 
 .transport-button__control {
@@ -614,14 +594,14 @@ input {
 }
 
 .sound-mode-button:is(:hover, [data-hovered]) {
-  background: rgba(230, 170, 101, 0.055);
+  background: color-mix(in oklch, var(--foreground) 6%, transparent);
   color: var(--noise-text);
 }
 
 .sound-mode-button[data-selected] {
   background: var(--noise-control-hover);
   color: var(--noise-text);
-  box-shadow: inset 0 0 0 1px rgba(230, 170, 101, 0.14);
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--foreground) 14%, transparent);
 }
 
 .sound-mode-button__icon {
@@ -883,7 +863,7 @@ input {
 }
 
 .transport-button__control[data-focus-visible] {
-  outline-color: #fff;
+  outline-color: var(--primary-foreground);
 }
 
 .noise-picker__surface.sleepyland-segmented-control__surface,
@@ -902,7 +882,7 @@ input {
 .noise-app .transport-button:defined {
   --sleepyland-icon-button-size: var(--control-height-transport);
   --jelly-fill: var(--noise-action);
-  --jelly-label: #fff;
+  --jelly-label: var(--primary-foreground);
   --jelly-radius: var(--radius-round);
 
   width: var(--control-height-transport);
@@ -912,7 +892,7 @@ input {
   min-height: 0;
   padding: 0;
   border: 0;
-  color: #fff;
+  color: var(--primary-foreground);
   box-shadow: none;
 }
 
@@ -925,7 +905,7 @@ input {
 
 .noise-app .transport-button:is(:hover, [data-hovered]):not([data-disabled]) {
   --jelly-fill: var(--noise-action-hover);
-  --jelly-label: #fff;
+  --jelly-label: var(--primary-foreground);
 }
 
 .noise-app .transport-button:has(.transport-button__control[data-pressed]):not([data-disabled]) {
@@ -969,31 +949,31 @@ input {
 }
 
 .noise-info-modal__surface {
-  --jelly-fill: #130d07;
-  --jelly-label: #e6aa65;
+  --jelly-fill: var(--surface);
+  --jelly-label: var(--foreground);
 
-  border-color: #362214;
+  border-color: var(--control-border);
 }
 
 .studio-resources-modal__surface {
-  --jelly-fill: #130d07;
-  --jelly-label: #e6aa65;
+  --jelly-fill: var(--surface);
+  --jelly-label: var(--foreground);
 
-  border-color: #362214;
+  border-color: var(--control-border);
 }
 
 .studio-resources-modal {
-  background: #130d07;
-  color: #e6aa65;
+  background: var(--surface);
+  color: var(--foreground);
 }
 
 .studio-resources-modal .sleepyland-modal__description {
-  color: #aa7745;
+  color: var(--muted);
 }
 
 .studio-resources-modal .sleepyland-modal__close {
   --jelly-fill: transparent;
-  --jelly-label: #aa7745;
+  --jelly-label: var(--muted);
 }
 
 .studio-resources {
@@ -1024,7 +1004,7 @@ input {
 }
 
 .studio-resources__group > header a {
-  color: #aa7745;
+  color: var(--muted);
   font-family: var(--font-text);
   font-size: 12px;
   font-weight: var(--font-weight-medium);
@@ -1047,14 +1027,14 @@ input {
 .studio-resource__image {
   display: block;
   overflow: hidden;
-  border: 1px solid #362214;
+  border: 1px solid var(--control-border);
   border-radius: var(--jelly-radius-compact);
-  background: #080604;
+  background: var(--background);
 }
 
 .studio-resource h4 {
   margin-top: 8px;
-  color: #e6aa65;
+  color: var(--foreground);
   font-size: 13px;
   line-height: 1.25;
 }
@@ -1068,7 +1048,7 @@ input {
   display: -webkit-box;
   overflow: hidden;
   margin-top: 4px;
-  color: #aa7745;
+  color: var(--muted);
   font-size: 11px;
   line-height: 1.4;
   -webkit-box-orient: vertical;
@@ -1076,24 +1056,24 @@ input {
 }
 
 .session-plan-modal__surface {
-  --jelly-fill: #130d07;
-  --jelly-label: #e6aa65;
+  --jelly-fill: var(--surface);
+  --jelly-label: var(--foreground);
 
-  border-color: #362214;
+  border-color: var(--control-border);
 }
 
 .session-plan-modal {
-  background: #130d07;
-  color: #e6aa65;
+  background: var(--surface);
+  color: var(--foreground);
 }
 
 .session-plan-modal .sleepyland-modal__description {
-  color: #aa7745;
+  color: var(--muted);
 }
 
 .session-plan-modal .sleepyland-modal__close {
   --jelly-fill: transparent;
-  --jelly-label: #aa7745;
+  --jelly-label: var(--muted);
 }
 
 .session-plan-options {
@@ -1109,23 +1089,23 @@ input {
   align-content: center;
   gap: 3px;
   padding: 9px 11px;
-  border: 1px solid #362214;
+  border: 1px solid var(--control-border);
   border-radius: var(--jelly-radius-compact);
-  background: #1b120a;
-  color: #aa7745;
+  background: var(--secondary);
+  color: var(--muted);
   text-align: left;
   cursor: pointer;
 }
 
 .session-plan-option:is(:hover, [data-hovered]),
 .session-plan-option[data-selected] {
-  border-color: #7e4b27;
-  background: #28180d;
-  color: #e6aa65;
+  border-color: var(--primary);
+  background: var(--surface-hover);
+  color: var(--foreground);
 }
 
 .session-plan-option[data-selected] {
-  box-shadow: inset 0 0 0 1px #7e4b27;
+  box-shadow: inset 0 0 0 1px var(--primary);
 }
 
 .session-plan-option strong,
@@ -1146,22 +1126,22 @@ input {
 
 .session-plan-option:focus-visible,
 .session-plan-option[data-focus-visible] {
-  outline: 2px solid #e6aa65;
+  outline: 2px solid var(--foreground);
   outline-offset: 2px;
 }
 
 .noise-info-modal {
-  background: #130d07;
-  color: #e6aa65;
+  background: var(--surface);
+  color: var(--foreground);
 }
 
 .noise-info-modal .sleepyland-modal__description {
-  color: #aa7745;
+  color: var(--muted);
 }
 
 .noise-info-modal .sleepyland-modal__close {
   --jelly-fill: transparent;
-  --jelly-label: #aa7745;
+  --jelly-label: var(--muted);
 }
 
 .noise-info {
@@ -1175,7 +1155,7 @@ input {
 
 .noise-info__lead {
   max-width: 56ch;
-  color: #d99650;
+  color: var(--warning);
   font-size: 15px;
   line-height: 1.6;
 }
@@ -1195,7 +1175,7 @@ input {
 
 .noise-info__features h3 {
   margin: 0;
-  color: #f0b977;
+  color: var(--foreground);
   font-size: 14px;
   font-weight: var(--font-weight-semibold);
   line-height: 1.3;
@@ -1203,14 +1183,14 @@ input {
 
 .noise-info__features p,
 .noise-info__note {
-  color: #aa7745;
+  color: var(--muted);
   font-size: 13px;
   line-height: 1.55;
 }
 
 .noise-info__note {
   padding-top: 14px;
-  border-top: 1px solid #362214;
+  border-top: 1px solid var(--control-border);
 }
 
 .noise-info__links {
@@ -1222,7 +1202,7 @@ input {
 
 .noise-info__links a {
   align-items: center;
-  color: #e6aa65;
+  color: var(--foreground);
   display: inline-flex;
   font-size: 13px;
   font-weight: var(--font-weight-semibold);
@@ -1232,7 +1212,7 @@ input {
 }
 
 .noise-info__links a:focus-visible {
-  outline: 2px solid #e6aa65;
+  outline: 2px solid var(--foreground);
   outline-offset: 2px;
 }
 
@@ -1583,7 +1563,7 @@ input {
 }
 
 .product-info-demo video {
-  background: #080604;
+  background: var(--background);
   border: 1px solid var(--plain-line);
   display: block;
   height: auto;
@@ -1625,4 +1605,17 @@ input {
     -webkit-line-clamp: 2;
   }
 
+}
+
+[data-hraness-theme="paper"] :where(.hraness-marketing-hero__heading, .hraness-marketing-cta__heading) {
+  font-size: var(--hraness-paper-heading-size);
+  line-height: var(--hraness-paper-heading-leading);
+  letter-spacing: var(--hraness-paper-heading-tracking);
+}
+[data-hraness-theme="paper"] :where(.hraness-marketing-section__heading, .hraness-marketing-install__heading, .hraness-marketing-primitives__heading, .hraness-marketing-interfaces__heading, .hraness-marketing-trust__heading, .hraness-marketing-quotes__heading, .hraness-marketing-pricing__heading, .hraness-marketing-questions__heading, .hraness-marketing-maker__heading) {
+  font-size: var(--hraness-paper-section-heading-size);
+  line-height: var(--hraness-paper-heading-leading);
+}
+[data-hraness-theme="paper"] .hraness-marketing-hero__summary {
+  font-size: var(--hraness-paper-summary-size);
 }
