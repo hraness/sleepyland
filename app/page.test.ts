@@ -43,8 +43,14 @@ describe("Sleepyland product homepage", () => {
     expect(markup).toContain(
       "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
     );
-    expect(markup).toContain('class="hraness-design-theme-toggle header-appearance"');
-    expect(markup).toContain('class="hraness-marketing-page sleepyland-home-information"');
+    const classLists = [...markup.matchAll(/class="([^"]*)"/gu)]
+      .map((match) => new Set((match[1] ?? "").split(/\s+/u)));
+    expect(classLists.filter((classes) => (
+      classes.has("hraness-design-theme-toggle") && classes.has("header-appearance")
+    ))).toHaveLength(1);
+    expect(classLists.filter((classes) => (
+      classes.has("hraness-marketing-page") && classes.has("sleepyland-home-information")
+    ))).toHaveLength(1);
     const orderedMarkers = [
       'aria-label="Sound controls"',
       'id="home-information-title"',
