@@ -178,15 +178,23 @@ test("late request failures remain red rather than disappearing from the pending
 });
 
 test("only the specifically intercepted challenge abort is expected", () => {
-  const tracker = createRequestTracker();
   const challenge = requestFixture("https://challenges.cloudflare.com/turnstile/v0/api.js");
-  tracker.start(challenge);
-  tracker.blockChallenge(challenge);
-  tracker.fail(challenge, "net::ERR_BLOCKED_BY_CLIENT");
-  expect(() => tracker.assertSettled()).not.toThrow();
-  expect(tracker.receipt().blockedChallenges).toBe(1);
-  expect(() => tracker.blockChallenge(requestFixture())).toThrow();
-  for (const failure of ["net::ERR_ABORTED", "unrecognized failure"]) {
+  for (const reason of ["net::ERR_BLOCKED_BY_CLIENT", "net::ERR_BLOCKED_BY_CLIENT.Inspector"]) {
+    const tracker = createRequestTracker();
+    tracker.start(challenge);
+    tracker.blockChallenge(challenge);
+    tracker.fail(challenge, reason);
+    expect(() => tracker.assertSettled()).not.toThrow();
+    expect(tracker.receipt().blockedChallenges).toBe(1);
+    expect(() => tracker.blockChallenge(requestFixture())).toThrow();
+    const unrelated = createRequestTracker();
+    const local = requestFixture();
+    unrelated.start(local);
+    unrelated.fail(local, reason);
+    expect(() => unrelated.assertSettled()).toThrow();
+    expect(unrelated.receipt().failures[0].reason).toBe(reason);
+  }
+  for (const failure of ["net::ERR_ABORTED", "net::ERR_BLOCKED_BY_CLIENT.Unknown", "unrecognized failure"]) {
     const unexpected = createRequestTracker();
     unexpected.start(challenge);
     unexpected.blockChallenge(challenge);

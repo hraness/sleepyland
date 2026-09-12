@@ -46,8 +46,9 @@ export function createRequestTracker() {
     fail(request, reason) {
       const owned = pending.has(request);
       pending.delete(request);
-      if (owned && expectedBlocks.delete(request) && reason === "net::ERR_BLOCKED_BY_CLIENT") blocked += 1;
-      else failures.push({ ...identity(request), reason: /^net::ERR_[A-Z_]+$/u.test(reason ?? "") ? reason : "unrecognized request failure" });
+      const intercepted = reason === "net::ERR_BLOCKED_BY_CLIENT" || reason === "net::ERR_BLOCKED_BY_CLIENT.Inspector";
+      if (owned && expectedBlocks.delete(request) && intercepted) blocked += 1;
+      else failures.push({ ...identity(request), reason: /^net::ERR_[A-Z_]+(?:\.Inspector)?$/u.test(reason ?? "") ? reason : "unrecognized request failure" });
     },
     assertHealthy() { assert.deepEqual(failures, [], "no failed or unknown browser requests"); },
     assertSettled() {
