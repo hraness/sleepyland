@@ -166,7 +166,14 @@ function fontFixture() {
   return {
     fonts, faces, args: { fontWeights: weights, fontSet: fonts, view },
     register() { for (const face of faces) fonts.add(face); },
-    frame() { const callback = frame; frame = undefined; callback(); },
+    async frame() {
+      for (let index = 0; index < 6; index += 1) await Promise.resolve();
+      const callback = frame;
+      expect(callback).toBeFunction();
+      frame = undefined;
+      callback();
+      for (let index = 0; index < 6; index += 1) await Promise.resolve();
+    },
     timeout() { deadline(); },
     get cleared() { return cleared; },
   };
@@ -175,10 +182,14 @@ function fontFixture() {
 test("font readiness waits for registration before loading every actual normal cut", async () => {
   const fixture = fontFixture();
   const loading = loadNebulaFonts(fixture.args);
-  fixture.frame();
+  await fixture.frame();
   expect(fixture.cleared).toBe(false);
   fixture.register();
-  fixture.frame();
+  await fixture.frame();
+  await fixture.frame();
+  await fixture.frame();
+  expect(fixture.cleared).toBe(false);
+  await fixture.frame();
   expect(await loading).toEqual(["400", "500", "600", "700"]);
   expect(fixture.faces.every((face) => face.status === "loaded")).toBe(true);
   expect(fixture.cleared).toBe(true);
@@ -189,13 +200,13 @@ test("font readiness rejects missing normal cuts, even when fonts.ready already 
   fixture.register();
   fixture.faces[1].style = "italic";
   const loading = loadNebulaFonts(fixture.args);
-  fixture.frame();
+  await fixture.frame();
   fixture.timeout();
   await expect(loading).rejects.toThrow("15 seconds");
   expect(fixture.cleared).toBe(true);
 });
 
-test("font readiness preserves load failures and rejects replacement after loading", async () => {
+test("font readiness preserves load failures and rejects a persistently removed normal cut", async () => {
   const failed = fontFixture();
   failed.register();
   failed.faces[1].load = async () => { throw new Error("Font request failed"); };
@@ -204,16 +215,65 @@ test("font readiness preserves load failures and rejects replacement after loadi
   const replaced = fontFixture();
   replaced.register();
   replaced.faces[1].load = async () => { replaced.fonts.delete(replaced.faces[1]); return replaced.faces[1]; };
-  await expect(loadNebulaFonts(replaced.args)).rejects.toThrow("changed or failed");
+  const pending = loadNebulaFonts(replaced.args);
+  await replaced.frame();
+  replaced.timeout();
+  await expect(pending).rejects.toThrow("15 seconds");
   expect(replaced.cleared).toBe(true);
+});
+
+test("font readiness loads a replacement registry and requires three stable rendered frames", async () => {
+  const fixture = fontFixture();
+  fixture.register();
+  const replacement = fixture.faces.map((face) => ({ ...face }));
+  fixture.faces[1].load = async () => {
+    fixture.faces[1].status = "loaded";
+    fixture.fonts.clear();
+    for (const face of replacement) fixture.fonts.add(face);
+    return fixture.faces[1];
+  };
+  const loading = loadNebulaFonts(fixture.args);
+  await fixture.frame();
+  expect(replacement.every((face) => face.status === "loaded")).toBe(true);
+  await fixture.frame();
+  await fixture.frame();
+  expect(fixture.cleared).toBe(false);
+  await fixture.frame();
+  expect(await loading).toEqual(["400", "500", "600", "700"]);
+  expect(fixture.cleared).toBe(true);
+});
+
+test("font readiness also loads newly registered cuts rather than accepting an older loaded subset", async () => {
   const added = fontFixture();
   added.register();
+  const extra = { ...added.faces[1], status: "unloaded" };
   added.faces[1].load = async () => {
     added.faces[1].status = "loaded";
-    added.fonts.add({ ...added.faces[1], status: "unloaded" });
+    added.fonts.add(extra);
     return added.faces[1];
   };
-  await expect(loadNebulaFonts(added.args)).rejects.toThrow("changed or failed");
+  const loading = loadNebulaFonts(added.args);
+  await added.frame();
+  expect(extra.status).toBe("loaded");
+  for (let index = 0; index < 3; index += 1) await added.frame();
+  expect(await loading).toEqual(["400", "500", "600", "700"]);
+});
+
+test("font readiness cannot pass when registered identities keep changing before settlement", async () => {
+  const fixture = fontFixture();
+  fixture.register();
+  const loading = loadNebulaFonts(fixture.args);
+  await fixture.frame();
+  for (let index = 0; index < 5; index += 1) {
+    const current = [...fixture.fonts];
+    fixture.fonts.clear();
+    for (const face of current) fixture.fonts.add({ ...face });
+    await fixture.frame();
+    expect(fixture.cleared).toBe(false);
+  }
+  fixture.timeout();
+  await expect(loading).rejects.toThrow("15 seconds");
+  expect(fixture.cleared).toBe(true);
 });
 
 test("browser and server children receive runtime settings without provider credentials", () => {

@@ -202,31 +202,47 @@ export function assertRenderedFonts(fonts) {
 
 export async function loadNebulaFonts({ fontWeights, fontSet, view }) {
   // FontFaceSet.load() may resolve to [] before a stylesheet registers its faces.
-  // Load the actual registered normal cuts, then reject replacement or fallback.
+  // Hydration can replace registered faces. Load the current actual normal cuts
+  // and require their identities and loaded state to settle on rendered frames.
   const fonts = fontSet ?? document.fonts;
   const clock = view ?? window;
   let frame;
   let timer;
+  let active = true;
   const matching = () => [...fonts].filter((face) => face.family.replaceAll('"', "") === "Nebula Sans"
     && face.style === "normal" && fontWeights.includes(face.weight));
+  const nextFrame = () => new Promise((resolve) => {
+    frame = clock.requestAnimationFrame(() => { frame = undefined; resolve(); });
+  });
+  const sameFaces = (left, right) => left.length === right.length && left.every((face) => right.includes(face));
   const operation = (async () => {
-    const faces = await new Promise((resolve) => {
-      const observe = () => {
-        const registered = matching();
-        if (fontWeights.every((weight) => registered.some((face) => face.weight === weight))) resolve(registered);
-        else frame = clock.requestAnimationFrame(observe);
-      };
-      observe();
-    });
-    await Promise.all(faces.map((face) => face.load()));
-    await fonts.ready;
-    const current = matching();
-    if (faces.some((face) => !fonts.has(face) || face.status !== "loaded")
-      || current.some((face) => !faces.includes(face) || face.status !== "loaded")
-      || !fontWeights.every((weight) => current.some((face) => face.weight === weight && face.status === "loaded"))) {
-      throw new Error("Registered Nebula Sans cuts changed or failed to load");
+    let selected = [];
+    let consecutive = 0;
+    while (active) {
+      const current = matching();
+      if (!fontWeights.every((weight) => current.some((face) => face.weight === weight))) {
+        selected = [];
+        consecutive = 0;
+        await nextFrame();
+        continue;
+      }
+      if (!sameFaces(current, selected) || current.some((face) => face.status !== "loaded")) {
+        selected = current;
+        consecutive = 0;
+        await Promise.all(selected.map((face) => face.load()));
+        await fonts.ready;
+      }
+      if (!active) return;
+      await nextFrame();
+      const rendered = matching();
+      if (sameFaces(rendered, selected) && rendered.every((face) => fonts.has(face) && face.status === "loaded")) {
+        consecutive += 1;
+        if (consecutive === 3) return fontWeights;
+      } else {
+        selected = [];
+        consecutive = 0;
+      }
     }
-    return fontWeights;
   })();
   try {
     return await Promise.race([
@@ -234,6 +250,7 @@ export async function loadNebulaFonts({ fontWeights, fontSet, view }) {
       new Promise((_, reject) => { timer = clock.setTimeout(() => reject(new Error("Nebula Sans readiness exceeded 15 seconds")), 15_000); }),
     ]);
   } finally {
+    active = false;
     clock.clearTimeout(timer);
     if (frame !== undefined) clock.cancelAnimationFrame(frame);
   }
