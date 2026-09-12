@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { assertRenderedFonts, assertSnapshot, bounded, createBrowserOwner, runtimeEnvironment, scenarios, screenshotPlan } from "./check-browser.mjs";
+import { assertForcedThemeState, assertRenderedFonts, assertSnapshot, bounded, createBrowserOwner, createRequestTracker, forcedThemeScenarios, loadNebulaFonts, observeRestoredFocus, runtimeEnvironment, scenarios, screenshotPlan } from "./check-browser.mjs";
 
 function validSnapshot(scenario) {
   const dark = scenario.path === "/noise" || scenario.theme === "dark";
@@ -28,6 +28,82 @@ test("browser matrix covers four routes, both appearances, touch, and short stud
   expect(scenarios).toHaveLength(18);
   expect(new Set(scenarios.map((scenario) => JSON.stringify(scenario))).size).toBe(18);
   for (const scenario of scenarios) expect(() => assertSnapshot(validSnapshot(scenario), scenario)).not.toThrow();
+});
+
+test("forced-theme navigation adds both OS schemes and all saved choices at 320px and desktop", () => {
+  expect(forcedThemeScenarios).toHaveLength(12);
+  expect(new Set(forcedThemeScenarios.map((scenario) => JSON.stringify(scenario))).size).toBe(12);
+  for (const width of [320, 1280]) for (const theme of ["light", "dark"]) for (const saved of ["light", "dark", "system"]) {
+    expect(forcedThemeScenarios.filter((scenario) => scenario.viewport.width === width && scenario.theme === theme && scenario.saved === saved)).toHaveLength(1);
+  }
+});
+
+function transitionState(scenario, forced) {
+  const theme = forced ? "dark" : scenario.saved === "system" ? scenario.theme : scenario.saved;
+  return {
+    theme, jelly: theme, saved: scenario.saved, os: scenario.theme, timeOrigin: 123,
+    systemObserved: false, horizontalOverflow: 0, audioContexts: 0,
+    background: theme === "dark" ? "rgb(18, 16, 15)" : "rgb(248, 247, 244)",
+    themeColor: theme === "dark" ? "#12100f" : "#f8f7f4",
+  };
+}
+
+test("forced, ordinary, and reforced theme evidence rejects fallback, document replacement, storage, and paint regressions", () => {
+  for (const scenario of forcedThemeScenarios) for (const forced of [true, false, true]) {
+    const state = transitionState(scenario, forced);
+    expect(() => assertForcedThemeState(state, scenario, forced, 123)).not.toThrow();
+    for (const change of [
+      { theme: "system" }, { jelly: "auto" }, { saved: "unexpected" },
+      { os: scenario.theme === "light" ? "dark" : "light" }, { timeOrigin: 124 },
+      { systemObserved: true }, { systemObserved: undefined },
+      { background: "rgb(0, 0, 0)" }, { themeColor: "#080604" },
+      { audioContexts: 1 }, { horizontalOverflow: 2 },
+    ]) expect(() => assertForcedThemeState({ ...state, ...change }, scenario, forced, 123)).toThrow();
+  }
+});
+
+function focusFixture() {
+  let frame;
+  let deadline;
+  let cleared = false;
+  const view = {
+    requestAnimationFrame(callback) { frame = callback; return 1; },
+    cancelAnimationFrame() { frame = undefined; },
+    setTimeout(callback) { deadline = callback; return 2; },
+    clearTimeout() { cleared = true; },
+  };
+  const element = { isConnected: true, ownerDocument: { defaultView: view, activeElement: null } };
+  return {
+    element,
+    frame(focused) { element.ownerDocument.activeElement = focused ? element : null; const callback = frame; frame = undefined; callback(); },
+    timeout() { deadline(); },
+    get cleared() { return cleared; },
+  };
+}
+
+test("focus observation waits for rendered restoration and resets after focus is lost", async () => {
+  const fixture = focusFixture();
+  const result = observeRestoredFocus(fixture.element);
+  for (const focused of [false, true, true, false, true, true]) fixture.frame(focused);
+  expect(fixture.cleared).toBe(false);
+  fixture.frame(true);
+  expect(await result).toEqual({ consecutiveFrames: 3 });
+  expect(fixture.cleared).toBe(true);
+});
+
+test("focus observation rejects absent, disconnected, and never-restored original triggers", async () => {
+  await expect(observeRestoredFocus(null)).rejects.toThrow("unavailable");
+  const detached = focusFixture();
+  const rejected = observeRestoredFocus(detached.element);
+  detached.element.isConnected = false;
+  detached.frame(false);
+  await expect(rejected).rejects.toThrow("disconnected");
+  expect(detached.cleared).toBe(true);
+  const timeout = focusFixture();
+  const pending = observeRestoredFocus(timeout.element);
+  timeout.frame(false);
+  timeout.timeout();
+  await expect(pending).rejects.toThrow("did not settle");
 });
 
 test("fixed-viewport canvases get a viewport capture before full-document screenshots", () => {
@@ -70,10 +146,191 @@ test("rendered font proof accepts the shipped cuts and rejects fallbacks or unus
   }
 });
 
+function fontFixture() {
+  const weights = ["400", "500", "600", "700"];
+  const faces = weights.map((weight) => ({
+    family: '"Nebula Sans"', style: "normal", weight, status: "unloaded",
+    async load() { this.status = "loaded"; return this; },
+  }));
+  const fonts = new Set();
+  fonts.ready = Promise.resolve();
+  let frame;
+  let deadline;
+  let cleared = false;
+  const view = {
+    requestAnimationFrame(callback) { frame = callback; return 1; },
+    cancelAnimationFrame() { frame = undefined; },
+    setTimeout(callback, milliseconds) { expect(milliseconds).toBe(15_000); deadline = callback; return 2; },
+    clearTimeout() { cleared = true; },
+  };
+  return {
+    fonts, faces, args: { fontWeights: weights, fontSet: fonts, view },
+    register() { for (const face of faces) fonts.add(face); },
+    async frame() {
+      for (let index = 0; index < 6; index += 1) await Promise.resolve();
+      const callback = frame;
+      expect(callback).toBeFunction();
+      frame = undefined;
+      callback();
+      for (let index = 0; index < 6; index += 1) await Promise.resolve();
+    },
+    timeout() { deadline(); },
+    get cleared() { return cleared; },
+  };
+}
+
+test("font readiness waits for registration before loading every actual normal cut", async () => {
+  const fixture = fontFixture();
+  const loading = loadNebulaFonts(fixture.args);
+  await fixture.frame();
+  expect(fixture.cleared).toBe(false);
+  fixture.register();
+  await fixture.frame();
+  await fixture.frame();
+  await fixture.frame();
+  expect(fixture.cleared).toBe(false);
+  await fixture.frame();
+  expect(await loading).toEqual(["400", "500", "600", "700"]);
+  expect(fixture.faces.every((face) => face.status === "loaded")).toBe(true);
+  expect(fixture.cleared).toBe(true);
+});
+
+test("font readiness rejects missing normal cuts, even when fonts.ready already resolved", async () => {
+  const fixture = fontFixture();
+  fixture.register();
+  fixture.faces[1].style = "italic";
+  const loading = loadNebulaFonts(fixture.args);
+  await fixture.frame();
+  fixture.timeout();
+  await expect(loading).rejects.toThrow("15 seconds");
+  expect(fixture.cleared).toBe(true);
+});
+
+test("font readiness preserves load failures and rejects a persistently removed normal cut", async () => {
+  const failed = fontFixture();
+  failed.register();
+  failed.faces[1].load = async () => { throw new Error("Font request failed"); };
+  await expect(loadNebulaFonts(failed.args)).rejects.toThrow("Font request failed");
+  expect(failed.cleared).toBe(true);
+  const replaced = fontFixture();
+  replaced.register();
+  replaced.faces[1].load = async () => { replaced.fonts.delete(replaced.faces[1]); return replaced.faces[1]; };
+  const pending = loadNebulaFonts(replaced.args);
+  await replaced.frame();
+  replaced.timeout();
+  await expect(pending).rejects.toThrow("15 seconds");
+  expect(replaced.cleared).toBe(true);
+});
+
+test("font readiness loads a replacement registry and requires three stable rendered frames", async () => {
+  const fixture = fontFixture();
+  fixture.register();
+  const replacement = fixture.faces.map((face) => ({ ...face }));
+  fixture.faces[1].load = async () => {
+    fixture.faces[1].status = "loaded";
+    fixture.fonts.clear();
+    for (const face of replacement) fixture.fonts.add(face);
+    return fixture.faces[1];
+  };
+  const loading = loadNebulaFonts(fixture.args);
+  await fixture.frame();
+  expect(replacement.every((face) => face.status === "loaded")).toBe(true);
+  await fixture.frame();
+  await fixture.frame();
+  expect(fixture.cleared).toBe(false);
+  await fixture.frame();
+  expect(await loading).toEqual(["400", "500", "600", "700"]);
+  expect(fixture.cleared).toBe(true);
+});
+
+test("font readiness also loads newly registered cuts rather than accepting an older loaded subset", async () => {
+  const added = fontFixture();
+  added.register();
+  const extra = { ...added.faces[1], status: "unloaded" };
+  added.faces[1].load = async () => {
+    added.faces[1].status = "loaded";
+    added.fonts.add(extra);
+    return added.faces[1];
+  };
+  const loading = loadNebulaFonts(added.args);
+  await added.frame();
+  expect(extra.status).toBe("loaded");
+  for (let index = 0; index < 3; index += 1) await added.frame();
+  expect(await loading).toEqual(["400", "500", "600", "700"]);
+});
+
+test("font readiness cannot pass when registered identities keep changing before settlement", async () => {
+  const fixture = fontFixture();
+  fixture.register();
+  const loading = loadNebulaFonts(fixture.args);
+  await fixture.frame();
+  for (let index = 0; index < 5; index += 1) {
+    const current = [...fixture.fonts];
+    fixture.fonts.clear();
+    for (const face of current) fixture.fonts.add({ ...face });
+    await fixture.frame();
+    expect(fixture.cleared).toBe(false);
+  }
+  fixture.timeout();
+  await expect(loading).rejects.toThrow("15 seconds");
+  expect(fixture.cleared).toBe(true);
+});
+
 test("browser and server children receive runtime settings without provider credentials", () => {
   expect(runtimeEnvironment({ PATH: "runtime", TMPDIR: "temporary", NODE_OPTIONS: "--max-old-space-size=2048", UV_THREADPOOL_SIZE: "4", EXAMPLE_PROVIDER_TOKEN: "test-only", NODE_ENV: "development" })).toEqual({
     PATH: "runtime", TMPDIR: "temporary", NODE_OPTIONS: "--max-old-space-size=2048", UV_THREADPOOL_SIZE: "4", NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1",
   });
+});
+
+const requestFixture = (url = "http://127.0.0.1:3000/about?synthetic=omitted") => ({ url: () => url, method: () => "GET" });
+
+test("continuing a route does not prove a stalled underlying request finished", async () => {
+  const tracker = createRequestTracker();
+  const request = requestFixture();
+  tracker.start(request);
+  await Promise.resolve(); // The route continuation has resolved, but no requestfinished event exists.
+  expect(tracker.pendingCount).toBe(1);
+  expect(() => tracker.assertSettled()).toThrow("completed before teardown");
+  expect(tracker.receipt().pending).toEqual([{ method: "GET", origin: "http://127.0.0.1:3000", path: "/about" }]);
+  tracker.finish(request);
+  expect(() => tracker.assertSettled()).not.toThrow();
+});
+
+test("late request failures remain red rather than disappearing from the pending set", async () => {
+  const tracker = createRequestTracker();
+  const request = requestFixture();
+  tracker.start(request);
+  await Promise.resolve().then(() => tracker.fail(request, "net::ERR_ABORTED"));
+  expect(tracker.pendingCount).toBe(0);
+  expect(() => tracker.assertHealthy()).toThrow("failed or unknown");
+  expect(() => tracker.assertSettled()).toThrow();
+  expect(tracker.receipt().failures[0].reason).toBe("net::ERR_ABORTED");
+});
+
+test("only the specifically intercepted challenge abort is expected", () => {
+  const challenge = requestFixture("https://challenges.cloudflare.com/turnstile/v0/api.js");
+  for (const reason of ["net::ERR_BLOCKED_BY_CLIENT", "net::ERR_BLOCKED_BY_CLIENT.Inspector"]) {
+    const tracker = createRequestTracker();
+    tracker.start(challenge);
+    tracker.blockChallenge(challenge);
+    tracker.fail(challenge, reason);
+    expect(() => tracker.assertSettled()).not.toThrow();
+    expect(tracker.receipt().blockedChallenges).toBe(1);
+    expect(() => tracker.blockChallenge(requestFixture())).toThrow();
+    const unrelated = createRequestTracker();
+    const local = requestFixture();
+    unrelated.start(local);
+    unrelated.fail(local, reason);
+    expect(() => unrelated.assertSettled()).toThrow();
+    expect(unrelated.receipt().failures[0].reason).toBe(reason);
+  }
+  for (const failure of ["net::ERR_ABORTED", "net::ERR_BLOCKED_BY_CLIENT.Unknown", "unrecognized failure"]) {
+    const unexpected = createRequestTracker();
+    unexpected.start(challenge);
+    unexpected.blockChallenge(challenge);
+    unexpected.fail(challenge, failure);
+    expect(() => unexpected.assertSettled()).toThrow();
+  }
 });
 
 test("native waits resolve or fail at a finite deadline", async () => {

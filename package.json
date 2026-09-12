@@ -27,7 +27,7 @@
     "check": "bun run check:theme && bun run test && bun run typecheck && bun run lint && bun run build"
   },
   "dependencies": {
-    "@hraness/design-kit": "github:hraness/design-kit#v0.6.3",
+    "@hraness/design-kit": "github:hraness/design-kit#v0.6.9",
     "@hraness/posthog": "github:hraness/posthog#v0.1.2",
     "@hraness/site-footer": "github:hraness/site-footer#v0.6.3",
     "@hraness/ui": "github:hraness/ui#v0.5.13",

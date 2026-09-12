@@ -12,10 +12,10 @@ describe("Sleepyland portfolio contract", () => {
     const lockfile = await Bun.file(new URL("bun.lock", repositoryRoot)).text();
 
     expect(packageJson.dependencies["@hraness/design-kit"]).toBe(
-      "github:hraness/design-kit#v0.6.3",
+      "github:hraness/design-kit#v0.6.9",
     );
     expect(lockfile).toContain(
-      '"@hraness/design-kit": "github:hraness/design-kit#v0.6.3"',
+      '"@hraness/design-kit": "github:hraness/design-kit#v0.6.9"',
     );
   });
 
