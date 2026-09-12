@@ -15,12 +15,13 @@
     "node": "24.x"
   },
   "scripts": {
+    "check:browser": "bun scripts/check-browser.mjs",
     "check:theme": "bun scripts/check-paper-theme.mjs",
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
     "search:notify": "bun scripts/submit-indexnow.ts",
-    "test": "bun test ./app ./lib ./next.config.test.ts",
+    "test": "bun test ./app ./lib ./scripts/check-browser.test.mjs ./next.config.test.ts",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "check": "bun run check:theme && bun run test && bun run typecheck && bun run lint && bun run build"
@@ -46,6 +47,7 @@
     "eslint": "^9.39.2",
     "eslint-config-next": "16.2.12",
     "fast-check": "^4.8.0",
+    "playwright-core": "1.62.0",
     "typescript": "^6.0.3"
   }
 }
