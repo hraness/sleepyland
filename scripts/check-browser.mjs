@@ -195,6 +195,7 @@ async function checkAppearance(page, initial) {
     await item.focus();
     await page.keyboard.press("Enter");
     await page.waitForFunction(({ theme, key }) => document.documentElement.dataset.theme === theme && localStorage.getItem(key) === theme, { theme, key: preferenceKey });
+    await page.locator(".hraness-design-theme-toggle__popover").waitFor({ state: "hidden" });
   }
 }
 
@@ -268,6 +269,14 @@ async function loadScreenshotImages(page) {
     await image.scrollIntoViewIfNeeded();
     await bounded(image.evaluate((element) => element.decode()), "Screenshot image decode", 10_000);
   }
+  await page.waitForFunction(() => {
+    const canvas = document.querySelector("canvas[data-spectrogram-overlay]");
+    if (canvas === null) return true;
+    if (canvas.width === 0 || canvas.height === 0) return false;
+    const pixels = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
+    for (let index = 3; index < pixels.length; index += 4) if (pixels[index] > 0) return true;
+    return false;
+  });
 }
 
 export async function runBrowserCheck() {
