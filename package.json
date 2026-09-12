@@ -33,7 +33,7 @@
     "@hraness/ui": "github:hraness/ui#v0.5.13",
     "@hraness/vercel-delivery": "github:hraness/vercel-delivery#v0.1.2",
     "@hraness/web-discovery": "github:hraness/web-discovery#v0.2.0",
-    "next": "16.2.12",
+    "next": "16.3.3",
     "react": "19.2.3",
     "react-aria-components": "1.19.0",
     "react-dom": "19.2.3",
