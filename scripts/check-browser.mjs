@@ -244,9 +244,10 @@ async function checkAudio(page) {
   await page.keyboard.press("Enter");
   await page.waitForFunction(() => window.__sleepylandAudio.every((context) => context.state === "suspended"));
   assert.equal(await transport.getAttribute("aria-label"), "Play sound");
-  // Client navigation exercises the studio's unmount cleanup in the same document.
-  await page.locator(".header-research-link").click();
-  await page.waitForURL("**/research");
+  // An image-free destination keeps audio disposal independent of canceled image work.
+  await page.getByRole("button", { name: "How Sleepyland works", exact: true }).click();
+  await page.getByRole("navigation", { name: "Product information", exact: true }).getByRole("link", { name: "About", exact: true }).click();
+  await page.waitForURL("**/about");
   await page.waitForFunction(() => window.__sleepylandAudio.length > 0 && window.__sleepylandAudio.every((context) => context.state === "closed"));
 }
 
@@ -260,6 +261,13 @@ async function checkStudioDialog(page, scenario) {
   assert.equal(await page.locator(".noise-info-modal").evaluate((element) => getComputedStyle(element).backgroundColor), dark ? "rgb(29, 26, 24)" : "rgb(255, 254, 250)", "dialog uses the Paper surface");
   await page.keyboard.press("Escape");
   await overlay.waitFor({ state: "hidden" });
+}
+
+async function loadScreenshotImages(page) {
+  for (const image of await page.locator("img").all()) {
+    await image.scrollIntoViewIfNeeded();
+    await bounded(image.evaluate((element) => element.decode()), "Screenshot image decode", 10_000);
+  }
 }
 
 export async function runBrowserCheck() {
@@ -368,6 +376,7 @@ export async function runBrowserCheck() {
         const fonts = await renderedFonts(context, page, scenario.path);
         await checkInteractions(page, scenario);
         assertSnapshot(await snapshot(page), scenario);
+        await loadScreenshotImages(page);
         await page.screenshot({ path: join(output, `${name}.png`), fullPage: true });
         if (scenario.device === "desktop" && scenario.theme === "light" && ["/", "/noise"].includes(scenario.path)) await checkAudio(page);
         assert.deepEqual(pageErrors, [], "no browser exceptions");
