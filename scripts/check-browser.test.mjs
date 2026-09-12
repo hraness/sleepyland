@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { assertForcedThemeState, assertRenderedFonts, assertSnapshot, bounded, createBrowserOwner, createRequestTracker, forcedThemeScenarios, observeRestoredFocus, runtimeEnvironment, scenarios, screenshotPlan } from "./check-browser.mjs";
+import { assertForcedThemeState, assertRenderedFonts, assertSnapshot, bounded, createBrowserOwner, createRequestTracker, forcedThemeScenarios, loadNebulaFonts, observeRestoredFocus, runtimeEnvironment, scenarios, screenshotPlan } from "./check-browser.mjs";
 
 function validSnapshot(scenario) {
   const dark = scenario.path === "/noise" || scenario.theme === "dark";
@@ -144,6 +144,76 @@ test("rendered font proof accepts the shipped cuts and rejects fallbacks or unus
   for (const change of [{ isCustomFont: false }, { postScriptName: "ArialMT" }, { glyphCount: 0 }]) {
     expect(() => assertRenderedFonts([{ ...rendered, ...change }])).toThrow();
   }
+});
+
+function fontFixture() {
+  const weights = ["400", "500", "600", "700"];
+  const faces = weights.map((weight) => ({
+    family: '"Nebula Sans"', style: "normal", weight, status: "unloaded",
+    async load() { this.status = "loaded"; return this; },
+  }));
+  const fonts = new Set();
+  fonts.ready = Promise.resolve();
+  let frame;
+  let deadline;
+  let cleared = false;
+  const view = {
+    requestAnimationFrame(callback) { frame = callback; return 1; },
+    cancelAnimationFrame() { frame = undefined; },
+    setTimeout(callback, milliseconds) { expect(milliseconds).toBe(15_000); deadline = callback; return 2; },
+    clearTimeout() { cleared = true; },
+  };
+  return {
+    fonts, faces, args: { fontWeights: weights, fontSet: fonts, view },
+    register() { for (const face of faces) fonts.add(face); },
+    frame() { const callback = frame; frame = undefined; callback(); },
+    timeout() { deadline(); },
+    get cleared() { return cleared; },
+  };
+}
+
+test("font readiness waits for registration before loading every actual normal cut", async () => {
+  const fixture = fontFixture();
+  const loading = loadNebulaFonts(fixture.args);
+  fixture.frame();
+  expect(fixture.cleared).toBe(false);
+  fixture.register();
+  fixture.frame();
+  expect(await loading).toEqual(["400", "500", "600", "700"]);
+  expect(fixture.faces.every((face) => face.status === "loaded")).toBe(true);
+  expect(fixture.cleared).toBe(true);
+});
+
+test("font readiness rejects missing normal cuts, even when fonts.ready already resolved", async () => {
+  const fixture = fontFixture();
+  fixture.register();
+  fixture.faces[1].style = "italic";
+  const loading = loadNebulaFonts(fixture.args);
+  fixture.frame();
+  fixture.timeout();
+  await expect(loading).rejects.toThrow("15 seconds");
+  expect(fixture.cleared).toBe(true);
+});
+
+test("font readiness preserves load failures and rejects replacement after loading", async () => {
+  const failed = fontFixture();
+  failed.register();
+  failed.faces[1].load = async () => { throw new Error("Font request failed"); };
+  await expect(loadNebulaFonts(failed.args)).rejects.toThrow("Font request failed");
+  expect(failed.cleared).toBe(true);
+  const replaced = fontFixture();
+  replaced.register();
+  replaced.faces[1].load = async () => { replaced.fonts.delete(replaced.faces[1]); return replaced.faces[1]; };
+  await expect(loadNebulaFonts(replaced.args)).rejects.toThrow("changed or failed");
+  expect(replaced.cleared).toBe(true);
+  const added = fontFixture();
+  added.register();
+  added.faces[1].load = async () => {
+    added.faces[1].status = "loaded";
+    added.fonts.add({ ...added.faces[1], status: "unloaded" });
+    return added.faces[1];
+  };
+  await expect(loadNebulaFonts(added.args)).rejects.toThrow("changed or failed");
 });
 
 test("browser and server children receive runtime settings without provider credentials", () => {

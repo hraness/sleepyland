@@ -200,6 +200,45 @@ export function assertRenderedFonts(fonts) {
   assert.ok(fonts.some((font) => font.isCustomFont && /^NebulaSans-(Book|Medium|Semibold|Bold)(Italic)?$/u.test(font.postScriptName) && font.glyphCount > 0), `Nebula Sans renders real glyphs: ${JSON.stringify(fonts)}`);
 }
 
+export async function loadNebulaFonts({ fontWeights, fontSet, view }) {
+  // FontFaceSet.load() may resolve to [] before a stylesheet registers its faces.
+  // Load the actual registered normal cuts, then reject replacement or fallback.
+  const fonts = fontSet ?? document.fonts;
+  const clock = view ?? window;
+  let frame;
+  let timer;
+  const matching = () => [...fonts].filter((face) => face.family.replaceAll('"', "") === "Nebula Sans"
+    && face.style === "normal" && fontWeights.includes(face.weight));
+  const operation = (async () => {
+    const faces = await new Promise((resolve) => {
+      const observe = () => {
+        const registered = matching();
+        if (fontWeights.every((weight) => registered.some((face) => face.weight === weight))) resolve(registered);
+        else frame = clock.requestAnimationFrame(observe);
+      };
+      observe();
+    });
+    await Promise.all(faces.map((face) => face.load()));
+    await fonts.ready;
+    const current = matching();
+    if (faces.some((face) => !fonts.has(face) || face.status !== "loaded")
+      || current.some((face) => !faces.includes(face) || face.status !== "loaded")
+      || !fontWeights.every((weight) => current.some((face) => face.weight === weight && face.status === "loaded"))) {
+      throw new Error("Registered Nebula Sans cuts changed or failed to load");
+    }
+    return fontWeights;
+  })();
+  try {
+    return await Promise.race([
+      operation,
+      new Promise((_, reject) => { timer = clock.setTimeout(() => reject(new Error("Nebula Sans readiness exceeded 15 seconds")), 15_000); }),
+    ]);
+  } finally {
+    clock.clearTimeout(timer);
+    if (frame !== undefined) clock.cancelAnimationFrame(frame);
+  }
+}
+
 async function unusedPort() {
   const reservation = createServer();
   await new Promise((resolve, reject) => {
@@ -221,14 +260,8 @@ async function waitUntil(check, message, timeout = 15_000) {
 }
 
 async function snapshot(page) {
-  return page.evaluate(async ({ requiredLayers, fontWeights }) => {
-    let deadline;
-    try {
-      await Promise.race([
-        Promise.all(fontWeights.map((weight) => document.fonts.load(`${weight} 16px "Nebula Sans"`))).then(() => document.fonts.ready),
-        new Promise((_, reject) => { deadline = setTimeout(() => reject(new Error("Nebula Sans readiness exceeded 15 seconds")), 15_000); }),
-      ]);
-    } finally { clearTimeout(deadline); }
+  await page.evaluate(loadNebulaFonts, { fontWeights });
+  return page.evaluate(({ requiredLayers }) => {
     const html = document.documentElement;
     const body = getComputedStyle(document.body);
     const css = [...document.styleSheets].flatMap((sheet) => [...sheet.cssRules].map((rule) => rule.cssText)).join("\n");
@@ -260,7 +293,7 @@ async function snapshot(page) {
       transportHeight: transport?.height,
       transportWidth: transport?.width,
     };
-  }, { requiredLayers, fontWeights });
+  }, { requiredLayers });
 }
 
 async function renderedFonts(context, page, path) {
