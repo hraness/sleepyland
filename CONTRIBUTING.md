@@ -40,7 +40,7 @@ headless browser. It does not download browsers or reuse a signed-in profile.
 On machines with a host or repository resource scheduler, run this command in
 its exclusive browser lane.
 
-The 18 cases cover `/`, `/noise`, `/research`, and `/design` in light and dark
+The original 18 cases cover `/`, `/noise`, `/research`, and `/design` in light and dark
 appearance on desktop and touch portrait, plus the studio in short touch
 landscape. Assertions cover compiled package layers, loaded Nebula Sans cuts,
 Paper colors, serif and monospace roles, overflow, footer boundaries, appearance
@@ -49,6 +49,12 @@ checks use native Web Audio with browser output muted, then verify suspension
 and disposal on navigation. The check never grants microphone access, submits
 forms, or sends external requests. Mailing-list challenges are blocked, so this
 is not provider or production-delivery verification.
+
+Twelve additional cases retain saved Light, Dark, and System preferences while
+navigating from the forced-dark studio to About and back, under both operating-system
+schemes at 320px and desktop widths. They check concrete root and Jelly appearance,
+Paper browser chrome and body portals, unchanged saved preferences, client-side
+navigation, and keyboard focus restoration. These cases never start audio.
 
 Screenshots and a JSON receipt are retained in ignored `.browser-artifacts/`
 directories. The receipt records the Git identity, browser version and executable

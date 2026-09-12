@@ -44,6 +44,20 @@ function metaTags(html: string, name: string): readonly string[] {
 }
 
 describe("Sleepyland shared appearance contract", () => {
+  test("admits the immutable forced-system fix without replacing the route provider", async () => {
+    const [manifest, lock, providers] = await Promise.all([
+      source("../package.json"), source("../bun.lock"), source("./providers.tsx"),
+    ]);
+    expect(JSON.parse(manifest).dependencies["@hraness/design-kit"]).toBe("github:hraness/design-kit#v0.6.9");
+    expect(lock).toContain('"@hraness/design-kit": "github:hraness/design-kit#v0.6.9"');
+    const lockedPackage = lock.split("\n").find((line) => line.startsWith('    "@hraness/design-kit": ['));
+    expect(lockedPackage).toContain('"@hraness/design-kit@github:hraness/design-kit#4819b3b"');
+    expect(lockedPackage).toContain("sha512-ENM2708UwkGnogUZiAMh24TW0cT5jjsR+HJIe/HIXib3QQQIWgW8qtsmppoVK7ZeG7KfJGC4RLXWqwK+amr3Wg==");
+    expect(providers.match(/<DesignThemeProvider /gu)).toHaveLength(1);
+    expect(providers).toContain('forcedTheme={isStudio ? "dark" : undefined}');
+    expect(providers).not.toMatch(/<DesignThemeProvider[^>]*\bkey=/u);
+  });
+
   test("keeps a fixed dark Paper studio inside the shared appearance runtime", async () => {
     const [layout, noisePage, providers, studio, stylesheet] = await Promise.all([
       source("./layout.tsx"),

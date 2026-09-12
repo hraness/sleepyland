@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { assertRenderedFonts, assertSnapshot, bounded, createBrowserOwner, runtimeEnvironment, scenarios, screenshotPlan } from "./check-browser.mjs";
+import { assertForcedThemeState, assertRenderedFonts, assertSnapshot, bounded, createBrowserOwner, forcedThemeScenarios, observeRestoredFocus, runtimeEnvironment, scenarios, screenshotPlan } from "./check-browser.mjs";
 
 function validSnapshot(scenario) {
   const dark = scenario.path === "/noise" || scenario.theme === "dark";
@@ -28,6 +28,82 @@ test("browser matrix covers four routes, both appearances, touch, and short stud
   expect(scenarios).toHaveLength(18);
   expect(new Set(scenarios.map((scenario) => JSON.stringify(scenario))).size).toBe(18);
   for (const scenario of scenarios) expect(() => assertSnapshot(validSnapshot(scenario), scenario)).not.toThrow();
+});
+
+test("forced-theme navigation adds both OS schemes and all saved choices at 320px and desktop", () => {
+  expect(forcedThemeScenarios).toHaveLength(12);
+  expect(new Set(forcedThemeScenarios.map((scenario) => JSON.stringify(scenario))).size).toBe(12);
+  for (const width of [320, 1280]) for (const theme of ["light", "dark"]) for (const saved of ["light", "dark", "system"]) {
+    expect(forcedThemeScenarios.filter((scenario) => scenario.viewport.width === width && scenario.theme === theme && scenario.saved === saved)).toHaveLength(1);
+  }
+});
+
+function transitionState(scenario, forced) {
+  const theme = forced ? "dark" : scenario.saved === "system" ? scenario.theme : scenario.saved;
+  return {
+    theme, jelly: theme, saved: scenario.saved, os: scenario.theme, timeOrigin: 123,
+    systemObserved: false, horizontalOverflow: 0, audioContexts: 0,
+    background: theme === "dark" ? "rgb(18, 16, 15)" : "rgb(248, 247, 244)",
+    themeColor: theme === "dark" ? "#12100f" : "#f8f7f4",
+  };
+}
+
+test("forced, ordinary, and reforced theme evidence rejects fallback, document replacement, storage, and paint regressions", () => {
+  for (const scenario of forcedThemeScenarios) for (const forced of [true, false, true]) {
+    const state = transitionState(scenario, forced);
+    expect(() => assertForcedThemeState(state, scenario, forced, 123)).not.toThrow();
+    for (const change of [
+      { theme: "system" }, { jelly: "auto" }, { saved: "unexpected" },
+      { os: scenario.theme === "light" ? "dark" : "light" }, { timeOrigin: 124 },
+      { systemObserved: true }, { systemObserved: undefined },
+      { background: "rgb(0, 0, 0)" }, { themeColor: "#080604" },
+      { audioContexts: 1 }, { horizontalOverflow: 2 },
+    ]) expect(() => assertForcedThemeState({ ...state, ...change }, scenario, forced, 123)).toThrow();
+  }
+});
+
+function focusFixture() {
+  let frame;
+  let deadline;
+  let cleared = false;
+  const view = {
+    requestAnimationFrame(callback) { frame = callback; return 1; },
+    cancelAnimationFrame() { frame = undefined; },
+    setTimeout(callback) { deadline = callback; return 2; },
+    clearTimeout() { cleared = true; },
+  };
+  const element = { isConnected: true, ownerDocument: { defaultView: view, activeElement: null } };
+  return {
+    element,
+    frame(focused) { element.ownerDocument.activeElement = focused ? element : null; const callback = frame; frame = undefined; callback(); },
+    timeout() { deadline(); },
+    get cleared() { return cleared; },
+  };
+}
+
+test("focus observation waits for rendered restoration and resets after focus is lost", async () => {
+  const fixture = focusFixture();
+  const result = observeRestoredFocus(fixture.element);
+  for (const focused of [false, true, true, false, true, true]) fixture.frame(focused);
+  expect(fixture.cleared).toBe(false);
+  fixture.frame(true);
+  expect(await result).toEqual({ consecutiveFrames: 3 });
+  expect(fixture.cleared).toBe(true);
+});
+
+test("focus observation rejects absent, disconnected, and never-restored original triggers", async () => {
+  await expect(observeRestoredFocus(null)).rejects.toThrow("unavailable");
+  const detached = focusFixture();
+  const rejected = observeRestoredFocus(detached.element);
+  detached.element.isConnected = false;
+  detached.frame(false);
+  await expect(rejected).rejects.toThrow("disconnected");
+  expect(detached.cleared).toBe(true);
+  const timeout = focusFixture();
+  const pending = observeRestoredFocus(timeout.element);
+  timeout.frame(false);
+  timeout.timeout();
+  await expect(pending).rejects.toThrow("did not settle");
 });
 
 test("fixed-viewport canvases get a viewport capture before full-document screenshots", () => {

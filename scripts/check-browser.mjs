@@ -67,6 +67,48 @@ export const scenarios = [
   ...["light", "dark"].map((theme) => ({ device: "touch-landscape", path: "/noise", theme })),
 ];
 
+export const forcedThemeScenarios = [320, 1280].flatMap((width) =>
+  ["light", "dark"].flatMap((theme) =>
+    ["light", "dark", "system"].map((saved) => ({
+      device: width === 320 ? "touch-portrait" : "desktop", path: "/noise", theme, saved,
+      viewport: { width, height: width === 320 ? 568 : 900 }, transition: true,
+    }))));
+
+export function assertForcedThemeState(state, scenario, forced, timeOrigin) {
+  assert.ok(["light", "dark", "system"].includes(scenario.saved), "known saved preference");
+  assert.ok(["light", "dark"].includes(scenario.theme), "concrete operating-system scheme");
+  const theme = forced ? "dark" : scenario.saved === "system" ? scenario.theme : scenario.saved;
+  assert.equal(state.theme, theme, "forced or saved concrete root appearance");
+  assert.equal(state.jelly, theme, "Jelly follows the concrete appearance");
+  assert.equal(state.saved, scenario.saved, "navigation preserves the saved preference");
+  assert.equal(state.os, scenario.theme, "isolated operating-system scheme is unchanged");
+  assert.equal(state.timeOrigin, timeOrigin, "route transitions retain the document");
+  assert.equal(state.systemObserved, false, "no transient data-theme=system");
+  assert.equal(state.background, theme === "dark" ? "rgb(18, 16, 15)" : "rgb(248, 247, 244)", "resolved Paper background");
+  assert.equal(state.themeColor, theme === "dark" ? "#12100f" : "#f8f7f4", "dynamic Paper browser chrome");
+  assert.equal(state.audioContexts, 0, "theme navigation does not start audio");
+  assert.ok(state.horizontalOverflow <= 1, "theme navigation preserves document width");
+}
+
+// React Aria restores focus on a rendered frame after its overlay unmounts.
+// Observe the original connected trigger; never repair focus from this probe.
+export function observeRestoredFocus(element) {
+  return new Promise((resolve, reject) => {
+    const view = element?.ownerDocument.defaultView;
+    if (!view || !element.isConnected) { reject(new Error("Original focus trigger is unavailable")); return; }
+    let frame;
+    let consecutive = 0;
+    const timer = view.setTimeout(() => { view.cancelAnimationFrame(frame); reject(new Error("Original trigger focus did not settle")); }, 2_000);
+    const observe = () => {
+      if (!element.isConnected) { view.clearTimeout(timer); reject(new Error("Original focus trigger disconnected")); return; }
+      consecutive = element.ownerDocument.activeElement === element ? consecutive + 1 : 0;
+      if (consecutive === 3) { view.clearTimeout(timer); resolve({ consecutiveFrames: consecutive }); }
+      else frame = view.requestAnimationFrame(observe);
+    };
+    frame = view.requestAnimationFrame(observe);
+  });
+}
+
 export function screenshotPlan(path, name) {
   return [
     ...(path === "/" ? [{ file: `${name}-studio.png`, fullPage: false }] : []),
@@ -271,6 +313,78 @@ async function checkStudioDialog(page, scenario) {
   await overlay.waitFor({ state: "hidden" });
 }
 
+async function checkForcedThemeNavigation(page, scenario, retain) {
+  const timeOrigin = await retain(page.evaluate(() => {
+    const html = document.documentElement;
+    const state = { systemObserved: html.dataset.theme === "system" };
+    state.observer = new MutationObserver((records) => {
+      if (html.dataset.theme === "system" || records.some((record) => record.oldValue === "system")) state.systemObserved = true;
+    });
+    state.observer.observe(html, { attributes: true, attributeFilter: ["data-theme"], attributeOldValue: true });
+    window.__sleepylandThemeTransition = state;
+    return performance.timeOrigin;
+  }), "Theme observer acquisition");
+  const phases = [];
+  const observe = async (forced, phase) => {
+    const expected = forced ? "dark" : scenario.saved === "system" ? scenario.theme : scenario.saved;
+    await page.waitForFunction((theme) => document.documentElement.dataset.theme === theme
+      && document.documentElement.dataset.jellyMode === theme
+      && document.querySelector('meta[name="theme-color"]:not([media])')?.content === (theme === "dark" ? "#12100f" : "#f8f7f4"), expected);
+    const state = await retain(page.evaluate((key) => ({
+      theme: document.documentElement.dataset.theme,
+      jelly: document.documentElement.dataset.jellyMode,
+      saved: localStorage.getItem(key),
+      os: matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light",
+      timeOrigin: performance.timeOrigin,
+      systemObserved: window.__sleepylandThemeTransition?.systemObserved,
+      background: getComputedStyle(document.body).backgroundColor,
+      themeColor: document.querySelector('meta[name="theme-color"]:not([media])')?.content,
+      audioContexts: window.__sleepylandAudio.length,
+      horizontalOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    }), preferenceKey), "Concrete theme observation");
+    assertForcedThemeState(state, scenario, forced, timeOrigin);
+    phases.push({ phase, ...state });
+  };
+  const openInfo = async () => {
+    const trigger = page.getByRole("button", { name: "How Sleepyland works", exact: true });
+    const original = await trigger.elementHandle();
+    assert.ok(original, "real studio information trigger");
+    await trigger.focus();
+    await page.keyboard.press("Enter");
+    const overlay = page.locator(".sleepyland-modal-overlay");
+    await overlay.waitFor({ state: "visible" });
+    const portal = await retain(overlay.evaluate((element) => ({
+      theme: element.dataset.theme, paper: element.dataset.hranessTheme,
+      outsideApplication: element.closest("main") === null && document.body.contains(element),
+      background: getComputedStyle(element.querySelector(".noise-info-modal")).backgroundColor,
+      focusInside: element.contains(document.activeElement),
+    })), "Forced studio portal");
+    assert.deepEqual(portal, { theme: "dark", paper: "paper", outsideApplication: true, background: "rgb(29, 26, 24)", focusInside: true }, "forced-dark body portal retains Paper and keyboard focus");
+    return original;
+  };
+  await observe(true, "forced");
+  const firstTrigger = await openInfo();
+  await page.getByRole("navigation", { name: "Product information", exact: true }).getByRole("link", { name: "About", exact: true }).focus();
+  await page.keyboard.press("Enter");
+  await page.waitForURL("**/about");
+  await firstTrigger.dispose();
+  await page.locator('.hraness-design-theme-toggle[data-ready="true"]').waitFor();
+  await observe(false, "ordinary");
+  assert.equal(await page.locator(".hraness-design-theme-toggle").getAttribute("data-theme-value"), scenario.saved, "ordinary appearance control retains the saved choice");
+  await page.getByRole("navigation", { name: "Product navigation", exact: true }).getByRole("link", { name: "Sound machine", exact: true }).focus();
+  await page.keyboard.press("Enter");
+  await page.waitForURL("**/noise");
+  await observe(true, "reforced");
+  const trigger = await openInfo();
+  await page.keyboard.press("Escape");
+  await page.locator(".sleepyland-modal-overlay").waitFor({ state: "hidden" });
+  const focus = await retain(trigger.evaluate(observeRestoredFocus), "Original trigger focus restoration", 3_000);
+  await trigger.dispose();
+  await observe(true, "after-dismiss");
+  await retain(page.evaluate(() => window.__sleepylandThemeTransition.observer.disconnect()), "Theme observer release");
+  return { phases, focus };
+}
+
 async function loadScreenshotImages(page) {
   for (const image of await page.locator("img").all()) {
     await image.scrollIntoViewIfNeeded();
@@ -340,16 +454,17 @@ export async function runBrowserCheck() {
     const { processInfo } = await processSession.send("SystemInfo.getProcessInfo");
     receipt.processes.browser = processInfo.find((info) => info.type === "browser")?.id;
     await processSession.detach();
-    for (const scenario of scenarios) {
+    for (const scenario of [...scenarios, ...forcedThemeScenarios]) {
       owner.assertRunning();
-      const viewport = scenario.device === "desktop" ? { width: 1280, height: 900 }
-        : scenario.device === "touch-portrait" ? { width: 390, height: 844 } : { width: 844, height: 390 };
+      const viewport = scenario.viewport ?? (scenario.device === "desktop" ? { width: 1280, height: 900 }
+        : scenario.device === "touch-portrait" ? { width: 390, height: 844 } : { width: 844, height: 390 });
       const context = await browser.newContext({ viewport, colorScheme: scenario.theme, hasTouch: scenario.device !== "desktop", isMobile: scenario.device !== "desktop", serviceWorkers: "block" });
       const pageErrors = [];
       const forbiddenRequests = [];
       const failedAssets = [];
       const assets = new Set();
       const pendingRequests = new Map();
+      const routeTasks = [];
       const page = await context.newPage();
       page.setDefaultTimeout(10_000);
       page.on("pageerror", (error) => pageErrors.push(error.message));
@@ -367,9 +482,15 @@ export async function runBrowserCheck() {
       await context.route("**/*", (route) => {
         const request = route.request();
         const url = new URL(request.url());
-        if (url.origin === origin && ["GET", "HEAD"].includes(request.method())) return route.continue();
-        if (url.hostname !== "challenges.cloudflare.com") forbiddenRequests.push(`${request.method()} ${url.origin}${url.pathname}`);
-        return route.abort("blockedbyclient");
+        let task;
+        if (url.origin === origin && ["GET", "HEAD"].includes(request.method())) task = route.continue();
+        else {
+          if (url.hostname !== "challenges.cloudflare.com") forbiddenRequests.push(`${request.method()} ${url.origin}${url.pathname}`);
+          task = route.abort("blockedbyclient");
+        }
+        routeTasks.push(task);
+        void task.catch(() => undefined);
+        return task;
       });
       await context.addInitScript(({ theme, key }) => {
         localStorage.setItem(key, theme);
@@ -378,19 +499,29 @@ export async function runBrowserCheck() {
         window.AudioContext = class extends NativeAudioContext {
           constructor(...args) { super(...args); window.__sleepylandAudio.push(this); }
         };
-      }, { theme: scenario.theme, key: preferenceKey });
-      const name = `${scenario.path === "/" ? "home" : scenario.path.slice(1)}-${scenario.theme}-${scenario.device}`;
+      }, { theme: scenario.saved ?? scenario.theme, key: preferenceKey });
+      const name = `${scenario.path === "/" ? "home" : scenario.path.slice(1)}-${scenario.theme}-${scenario.device}${scenario.transition ? `-saved-${scenario.saved}-transition` : ""}`;
       let before;
+      let caseError;
+      const retained = [];
+      const retain = (promise, label, limit = 10_000) => {
+        // Keep original observations through context teardown if a host deadline wins.
+        retained.push(promise);
+        void promise.catch(() => undefined);
+        return bounded(promise, label, limit);
+      };
       try {
         assert.equal((await page.goto(`${origin}${scenario.path}`, { waitUntil: "domcontentloaded" })).status(), 200);
         const expectedTheme = scenario.path === "/noise" ? "dark" : scenario.theme;
         await page.waitForFunction((theme) => document.documentElement.dataset.theme === theme, expectedTheme);
         if (scenario.path !== "/noise") await page.locator('.hraness-design-theme-toggle[data-ready="true"]').waitFor();
-        await checkStudioDialog(page, scenario);
+        if (!scenario.transition) await checkStudioDialog(page, scenario);
         before = await snapshot(page);
         assertSnapshot(before, scenario);
         const fonts = await renderedFonts(context, page, scenario.path);
-        await checkInteractions(page, scenario);
+        const transition = scenario.transition
+          ? await retain(checkForcedThemeNavigation(page, scenario, retain), "Forced theme route case", 45_000)
+          : await checkInteractions(page, scenario);
         assertSnapshot(await snapshot(page), scenario);
         await loadScreenshotImages(page);
         // Full-page viewport overrides clear responsive canvas buffers in Chromium.
@@ -398,21 +529,36 @@ export async function runBrowserCheck() {
           if (!capture.fullPage) await page.evaluate(() => window.scrollTo(0, 0));
           await page.screenshot({ path: join(output, capture.file), fullPage: capture.fullPage });
         }
-        if (scenario.device === "desktop" && scenario.theme === "light" && ["/", "/noise"].includes(scenario.path)) await checkAudio(page);
+        if (!scenario.transition && scenario.device === "desktop" && scenario.theme === "light" && ["/", "/noise"].includes(scenario.path)) await checkAudio(page);
         assert.deepEqual(pageErrors, [], "no browser exceptions");
         assert.deepEqual(failedAssets, [], "local CSS and fonts load successfully");
         assert.deepEqual(forbiddenRequests, [], "no remote product or analytics requests");
-        receipt.scenarios.push({ ...scenario, viewport, snapshot: before, renderedFonts: fonts, assets: [...assets].sort(), status: "passed" });
+        receipt.scenarios.push({ ...scenario, viewport, snapshot: before, renderedFonts: fonts, assets: [...assets].sort(), ...(transition ? { transitionEvidence: transition } : {}), status: "passed" });
         console.log(`PASS ${name}`);
       } catch (error) {
+        caseError = error;
         await page.screenshot({ path: join(output, `${name}-failure.png`), fullPage: true }).catch(() => undefined);
         receipt.scenarios.push({ ...scenario, snapshot: before, status: "failed", error: error.message, pendingRequests: [...pendingRequests.values()] });
         throw error;
       } finally {
         // Close native contexts before closing the isolated browser context, even on failure.
+        const cleanupErrors = [];
         try {
           if (!page.isClosed()) await bounded(page.evaluate(() => Promise.all((window.__sleepylandAudio ?? []).map((audio) => audio.state === "closed" ? undefined : audio.close()))), "Web Audio cleanup", 3_000);
-        } finally { await bounded(context.close(), "Browser context cleanup", 5_000); }
+        } catch (error) { cleanupErrors.push(error); }
+        try { await bounded(context.close(), "Browser context cleanup", 5_000); }
+        catch (error) { cleanupErrors.push(error); }
+        try {
+          const results = await bounded(Promise.allSettled([...retained, ...routeTasks]), "Original browser observations and routes drain", 5_000);
+          if (!caseError) for (const result of results) if (result.status === "rejected") cleanupErrors.push(result.reason);
+          assert.deepEqual(pageErrors, [], "no late browser exceptions");
+          assert.deepEqual(failedAssets, [], "no late local asset failures");
+          assert.deepEqual(forbiddenRequests, [], "no late remote requests");
+        } catch (error) { cleanupErrors.push(error); }
+        if (cleanupErrors.length > 0) {
+          receipt.scenarios.at(-1).status = "failed";
+          throw new AggregateError([...(caseError ? [caseError] : []), ...cleanupErrors], "Browser case or cleanup failed");
+        }
       }
     }
     receipt.status = "passed";
