@@ -44,7 +44,7 @@ The 18 cases cover `/`, `/noise`, `/research`, and `/design` in light and dark
 appearance on desktop and touch portrait, plus the studio in short touch
 landscape. Assertions cover compiled package layers, loaded Nebula Sans cuts,
 Paper colors, serif and monospace roles, overflow, footer boundaries, appearance
-menus, disclosures, research filters, and mixer controls. Two short playback
+menus, themed dialogs, disclosures, research filters, and mixer controls. Two short playback
 checks use native Web Audio with browser output muted, then verify suspension
 and disposal on navigation. The check never grants microphone access, submits
 forms, or sends external requests. Mailing-list challenges are blocked, so this

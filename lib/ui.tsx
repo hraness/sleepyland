@@ -228,7 +228,7 @@ export function Modal({
 }>) {
   const theme = useDesignPortalTheme() ?? "dark";
   return (
-    <ModalOverlay className="sleepyland-modal-overlay" data-theme={theme} isDismissable>
+    <ModalOverlay className="sleepyland-modal-overlay" data-hraness-theme="paper" data-theme={theme} isDismissable>
       <AriaModal
         className={classNames("sleepyland-modal__surface", surfaceClassName, "sleepyland-modal", className)}
         data-size={size}

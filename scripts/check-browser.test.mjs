@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { assertSnapshot, scenarios } from "./check-browser.mjs";
+import { assertRenderedFonts, assertSnapshot, scenarios } from "./check-browser.mjs";
 
 function validSnapshot(scenario) {
   const dark = scenario.path === "/noise" || scenario.theme === "dark";
@@ -54,4 +54,12 @@ test("studio stays dark and excludes the footer, challenge, and document scrolli
 test("research retains its authored serif reading role", () => {
   const scenario = scenarios.find((candidate) => candidate.path === "/research");
   expect(() => assertSnapshot({ ...validSnapshot(scenario), serif: "Nebula Sans" }, scenario)).toThrow();
+});
+
+test("rendered font proof accepts the shipped cuts and rejects fallbacks or unused faces", () => {
+  const rendered = { familyName: "Nebula Sans Semibold", postScriptName: "NebulaSans-Semibold", isCustomFont: true, glyphCount: 32 };
+  expect(() => assertRenderedFonts([rendered])).not.toThrow();
+  for (const change of [{ isCustomFont: false }, { postScriptName: "ArialMT" }, { glyphCount: 0 }]) {
+    expect(() => assertRenderedFonts([{ ...rendered, ...change }])).toThrow();
+  }
 });

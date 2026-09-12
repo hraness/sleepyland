@@ -57,6 +57,10 @@ export function assertSnapshot(snapshot, scenario) {
   if (scenario.path === "/research") assert.ok(snapshot.serif.includes("Georgia"), "publication serif role");
 }
 
+export function assertRenderedFonts(fonts) {
+  assert.ok(fonts.some((font) => font.isCustomFont && /^NebulaSans-(Book|Medium|Semibold|Bold)(Italic)?$/u.test(font.postScriptName) && font.glyphCount > 0), `Nebula Sans renders real glyphs: ${JSON.stringify(fonts)}`);
+}
+
 async function unusedPort() {
   const reservation = createServer();
   await new Promise((resolve, reject) => {
@@ -125,7 +129,7 @@ async function renderedFonts(context, page, path) {
     const { nodeId } = await session.send("DOM.querySelector", { nodeId: document.nodeId, selector });
     assert.ok(nodeId, "rendered font probe exists");
     const { fonts } = await session.send("CSS.getPlatformFontsForNode", { nodeId });
-    assert.ok(fonts.some((font) => font.isCustomFont && font.familyName === "Nebula Sans" && font.glyphCount > 0), "Nebula Sans renders real glyphs, not only a computed family name");
+    assertRenderedFonts(fonts);
     return fonts;
   } finally { await session.detach(); }
 }
@@ -192,6 +196,18 @@ async function checkAudio(page) {
   await page.locator(".header-research-link").click();
   await page.waitForURL("**/research");
   await page.waitForFunction(() => window.__sleepylandAudio.length > 0 && window.__sleepylandAudio.every((context) => context.state === "closed"));
+}
+
+async function checkStudioDialog(page, scenario) {
+  if (!["/", "/noise"].includes(scenario.path)) return;
+  await page.getByRole("button", { name: "How Sleepyland works", exact: true }).click();
+  const overlay = page.locator(".sleepyland-modal-overlay");
+  await overlay.waitFor({ state: "visible" });
+  const dark = scenario.path === "/noise" || scenario.theme === "dark";
+  assert.equal(await overlay.getAttribute("data-theme"), dark ? "dark" : "light", "portal follows the route's concrete appearance");
+  assert.equal(await page.locator(".noise-info-modal").evaluate((element) => getComputedStyle(element).backgroundColor), dark ? "rgb(29, 26, 24)" : "rgb(255, 254, 250)", "dialog uses the Paper surface");
+  await page.keyboard.press("Escape");
+  await overlay.waitFor({ state: "hidden" });
 }
 
 export async function runBrowserCheck() {
@@ -278,6 +294,7 @@ export async function runBrowserCheck() {
         assert.equal((await page.goto(`${origin}${scenario.path}`, { waitUntil: "networkidle" })).status(), 200);
         const expectedTheme = scenario.path === "/noise" ? "dark" : scenario.theme;
         await page.waitForFunction((theme) => document.documentElement.dataset.theme === theme, expectedTheme);
+        await checkStudioDialog(page, scenario);
         before = await snapshot(page);
         assertSnapshot(before, scenario);
         const fonts = await renderedFonts(context, page, scenario.path);
