@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { assertRenderedFonts, assertSnapshot, scenarios } from "./check-browser.mjs";
+import { assertRenderedFonts, assertSnapshot, bounded, runtimeEnvironment, scenarios } from "./check-browser.mjs";
 
 function validSnapshot(scenario) {
   const dark = scenario.path === "/noise" || scenario.theme === "dark";
@@ -62,4 +62,15 @@ test("rendered font proof accepts the shipped cuts and rejects fallbacks or unus
   for (const change of [{ isCustomFont: false }, { postScriptName: "ArialMT" }, { glyphCount: 0 }]) {
     expect(() => assertRenderedFonts([{ ...rendered, ...change }])).toThrow();
   }
+});
+
+test("browser and server children receive runtime settings without provider credentials", () => {
+  expect(runtimeEnvironment({ PATH: "runtime", TMPDIR: "temporary", NODE_OPTIONS: "--max-old-space-size=2048", EXAMPLE_PROVIDER_TOKEN: "test-only", NODE_ENV: "development" })).toEqual({
+    PATH: "runtime", TMPDIR: "temporary", NODE_OPTIONS: "--max-old-space-size=2048", NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1",
+  });
+});
+
+test("native waits resolve or fail at a finite deadline", async () => {
+  expect(await bounded(Promise.resolve("ready"), "Ready", 10)).toBe("ready");
+  await expect(bounded(new Promise(() => undefined), "Pending", 10)).rejects.toThrow("Pending exceeded 10ms");
 });

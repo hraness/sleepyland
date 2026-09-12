@@ -13,6 +13,21 @@ const preferenceKey = "hraness-design-theme-v1";
 const requiredLayers = ["components.hraness-ui", "components.hraness-design-kit", "components.hraness-site-footer"];
 const fontWeights = ["400", "500", "600", "700"];
 
+export function runtimeEnvironment(source) {
+  const keys = ["PATH", "HOME", "TMPDIR", "TMP", "TEMP", "LANG", "LC_ALL", "TZ", "NODE_OPTIONS"];
+  return { ...Object.fromEntries(keys.filter((key) => source[key] !== undefined).map((key) => [key, source[key]])), NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1" };
+}
+
+export async function bounded(promise, label, milliseconds = 10_000) {
+  let timer;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(`${label} exceeded ${milliseconds}ms`)), milliseconds); }),
+    ]);
+  } finally { clearTimeout(timer); }
+}
+
 export const scenarios = [
   ...["desktop", "touch-portrait"].flatMap((device) =>
     ["light", "dark"].flatMap((theme) =>
@@ -83,8 +98,13 @@ async function waitUntil(check, message, timeout = 15_000) {
 
 async function snapshot(page) {
   return page.evaluate(async ({ requiredLayers, fontWeights }) => {
-    await Promise.all(fontWeights.map((weight) => document.fonts.load(`${weight} 16px "Nebula Sans"`)));
-    await document.fonts.ready;
+    let deadline;
+    try {
+      await Promise.race([
+        Promise.all(fontWeights.map((weight) => document.fonts.load(`${weight} 16px "Nebula Sans"`))).then(() => document.fonts.ready),
+        new Promise((_, reject) => { deadline = setTimeout(() => reject(new Error("Nebula Sans readiness exceeded 15 seconds")), 15_000); }),
+      ]);
+    } finally { clearTimeout(deadline); }
     const html = document.documentElement;
     const body = getComputedStyle(document.body);
     const css = [...document.styleSheets].flatMap((sheet) => [...sheet.cssRules].map((rule) => rule.cssText)).join("\n");
@@ -222,6 +242,9 @@ export async function runBrowserCheck() {
     head: git("rev-parse", "HEAD"), tree: git("rev-parse", "HEAD^{tree}"),
     dirty: git("status", "--porcelain") !== "",
     browserSha256: createHash("sha256").update(await readFile(executablePath)).digest("hex"),
+    lockfileSha256: createHash("sha256").update(await readFile(join(root, "bun.lock"))).digest("hex"),
+    buildId: (await readFile(join(root, ".next/BUILD_ID"), "utf8")).trim(),
+    bun: Bun.version, node: execFileSync("node", ["--version"], { encoding: "utf8" }).trim(),
     browser: null, scenarios: [], status: "running",
   };
   const port = await unusedPort();
@@ -229,19 +252,21 @@ export async function runBrowserCheck() {
   let serverLog = "";
   const server = spawn("node", [join(root, "node_modules/next/dist/bin/next"), "start", "--hostname", "127.0.0.1", "--port", String(port)], {
     cwd: root, stdio: ["ignore", "pipe", "pipe"],
-    env: { ...process.env, NEXT_TELEMETRY_DISABLED: "1" },
+    env: runtimeEnvironment(process.env),
   });
   for (const stream of [server.stdout, server.stderr]) stream.on("data", (chunk) => { serverLog = (serverLog + chunk).slice(-8_000); });
   let serverError;
   server.on("error", (error) => { serverError = error; });
   const serverExit = new Promise((resolve) => server.once("exit", resolve));
+  receipt.processes = { server: server.pid };
   let browser;
   let stopPromise;
   const stop = () => stopPromise ??= (async () => {
-    try { await browser?.close(); } finally {
+    try { if (browser) await bounded(browser.close(), "Browser cleanup"); } finally {
       if (server.exitCode === null) server.kill("SIGTERM");
-      await Promise.race([serverExit, new Promise((_, reject) => setTimeout(() => reject(new Error("Owned production server did not exit")), 5_000).unref())]);
+      await bounded(serverExit, "Production server cleanup", 5_000);
     }
+    receipt.cleanup = "passed";
   })();
   const interrupted = () => { void stop().finally(() => { process.exitCode = 130; }); };
   process.once("SIGINT", interrupted);
@@ -252,8 +277,12 @@ export async function runBrowserCheck() {
       if (server.exitCode !== null) throw new Error(`Production server exited: ${serverLog}`);
       try { return (await fetch(origin, { signal: AbortSignal.timeout(1_000) })).ok; } catch { return false; }
     }, "Production server was not ready");
-    browser = await chromium.launch({ executablePath, headless: true, args: ["--mute-audio"] });
+    browser = await chromium.launch({ executablePath, headless: true, args: ["--mute-audio"], env: runtimeEnvironment(process.env) });
     receipt.browser = browser.version();
+    const processSession = await browser.newBrowserCDPSession();
+    const { processInfo } = await processSession.send("SystemInfo.getProcessInfo");
+    receipt.processes.browser = processInfo.find((info) => info.type === "browser")?.id;
+    await processSession.detach();
     for (const scenario of scenarios) {
       const viewport = scenario.device === "desktop" ? { width: 1280, height: 900 }
         : scenario.device === "touch-portrait" ? { width: 390, height: 844 } : { width: 844, height: 390 };
@@ -262,9 +291,13 @@ export async function runBrowserCheck() {
       const forbiddenRequests = [];
       const failedAssets = [];
       const assets = new Set();
+      const pendingRequests = new Map();
       const page = await context.newPage();
       page.setDefaultTimeout(10_000);
       page.on("pageerror", (error) => pageErrors.push(error.message));
+      page.on("request", (request) => pendingRequests.set(request, new URL(request.url()).pathname));
+      page.on("requestfinished", (request) => pendingRequests.delete(request));
+      page.on("requestfailed", (request) => pendingRequests.delete(request));
       page.on("response", (response) => {
         const url = new URL(response.url());
         if (url.origin === origin && /\.(?:css|woff2)(?:$|\?)/u.test(url.pathname)) {
@@ -291,9 +324,10 @@ export async function runBrowserCheck() {
       const name = `${scenario.path === "/" ? "home" : scenario.path.slice(1)}-${scenario.theme}-${scenario.device}`;
       let before;
       try {
-        assert.equal((await page.goto(`${origin}${scenario.path}`, { waitUntil: "networkidle" })).status(), 200);
+        assert.equal((await page.goto(`${origin}${scenario.path}`, { waitUntil: "domcontentloaded" })).status(), 200);
         const expectedTheme = scenario.path === "/noise" ? "dark" : scenario.theme;
         await page.waitForFunction((theme) => document.documentElement.dataset.theme === theme, expectedTheme);
+        if (scenario.path !== "/noise") await page.locator('.hraness-design-theme-toggle[data-ready="true"]').waitFor();
         await checkStudioDialog(page, scenario);
         before = await snapshot(page);
         assertSnapshot(before, scenario);
@@ -309,22 +343,24 @@ export async function runBrowserCheck() {
         console.log(`PASS ${name}`);
       } catch (error) {
         await page.screenshot({ path: join(output, `${name}-failure.png`), fullPage: true }).catch(() => undefined);
-        receipt.scenarios.push({ ...scenario, snapshot: before, status: "failed", error: error.message });
+        receipt.scenarios.push({ ...scenario, snapshot: before, status: "failed", error: error.message, pendingRequests: [...pendingRequests.values()] });
         throw error;
       } finally {
         // Close native contexts before closing the isolated browser context, even on failure.
-        await page.evaluate(() => Promise.all(window.__sleepylandAudio.map((audio) => audio.state === "closed" ? undefined : audio.close()))).catch(() => undefined);
-        await context.close();
+        try {
+          if (!page.isClosed()) await bounded(page.evaluate(() => Promise.all((window.__sleepylandAudio ?? []).map((audio) => audio.state === "closed" ? undefined : audio.close()))), "Web Audio cleanup", 3_000);
+        } finally { await bounded(context.close(), "Browser context cleanup", 5_000); }
       }
     }
     receipt.status = "passed";
   } finally {
-    await stop();
-    if (receipt.status === "running") receipt.status = "failed";
-    await writeFile(join(output, "receipt.json"), `${JSON.stringify(receipt, null, 2)}\n`);
-    console.log(`Browser evidence: ${output}`);
-    process.removeListener("SIGINT", interrupted);
-    process.removeListener("SIGTERM", interrupted);
+    try { await stop(); } finally {
+      if (receipt.status === "running" || receipt.cleanup !== "passed") receipt.status = "failed";
+      await writeFile(join(output, "receipt.json"), `${JSON.stringify(receipt, null, 2)}\n`);
+      console.log(`Browser evidence: ${output}`);
+      process.removeListener("SIGINT", interrupted);
+      process.removeListener("SIGTERM", interrupted);
+    }
   }
 }
 
