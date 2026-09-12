@@ -10,7 +10,7 @@ import { chromium } from "playwright-core";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const preferenceKey = "hraness-design-theme-v1";
-const requiredLayers = ["components.hraness-ui", "hraness-design-kit", "hraness-site-footer"];
+const requiredLayers = ["components.hraness-ui", "components.hraness-design-kit", "components.hraness-site-footer"];
 const fontWeights = ["400", "500", "600", "700"];
 
 export const scenarios = [
@@ -36,6 +36,16 @@ export function assertSnapshot(snapshot, scenario) {
   assert.ok(snapshot.sans.includes("Nebula Sans"), "product sans role");
   assert.ok(snapshot.mono.includes("ui-monospace"), "product monospace role");
   for (const weight of fontWeights) assert.ok(snapshot.loadedWeights.includes(weight), `loaded Nebula Sans ${weight}`);
+  if (scenario.path !== "/noise") {
+    assert.equal(snapshot.footerPosition, "static", "footer remains in document flow");
+    assert.equal(snapshot.footerBackground, snapshot.background, "footer inherits Paper surface");
+    assert.equal(snapshot.footerColor, snapshot.foreground, "footer inherits Paper ink");
+    assert.equal(snapshot.socialTargets.length, 5, "all five footer social links remain visible");
+    for (const target of snapshot.socialTargets) {
+      const minimum = scenario.device === "desktop" ? 40 : 44;
+      assert.ok(target.width >= minimum && target.height >= minimum, "footer pointer target");
+    }
+  }
   if (scenario.path === "/noise") {
     assert.ok(snapshot.verticalOverflow <= 1, "fullscreen studio has no document overflow");
     assert.equal(snapshot.challengeFrames, 0, "studio excludes the mailing-list challenge");
@@ -93,12 +103,31 @@ async function snapshot(page) {
       sans: getComputedStyle(html).fontFamily,
       mono: getComputedStyle(html).getPropertyValue("--font-mono"),
       loadedWeights: [...document.fonts].filter((face) => face.family.replaceAll('"', "") === "Nebula Sans" && face.status === "loaded").map((face) => face.weight),
+      footerPosition: document.querySelector(".hraness-site-footer") ? getComputedStyle(document.querySelector(".hraness-site-footer")).position : null,
+      footerColor: document.querySelector(".hraness-site-footer") ? getComputedStyle(document.querySelector(".hraness-site-footer")).color : null,
+      footerBackground: document.querySelector(".hraness-site-footer__inner") ? getComputedStyle(document.querySelector(".hraness-site-footer__inner")).backgroundColor : null,
+      socialTargets: [...document.querySelectorAll(".hraness-site-footer__social-link")].map((link) => ({ width: link.getBoundingClientRect().width, height: link.getBoundingClientRect().height })),
       serif: document.querySelector(".plain-publication") ? getComputedStyle(document.querySelector(".plain-publication")).fontFamily : null,
       studioBackground: studio ? getComputedStyle(studio).backgroundColor : null,
       transportHeight: transport?.height,
       transportWidth: transport?.width,
     };
   }, { requiredLayers, fontWeights });
+}
+
+async function renderedFonts(context, page, path) {
+  const session = await context.newCDPSession(page);
+  try {
+    await session.send("DOM.enable");
+    await session.send("CSS.enable");
+    const { root: document } = await session.send("DOM.getDocument");
+    const selector = path === "/research" ? ".plain-nav" : path === "/design" ? ".sleepyland-design h1" : ".wordmark";
+    const { nodeId } = await session.send("DOM.querySelector", { nodeId: document.nodeId, selector });
+    assert.ok(nodeId, "rendered font probe exists");
+    const { fonts } = await session.send("CSS.getPlatformFontsForNode", { nodeId });
+    assert.ok(fonts.some((font) => font.isCustomFont && font.familyName === "Nebula Sans" && font.glyphCount > 0), "Nebula Sans renders real glyphs, not only a computed family name");
+    return fonts;
+  } finally { await session.detach(); }
 }
 
 async function checkAppearance(page, initial) {
@@ -244,12 +273,14 @@ export async function runBrowserCheck() {
         };
       }, { theme: scenario.theme, key: preferenceKey });
       const name = `${scenario.path === "/" ? "home" : scenario.path.slice(1)}-${scenario.theme}-${scenario.device}`;
+      let before;
       try {
         assert.equal((await page.goto(`${origin}${scenario.path}`, { waitUntil: "networkidle" })).status(), 200);
         const expectedTheme = scenario.path === "/noise" ? "dark" : scenario.theme;
         await page.waitForFunction((theme) => document.documentElement.dataset.theme === theme, expectedTheme);
-        const before = await snapshot(page);
+        before = await snapshot(page);
         assertSnapshot(before, scenario);
+        const fonts = await renderedFonts(context, page, scenario.path);
         await checkInteractions(page, scenario);
         assertSnapshot(await snapshot(page), scenario);
         await page.screenshot({ path: join(output, `${name}.png`), fullPage: true });
@@ -257,11 +288,11 @@ export async function runBrowserCheck() {
         assert.deepEqual(pageErrors, [], "no browser exceptions");
         assert.deepEqual(failedAssets, [], "local CSS and fonts load successfully");
         assert.deepEqual(forbiddenRequests, [], "no remote product or analytics requests");
-        receipt.scenarios.push({ ...scenario, viewport, snapshot: before, assets: [...assets].sort(), status: "passed" });
+        receipt.scenarios.push({ ...scenario, viewport, snapshot: before, renderedFonts: fonts, assets: [...assets].sort(), status: "passed" });
         console.log(`PASS ${name}`);
       } catch (error) {
         await page.screenshot({ path: join(output, `${name}-failure.png`), fullPage: true }).catch(() => undefined);
-        receipt.scenarios.push({ ...scenario, status: "failed", error: error.message });
+        receipt.scenarios.push({ ...scenario, snapshot: before, status: "failed", error: error.message });
         throw error;
       } finally {
         // Close native contexts before closing the isolated browser context, even on failure.

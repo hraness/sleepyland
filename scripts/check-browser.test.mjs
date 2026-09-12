@@ -13,10 +13,14 @@ function validSnapshot(scenario) {
     footers: scenario.path === "/noise" ? 0 : 1,
     appearanceControls: scenario.path === "/noise" ? 0 : 1,
     audioContexts: 0, challengeFrames: 0,
-    layers: ["components.hraness-ui", "hraness-design-kit", "hraness-site-footer"],
+    layers: ["components.hraness-ui", "components.hraness-design-kit", "components.hraness-site-footer"],
     sans: '"Nebula Sans", sans-serif', mono: "ui-monospace, monospace",
     loadedWeights: ["400", "500", "600", "700"], serif: "Georgia, serif",
     studioBackground: "rgb(18, 16, 15)", transportHeight: 64, transportWidth: 64,
+    footerPosition: "static",
+    footerBackground: dark ? "rgb(18, 16, 15)" : "rgb(248, 247, 244)",
+    footerColor: dark ? "rgb(245, 242, 237)" : "rgb(28, 25, 23)",
+    socialTargets: Array.from({ length: 5 }, () => ({ width: 44, height: 44 })),
   };
 }
 
@@ -34,6 +38,7 @@ test("browser assertions reject missing compiled CSS, fallback fonts, and change
     { foreground: "rgb(255, 255, 255)" }, { themeColor: "#080604" },
     { horizontalOverflow: 2 }, { audioContexts: 1 }, { footers: 0 },
     { appearanceControls: 2 }, { transportHeight: 20 },
+    { footerPosition: "fixed" }, { socialTargets: [] },
   ]) expect(() => assertSnapshot({ ...validSnapshot(scenario), ...change }, scenario)).toThrow();
 });
 
