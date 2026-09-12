@@ -92,10 +92,12 @@ describe("Sleepyland homepage information layer", () => {
     for (const feature of applicationFeatures) {
       expect(markup).toContain(feature);
     }
+    const definitionLabels = [...markup.matchAll(/<dt\b[^>]*>([^<]+)<\/dt>/gu)]
+      .map((match) => match[1]);
     for (const mode of SOUND_MODES) {
       const pillar = HOME_PILLARS.find((candidate) => candidate.label === mode.label);
       expect(pillar?.summary.startsWith(`${mode.detail}: `)).toBeTrue();
-      expect(markup).toContain(`<dt>${mode.label}</dt>`);
+      expect(definitionLabels).toContain(mode.label);
     }
     const analytics = HOME_TRUST_ITEMS.find((item) => item.label === "Analytics");
     expect(analytics).toBeDefined();
