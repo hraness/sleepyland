@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { assertForcedThemeState, assertRenderedFonts, assertSnapshot, bounded, createBrowserOwner, forcedThemeScenarios, observeRestoredFocus, runtimeEnvironment, scenarios, screenshotPlan } from "./check-browser.mjs";
+import { assertForcedThemeState, assertRenderedFonts, assertSnapshot, bounded, createBrowserOwner, createRequestTracker, forcedThemeScenarios, observeRestoredFocus, runtimeEnvironment, scenarios, screenshotPlan } from "./check-browser.mjs";
 
 function validSnapshot(scenario) {
   const dark = scenario.path === "/noise" || scenario.theme === "dark";
@@ -150,6 +150,49 @@ test("browser and server children receive runtime settings without provider cred
   expect(runtimeEnvironment({ PATH: "runtime", TMPDIR: "temporary", NODE_OPTIONS: "--max-old-space-size=2048", UV_THREADPOOL_SIZE: "4", EXAMPLE_PROVIDER_TOKEN: "test-only", NODE_ENV: "development" })).toEqual({
     PATH: "runtime", TMPDIR: "temporary", NODE_OPTIONS: "--max-old-space-size=2048", UV_THREADPOOL_SIZE: "4", NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1",
   });
+});
+
+const requestFixture = (url = "http://127.0.0.1:3000/about?synthetic=omitted") => ({ url: () => url, method: () => "GET" });
+
+test("continuing a route does not prove a stalled underlying request finished", async () => {
+  const tracker = createRequestTracker();
+  const request = requestFixture();
+  tracker.start(request);
+  await Promise.resolve(); // The route continuation has resolved, but no requestfinished event exists.
+  expect(tracker.pendingCount).toBe(1);
+  expect(() => tracker.assertSettled()).toThrow("completed before teardown");
+  expect(tracker.receipt().pending).toEqual([{ method: "GET", origin: "http://127.0.0.1:3000", path: "/about" }]);
+  tracker.finish(request);
+  expect(() => tracker.assertSettled()).not.toThrow();
+});
+
+test("late request failures remain red rather than disappearing from the pending set", async () => {
+  const tracker = createRequestTracker();
+  const request = requestFixture();
+  tracker.start(request);
+  await Promise.resolve().then(() => tracker.fail(request, "net::ERR_ABORTED"));
+  expect(tracker.pendingCount).toBe(0);
+  expect(() => tracker.assertHealthy()).toThrow("failed or unknown");
+  expect(() => tracker.assertSettled()).toThrow();
+  expect(tracker.receipt().failures[0].reason).toBe("net::ERR_ABORTED");
+});
+
+test("only the specifically intercepted challenge abort is expected", () => {
+  const tracker = createRequestTracker();
+  const challenge = requestFixture("https://challenges.cloudflare.com/turnstile/v0/api.js");
+  tracker.start(challenge);
+  tracker.blockChallenge(challenge);
+  tracker.fail(challenge, "net::ERR_BLOCKED_BY_CLIENT");
+  expect(() => tracker.assertSettled()).not.toThrow();
+  expect(tracker.receipt().blockedChallenges).toBe(1);
+  expect(() => tracker.blockChallenge(requestFixture())).toThrow();
+  for (const failure of ["net::ERR_ABORTED", "unrecognized failure"]) {
+    const unexpected = createRequestTracker();
+    unexpected.start(challenge);
+    unexpected.blockChallenge(challenge);
+    unexpected.fail(challenge, failure);
+    expect(() => unexpected.assertSettled()).toThrow();
+  }
 });
 
 test("native waits resolve or fail at a finite deadline", async () => {

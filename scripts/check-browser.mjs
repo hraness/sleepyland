@@ -18,6 +18,48 @@ export function runtimeEnvironment(source) {
   return { ...Object.fromEntries(keys.filter((key) => source[key] !== undefined).map((key) => [key, source[key]])), NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1" };
 }
 
+export function createRequestTracker() {
+  const pending = new Map();
+  const expectedBlocks = new Set();
+  const failures = [];
+  let completed = 0;
+  let blocked = 0;
+  const identity = (request) => {
+    const url = new URL(request.url());
+    return { method: request.method(), origin: url.origin, path: url.pathname };
+  };
+  const tracker = {
+    start(request) {
+      if (pending.has(request)) failures.push({ ...identity(request), reason: "duplicate request start" });
+      pending.set(request, identity(request));
+    },
+    blockChallenge(request) {
+      assert.equal(new URL(request.url()).hostname, "challenges.cloudflare.com", "only the intentionally blocked challenge is expected");
+      expectedBlocks.add(request);
+    },
+    finish(request) {
+      if (!pending.has(request) || expectedBlocks.has(request)) failures.push({ ...identity(request), reason: "unexpected request completion" });
+      pending.delete(request);
+      expectedBlocks.delete(request);
+      completed += 1;
+    },
+    fail(request, reason) {
+      const owned = pending.has(request);
+      pending.delete(request);
+      if (owned && expectedBlocks.delete(request) && reason === "net::ERR_BLOCKED_BY_CLIENT") blocked += 1;
+      else failures.push({ ...identity(request), reason: /^net::ERR_[A-Z_]+$/u.test(reason ?? "") ? reason : "unrecognized request failure" });
+    },
+    assertHealthy() { assert.deepEqual(failures, [], "no failed or unknown browser requests"); },
+    assertSettled() {
+      tracker.assertHealthy();
+      assert.deepEqual([...pending.values()], [], "all browser requests completed before teardown");
+    },
+    get pendingCount() { return pending.size; },
+    receipt() { return { completed, blockedChallenges: blocked, pending: [...pending.values()], failures: [...failures] }; },
+  };
+  return tracker;
+}
+
 export async function bounded(promise, label, milliseconds = 10_000) {
   let timer;
   try {
@@ -463,14 +505,14 @@ export async function runBrowserCheck() {
       const forbiddenRequests = [];
       const failedAssets = [];
       const assets = new Set();
-      const pendingRequests = new Map();
+      const requests = createRequestTracker();
       const routeTasks = [];
       const page = await context.newPage();
       page.setDefaultTimeout(10_000);
       page.on("pageerror", (error) => pageErrors.push(error.message));
-      page.on("request", (request) => pendingRequests.set(request, new URL(request.url()).pathname));
-      page.on("requestfinished", (request) => pendingRequests.delete(request));
-      page.on("requestfailed", (request) => pendingRequests.delete(request));
+      page.on("request", (request) => requests.start(request));
+      page.on("requestfinished", (request) => requests.finish(request));
+      page.on("requestfailed", (request) => requests.fail(request, request.failure()?.errorText));
       page.on("response", (response) => {
         const url = new URL(response.url());
         if (url.origin === origin && /\.(?:css|woff2)(?:$|\?)/u.test(url.pathname)) {
@@ -486,6 +528,7 @@ export async function runBrowserCheck() {
         if (url.origin === origin && ["GET", "HEAD"].includes(request.method())) task = route.continue();
         else {
           if (url.hostname !== "challenges.cloudflare.com") forbiddenRequests.push(`${request.method()} ${url.origin}${url.pathname}`);
+          else requests.blockChallenge(request);
           task = route.abort("blockedbyclient");
         }
         routeTasks.push(task);
@@ -530,15 +573,17 @@ export async function runBrowserCheck() {
           await page.screenshot({ path: join(output, capture.file), fullPage: capture.fullPage });
         }
         if (!scenario.transition && scenario.device === "desktop" && scenario.theme === "light" && ["/", "/noise"].includes(scenario.path)) await checkAudio(page);
+        await retain(waitUntil(() => { requests.assertHealthy(); return requests.pendingCount === 0; }, "Browser requests did not finish before teardown", 10_000), "Browser request completion", 11_000);
+        requests.assertSettled();
         assert.deepEqual(pageErrors, [], "no browser exceptions");
         assert.deepEqual(failedAssets, [], "local CSS and fonts load successfully");
         assert.deepEqual(forbiddenRequests, [], "no remote product or analytics requests");
-        receipt.scenarios.push({ ...scenario, viewport, snapshot: before, renderedFonts: fonts, assets: [...assets].sort(), ...(transition ? { transitionEvidence: transition } : {}), status: "passed" });
+        receipt.scenarios.push({ ...scenario, viewport, snapshot: before, renderedFonts: fonts, assets: [...assets].sort(), ...(transition ? { transitionEvidence: transition } : {}), requests: requests.receipt(), status: "passed" });
         console.log(`PASS ${name}`);
       } catch (error) {
         caseError = error;
         await page.screenshot({ path: join(output, `${name}-failure.png`), fullPage: true }).catch(() => undefined);
-        receipt.scenarios.push({ ...scenario, snapshot: before, status: "failed", error: error.message, pendingRequests: [...pendingRequests.values()] });
+        receipt.scenarios.push({ ...scenario, snapshot: before, status: "failed", error: error.message, requests: requests.receipt() });
         throw error;
       } finally {
         // Close native contexts before closing the isolated browser context, even on failure.
@@ -554,7 +599,9 @@ export async function runBrowserCheck() {
           assert.deepEqual(pageErrors, [], "no late browser exceptions");
           assert.deepEqual(failedAssets, [], "no late local asset failures");
           assert.deepEqual(forbiddenRequests, [], "no late remote requests");
+          requests.assertSettled();
         } catch (error) { cleanupErrors.push(error); }
+        receipt.scenarios.at(-1).requests = requests.receipt();
         if (cleanupErrors.length > 0) {
           receipt.scenarios.at(-1).status = "failed";
           throw new AggregateError([...(caseError ? [caseError] : []), ...cleanupErrors], "Browser case or cleanup failed");
