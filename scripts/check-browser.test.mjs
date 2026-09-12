@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { assertRenderedFonts, assertSnapshot, bounded, runtimeEnvironment, scenarios } from "./check-browser.mjs";
+import { assertRenderedFonts, assertSnapshot, bounded, createBrowserOwner, runtimeEnvironment, scenarios } from "./check-browser.mjs";
 
 function validSnapshot(scenario) {
   const dark = scenario.path === "/noise" || scenario.theme === "dark";
@@ -65,12 +65,37 @@ test("rendered font proof accepts the shipped cuts and rejects fallbacks or unus
 });
 
 test("browser and server children receive runtime settings without provider credentials", () => {
-  expect(runtimeEnvironment({ PATH: "runtime", TMPDIR: "temporary", NODE_OPTIONS: "--max-old-space-size=2048", EXAMPLE_PROVIDER_TOKEN: "test-only", NODE_ENV: "development" })).toEqual({
-    PATH: "runtime", TMPDIR: "temporary", NODE_OPTIONS: "--max-old-space-size=2048", NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1",
+  expect(runtimeEnvironment({ PATH: "runtime", TMPDIR: "temporary", NODE_OPTIONS: "--max-old-space-size=2048", UV_THREADPOOL_SIZE: "4", EXAMPLE_PROVIDER_TOKEN: "test-only", NODE_ENV: "development" })).toEqual({
+    PATH: "runtime", TMPDIR: "temporary", NODE_OPTIONS: "--max-old-space-size=2048", UV_THREADPOOL_SIZE: "4", NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1",
   });
 });
 
 test("native waits resolve or fail at a finite deadline", async () => {
   expect(await bounded(Promise.resolve("ready"), "Ready", 10)).toBe("ready");
   await expect(bounded(new Promise(() => undefined), "Pending", 10)).rejects.toThrow("Pending exceeded 10ms");
+});
+
+test("interruption closes a browser that arrives after the signal before completing cleanup", async () => {
+  const events = [];
+  let finishLaunch;
+  const owner = createBrowserOwner(async () => { events.push("server closed"); });
+  const launching = owner.launch(() => new Promise((resolve) => { finishLaunch = resolve; }));
+  const result = launching.catch((error) => error.message);
+  const stopping = owner.stop();
+  expect(events).toEqual([]);
+  finishLaunch({ close: async () => { events.push("browser closed"); } });
+  await stopping;
+  expect(await result).toBe("Browser verification interrupted");
+  await owner.stop();
+  expect(events).toEqual(["browser closed", "server closed"]);
+});
+
+test("cleanup failure still closes the server and propagates to every stop caller", async () => {
+  let serverClosed = false;
+  const owner = createBrowserOwner(async () => { serverClosed = true; });
+  await owner.launch(async () => ({ close: async () => { throw new Error("cleanup failed"); } }));
+  await expect(owner.stop()).rejects.toThrow("cleanup failed");
+  expect(serverClosed).toBe(true);
+  await expect(owner.stop()).rejects.toThrow("cleanup failed");
+  await expect(owner.launch(async () => undefined)).rejects.toThrow("interrupted");
 });

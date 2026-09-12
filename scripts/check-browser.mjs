@@ -14,7 +14,7 @@ const requiredLayers = ["components.hraness-ui", "components.hraness-design-kit"
 const fontWeights = ["400", "500", "600", "700"];
 
 export function runtimeEnvironment(source) {
-  const keys = ["PATH", "HOME", "TMPDIR", "TMP", "TEMP", "LANG", "LC_ALL", "TZ", "NODE_OPTIONS"];
+  const keys = ["PATH", "HOME", "TMPDIR", "TMP", "TEMP", "LANG", "LC_ALL", "TZ", "NODE_OPTIONS", "CIRCLE_NODE_TOTAL", "GOMAXPROCS", "RAYON_NUM_THREADS", "UV_THREADPOOL_SIZE", "VIPS_CONCURRENCY"];
   return { ...Object.fromEntries(keys.filter((key) => source[key] !== undefined).map((key) => [key, source[key]])), NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1" };
 }
 
@@ -26,6 +26,38 @@ export async function bounded(promise, label, milliseconds = 10_000) {
       new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(`${label} exceeded ${milliseconds}ms`)), milliseconds); }),
     ]);
   } finally { clearTimeout(timer); }
+}
+
+export function createBrowserOwner(stopServer) {
+  let browser;
+  let acquisition;
+  let stopped = false;
+  let cleanup;
+  const owner = {
+    assertRunning() { if (stopped) throw new Error("Browser verification interrupted"); },
+    async launch(start) {
+      owner.assertRunning();
+      assert.equal(acquisition, undefined, "one owned browser launch");
+      acquisition = start();
+      browser = await acquisition;
+      if (stopped) {
+        await owner.stop();
+        throw new Error("Browser verification interrupted");
+      }
+      return browser;
+    },
+    stop() {
+      stopped = true;
+      return cleanup ??= (async () => {
+        try {
+          // A launch already in flight must settle before cleanup can be complete.
+          if (acquisition) { try { browser = await acquisition; } catch { /* Failed launch owns no browser. */ } }
+          if (browser) await bounded(browser.close(), "Browser cleanup");
+        } finally { await stopServer(); }
+      })();
+    },
+  };
+  return owner;
 }
 
 export const scenarios = [
@@ -257,33 +289,35 @@ export async function runBrowserCheck() {
   for (const stream of [server.stdout, server.stderr]) stream.on("data", (chunk) => { serverLog = (serverLog + chunk).slice(-8_000); });
   let serverError;
   server.on("error", (error) => { serverError = error; });
-  const serverExit = new Promise((resolve) => server.once("exit", resolve));
+  const serverExit = new Promise((resolve) => { server.once("exit", resolve); server.once("error", resolve); });
   receipt.processes = { server: server.pid };
   let browser;
-  let stopPromise;
-  const stop = () => stopPromise ??= (async () => {
-    try { if (browser) await bounded(browser.close(), "Browser cleanup"); } finally {
-      if (server.exitCode === null) server.kill("SIGTERM");
-      await bounded(serverExit, "Production server cleanup", 5_000);
-    }
+  const owner = createBrowserOwner(async () => {
+    if (server.pid && server.exitCode === null) server.kill("SIGTERM");
+    await bounded(serverExit, "Production server cleanup", 5_000);
+  });
+  const stop = async () => {
+    await owner.stop();
     receipt.cleanup = "passed";
-  })();
-  const interrupted = () => { void stop().finally(() => { process.exitCode = 130; }); };
+  };
+  const interrupted = () => { void stop().then(() => { process.exitCode = 130; }, (error) => { receipt.cleanupError = error.message; process.exitCode = 1; }); };
   process.once("SIGINT", interrupted);
   process.once("SIGTERM", interrupted);
   try {
     await waitUntil(async () => {
+      owner.assertRunning();
       if (serverError) throw serverError;
       if (server.exitCode !== null) throw new Error(`Production server exited: ${serverLog}`);
       try { return (await fetch(origin, { signal: AbortSignal.timeout(1_000) })).ok; } catch { return false; }
     }, "Production server was not ready");
-    browser = await chromium.launch({ executablePath, headless: true, args: ["--mute-audio"], env: runtimeEnvironment(process.env) });
+    browser = await owner.launch(() => chromium.launch({ executablePath, headless: true, timeout: 10_000, args: ["--mute-audio"], env: runtimeEnvironment(process.env) }));
     receipt.browser = browser.version();
     const processSession = await browser.newBrowserCDPSession();
     const { processInfo } = await processSession.send("SystemInfo.getProcessInfo");
     receipt.processes.browser = processInfo.find((info) => info.type === "browser")?.id;
     await processSession.detach();
     for (const scenario of scenarios) {
+      owner.assertRunning();
       const viewport = scenario.device === "desktop" ? { width: 1280, height: 900 }
         : scenario.device === "touch-portrait" ? { width: 390, height: 844 } : { width: 844, height: 390 };
       const context = await browser.newContext({ viewport, colorScheme: scenario.theme, hasTouch: scenario.device !== "desktop", isMobile: scenario.device !== "desktop", serviceWorkers: "block" });
