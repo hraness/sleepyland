@@ -106,8 +106,8 @@ describe("Sleepyland Research content", () => {
     expect(viewport).toEqual({
       colorScheme: "light dark",
       themeColor: [
-        { color: "#ffffff", media: "(prefers-color-scheme: light)" },
-        { color: "#151515", media: "(prefers-color-scheme: dark)" },
+        { color: "#f8f7f4", media: "(prefers-color-scheme: light)" },
+        { color: "#12100f", media: "(prefers-color-scheme: dark)" },
       ],
       viewportFit: "cover",
     });

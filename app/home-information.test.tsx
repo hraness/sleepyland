@@ -122,23 +122,15 @@ describe("Sleepyland homepage information layer", () => {
     expect(markup).toContain("Puerto Rico");
   });
 
-  test("binds the amber accent at accessible contrast in both appearances", () => {
-    const light = stylesheet.match(
-      /\.sleepyland-home-information\s*\{[^}]*--hraness-site-accent:\s*(?<accent>#[0-9a-f]{6});[^}]*--hraness-site-accent-ink:\s*(?<ink>#[0-9a-f]{6});/su,
-    )?.groups;
-    const dark = stylesheet.match(
-      /:root\[data-theme="dark"\] \.sleepyland-home-information\s*\{[^}]*--hraness-site-accent:\s*(?<accent>#[0-9a-f]{6});[^}]*--hraness-site-accent-ink:\s*(?<ink>#[0-9a-f]{6});/su,
-    )?.groups;
-
-    expect(light?.accent).toBeDefined();
-    expect(dark?.accent).toBeDefined();
-    expect(contrast(light?.accent ?? "", light?.ink ?? "")).toBeGreaterThanOrEqual(4.5);
-    expect(contrast(light?.accent ?? "", "#fbf6f2")).toBeGreaterThanOrEqual(4.5);
-    expect(contrast(dark?.accent ?? "", dark?.ink ?? "")).toBeGreaterThanOrEqual(4.5);
-    expect(contrast(dark?.accent ?? "", "#000000")).toBeGreaterThanOrEqual(4.5);
-    expect(stylesheet).toMatch(
-      /@media \(prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme\]\) \.sleepyland-home-information/u,
-    );
+  test("inherits the shared Paper accent at accessible contrast in both appearances", async () => {
+    const paper = await Bun.file(new URL("../styles/vendor/hraness-paper/paper-theme.css", import.meta.url)).text();
+    const primary = paper.match(/--primary:\s*light-dark\((#[0-9a-f]{6}), (#[0-9a-f]{6})\)/u);
+    const ink = paper.match(/--primary-foreground:\s*light-dark\((#[0-9a-f]{6}), (#[0-9a-f]{6})\)/u);
+    expect(primary).not.toBeNull();
+    expect(ink).not.toBeNull();
+    expect(contrast(primary?.[1] ?? "", ink?.[1] ?? "")).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(primary?.[2] ?? "", ink?.[2] ?? "")).toBeGreaterThanOrEqual(4.5);
+    expect(stylesheet).not.toContain("--hraness-site-accent:");
   });
 
   test("keeps the instrument chrome on the shared type and label treatment", () => {
