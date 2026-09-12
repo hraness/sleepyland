@@ -67,6 +67,13 @@ export const scenarios = [
   ...["light", "dark"].map((theme) => ({ device: "touch-landscape", path: "/noise", theme })),
 ];
 
+export function screenshotPlan(path, name) {
+  return [
+    ...(path === "/" ? [{ file: `${name}-studio.png`, fullPage: false }] : []),
+    { file: `${name}.png`, fullPage: path !== "/noise" },
+  ];
+}
+
 export function assertSnapshot(snapshot, scenario) {
   const dark = scenario.path === "/noise" || scenario.theme === "dark";
   assert.equal(snapshot.paper, "paper", "Paper opt-in");
@@ -386,7 +393,11 @@ export async function runBrowserCheck() {
         await checkInteractions(page, scenario);
         assertSnapshot(await snapshot(page), scenario);
         await loadScreenshotImages(page);
-        await page.screenshot({ path: join(output, `${name}.png`), fullPage: true });
+        // Full-page viewport overrides clear responsive canvas buffers in Chromium.
+        for (const capture of screenshotPlan(scenario.path, name)) {
+          if (!capture.fullPage) await page.evaluate(() => window.scrollTo(0, 0));
+          await page.screenshot({ path: join(output, capture.file), fullPage: capture.fullPage });
+        }
         if (scenario.device === "desktop" && scenario.theme === "light" && ["/", "/noise"].includes(scenario.path)) await checkAudio(page);
         assert.deepEqual(pageErrors, [], "no browser exceptions");
         assert.deepEqual(failedAssets, [], "local CSS and fonts load successfully");

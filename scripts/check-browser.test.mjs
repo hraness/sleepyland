@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-import { assertRenderedFonts, assertSnapshot, bounded, createBrowserOwner, runtimeEnvironment, scenarios } from "./check-browser.mjs";
+import { assertRenderedFonts, assertSnapshot, bounded, createBrowserOwner, runtimeEnvironment, scenarios, screenshotPlan } from "./check-browser.mjs";
 
 function validSnapshot(scenario) {
   const dark = scenario.path === "/noise" || scenario.theme === "dark";
@@ -28,6 +28,12 @@ test("browser matrix covers four routes, both appearances, touch, and short stud
   expect(scenarios).toHaveLength(18);
   expect(new Set(scenarios.map((scenario) => JSON.stringify(scenario))).size).toBe(18);
   for (const scenario of scenarios) expect(() => assertSnapshot(validSnapshot(scenario), scenario)).not.toThrow();
+});
+
+test("fixed-viewport canvases get a viewport capture before full-document screenshots", () => {
+  expect(screenshotPlan("/noise", "studio")).toEqual([{ file: "studio.png", fullPage: false }]);
+  expect(screenshotPlan("/", "home")).toEqual([{ file: "home-studio.png", fullPage: false }, { file: "home.png", fullPage: true }]);
+  expect(screenshotPlan("/research", "research")).toEqual([{ file: "research.png", fullPage: true }]);
 });
 
 test("browser assertions reject missing compiled CSS, fallback fonts, and changed Paper colors", () => {
