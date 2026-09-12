@@ -59,6 +59,8 @@ describe("Sleepyland shared appearance contract", () => {
     expect(providers).toContain('const isStudio = pathname === "/noise"');
     expect(providers).toContain('forcedTheme={isStudio ? "dark" : undefined}');
     expect(providers).toContain("<ThemeColorSync");
+    expect(providers).toContain('lightColor={isStudio ? "#12100f" : "#f8f7f4"}');
+    expect(providers).toContain('<DesignPortalThemeProvider theme="dark">');
     expect(noisePage).toContain('colorScheme: "dark"');
     expect(noisePage).toContain('themeColor: "#12100f"');
     expect(noisePage).toContain("<h1>{NOISE_HEADING}</h1>");
@@ -116,6 +118,7 @@ describe("Sleepyland shared appearance contract", () => {
     expect(localUi).toContain('className="sleepyland-design__header"');
     expect(localUi).toContain('className="sleepyland-design__appearance"');
     expect(localUi).toContain("<ThemeMenuButton");
+    expect(localUi).toContain('className="sleepyland-modal-overlay" data-hraness-theme="paper" data-theme={theme}');
     expect(localUi).not.toContain("<ThemeToggle");
     expect(stylesheet).toContain('@import "../styles/foundation.css"');
     expect(stylesheet).not.toMatch(canonicalFoundationDeclaration);

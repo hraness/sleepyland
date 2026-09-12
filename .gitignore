@@ -2,6 +2,7 @@
 .env*
 !.env.example
 .next/
+.browser-artifacts/
 .turbo/
 .vercel/
 coverage/

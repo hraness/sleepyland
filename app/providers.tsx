@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  DesignPortalThemeProvider,
   DesignThemeProvider,
   ThemeColorSync,
 } from "@hraness/design-kit/react";
@@ -15,9 +16,13 @@ export function SleepylandThemeProvider({ children }: Readonly<{ children: React
     <DesignThemeProvider forcedTheme={isStudio ? "dark" : undefined}>
       <ThemeColorSync
         darkColor="#12100f"
-        lightColor="#f8f7f4"
+        lightColor={isStudio ? "#12100f" : "#f8f7f4"}
       />
-      {children}
+      {isStudio ? (
+        <DesignPortalThemeProvider theme="dark">
+          {children}
+        </DesignPortalThemeProvider>
+      ) : children}
     </DesignThemeProvider>
   );
 }

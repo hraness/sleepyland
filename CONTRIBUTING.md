@@ -25,6 +25,36 @@ bun run check
 
 Keep changes narrow, preserve existing behavior unless the issue requires changing it, and add deterministic evidence for regressions. Do not add another package manager or lockfile.
 
+### Browser regression check
+
+After `bun run check` builds the production application, set
+`SLEEPYLAND_BROWSER_EXECUTABLE` to the absolute path of an installed Chromium or
+Google Chrome executable, then run:
+
+```sh
+bun run check:browser
+```
+
+The check starts and stops its own loopback production server and isolated,
+headless browser. It does not download browsers or reuse a signed-in profile.
+On machines with a host or repository resource scheduler, run this command in
+its exclusive browser lane.
+
+The 18 cases cover `/`, `/noise`, `/research`, and `/design` in light and dark
+appearance on desktop and touch portrait, plus the studio in short touch
+landscape. Assertions cover compiled package layers, loaded Nebula Sans cuts,
+Paper colors, serif and monospace roles, overflow, footer boundaries, appearance
+menus, themed dialogs, disclosures, research filters, and mixer controls. Two short playback
+checks use native Web Audio with browser output muted, then verify suspension
+and disposal on navigation. The check never grants microphone access, submits
+forms, or sends external requests. Mailing-list challenges are blocked, so this
+is not provider or production-delivery verification.
+
+Screenshots and a JSON receipt are retained in ignored `.browser-artifacts/`
+directories. The receipt records the Git identity, browser version and executable
+digest, cases, and local asset paths. Review the screenshots as well as the
+assertions. Rebuild after application or dependency changes before rerunning.
+
 ## Research contributions
 
 Research corrections, stronger sources, and new article proposals are especially welcome. A publishable contribution should:
