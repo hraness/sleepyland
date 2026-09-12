@@ -177,7 +177,7 @@ async function renderedFonts(context, page, path) {
     await session.send("DOM.enable");
     await session.send("CSS.enable");
     const { root: document } = await session.send("DOM.getDocument");
-    const selector = path === "/research" ? ".plain-nav" : path === "/design" ? ".sleepyland-design h1" : ".wordmark";
+    const selector = path === "/research" ? ".plain-nav a" : path === "/design" ? ".sleepyland-design h1" : ".wordmark";
     const { nodeId } = await session.send("DOM.querySelector", { nodeId: document.nodeId, selector });
     assert.ok(nodeId, "rendered font probe exists");
     const { fonts } = await session.send("CSS.getPlatformFontsForNode", { nodeId });
