@@ -5,7 +5,7 @@ import { assertForcedThemeState, assertRenderedFonts, assertSnapshot, bounded, c
 function validSnapshot(scenario) {
   const dark = scenario.path === "/noise" || scenario.theme === "dark";
   return {
-    paper: "paper", theme: dark ? "dark" : "light",
+    paper: "paper", theme: dark ? "dark" : "light", colorScheme: dark ? "dark" : "light", retiredHosts: 0,
     background: dark ? "rgb(18, 16, 15)" : "rgb(248, 247, 244)",
     foreground: dark ? "rgb(245, 242, 237)" : "rgb(28, 25, 23)",
     themeColor: dark ? "#12100f" : "#f8f7f4",
@@ -30,6 +30,14 @@ test("browser matrix covers four routes, both appearances, touch, and short stud
   for (const scenario of scenarios) expect(() => assertSnapshot(validSnapshot(scenario), scenario)).not.toThrow();
 });
 
+test("native appearance evidence rejects mismatched CSS and retired hosts on every route", () => {
+  for (const scenario of scenarios) {
+    const state = validSnapshot(scenario);
+    expect(() => assertSnapshot({ ...state, colorScheme: "light dark" }, scenario)).toThrow();
+    expect(() => assertSnapshot({ ...state, retiredHosts: 1 }, scenario)).toThrow();
+  }
+});
+
 test("forced-theme navigation adds both OS schemes and all saved choices at 320px and desktop", () => {
   expect(forcedThemeScenarios).toHaveLength(12);
   expect(new Set(forcedThemeScenarios.map((scenario) => JSON.stringify(scenario))).size).toBe(12);
@@ -41,7 +49,7 @@ test("forced-theme navigation adds both OS schemes and all saved choices at 320p
 function transitionState(scenario, forced) {
   const theme = forced ? "dark" : scenario.saved === "system" ? scenario.theme : scenario.saved;
   return {
-    theme, jelly: theme, saved: scenario.saved, os: scenario.theme, timeOrigin: 123,
+    theme, colorScheme: theme, retiredHosts: 0, saved: scenario.saved, os: scenario.theme, timeOrigin: 123,
     systemObserved: false, horizontalOverflow: 0, audioContexts: 0,
     background: theme === "dark" ? "rgb(18, 16, 15)" : "rgb(248, 247, 244)",
     themeColor: theme === "dark" ? "#12100f" : "#f8f7f4",
@@ -53,7 +61,7 @@ test("forced, ordinary, and reforced theme evidence rejects fallback, document r
     const state = transitionState(scenario, forced);
     expect(() => assertForcedThemeState(state, scenario, forced, 123)).not.toThrow();
     for (const change of [
-      { theme: "system" }, { jelly: "auto" }, { saved: "unexpected" },
+      { theme: "system" }, { colorScheme: "light dark" }, { retiredHosts: 1 }, { saved: "unexpected" },
       { os: scenario.theme === "light" ? "dark" : "light" }, { timeOrigin: 124 },
       { systemObserved: true }, { systemObserved: undefined },
       { background: "rgb(0, 0, 0)" }, { themeColor: "#080604" },

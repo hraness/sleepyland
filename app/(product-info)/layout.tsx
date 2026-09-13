@@ -21,9 +21,10 @@ export default function ProductInfoLayout({
   return (
     <div className="plain-site sleepyland-product-info">
       <SkipLink href="#product-info-content">Skip to content</SkipLink>
-      <header className="plain-header">
+      <header className="plain-header hraness-material-chrome">
         <div className="plain-header__inner">
           <Link className="plain-wordmark" href="/">
+            <span aria-hidden="true">💤</span>{" "}
             Sleepyland
           </Link>
           <div className="plain-header__actions">

@@ -1426,6 +1426,7 @@ export function NoiseStudio({
     <ViewportFrame as="main" className="noise-app">
       <header className="app-header">
         <h1 aria-label={`${brand.name} ${brand.tagline}`} className="wordmark">
+          <span aria-hidden="true">💤</span>{" "}
           {brand.name}
           <span className="wordmark__tagline"> {brand.tagline}</span>
         </h1>

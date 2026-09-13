@@ -8,8 +8,8 @@
   --control-height-transport: 64px;
   --layout-chrome-inset: 12px;
   --radius-round: 999px;
-  --jelly-radius-control: 14px;
-  --jelly-radius-compact: 10px;
+  --sleepyland-control-radius: 14px;
+  --sleepyland-compact-radius: 10px;
   --space-6: 1.5rem;
 }
 
@@ -86,14 +86,15 @@ a {
   font: inherit;
 }
 
+/* Local native control paint; no custom-element styling or external runtime. */
 .sleepyland-button,
 .sleepyland-icon-button {
   display: inline-flex;
   min-height: var(--interactive-target-min);
   align-items: center;
   justify-content: center;
-  background: var(--jelly-fill, transparent);
-  color: var(--jelly-label, currentColor);
+  background: var(--sleepyland-control-background, transparent);
+  color: var(--sleepyland-control-foreground, currentColor);
 }
 
 .sleepyland-button__control,
@@ -209,8 +210,8 @@ a {
   overflow: auto;
   border: 1px solid var(--control-border);
   border-radius: 14px;
-  background: var(--jelly-fill, var(--surface));
-  color: var(--jelly-label, var(--foreground));
+  background: var(--sleepyland-control-background, var(--surface));
+  color: var(--sleepyland-control-foreground, var(--foreground));
   box-shadow: 0 18px 70px rgba(0, 0, 0, 0.55);
 }
 
