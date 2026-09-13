@@ -48,11 +48,11 @@ describe("Sleepyland shared appearance contract", () => {
     const [manifest, lock, providers] = await Promise.all([
       source("../package.json"), source("../bun.lock"), source("./providers.tsx"),
     ]);
-    expect(JSON.parse(manifest).dependencies["@hraness/design-kit"]).toBe("github:hraness/design-kit#v0.6.9");
-    expect(lock).toContain('"@hraness/design-kit": "github:hraness/design-kit#v0.6.9"');
+    expect(JSON.parse(manifest).dependencies["@hraness/design-kit"]).toBe("github:hraness/design-kit#v0.8.0");
+    expect(lock).toContain('"@hraness/design-kit": "github:hraness/design-kit#v0.8.0"');
     const lockedPackage = lock.split("\n").find((line) => line.startsWith('    "@hraness/design-kit": ['));
-    expect(lockedPackage).toContain('"@hraness/design-kit@github:hraness/design-kit#4819b3b"');
-    expect(lockedPackage).toContain("sha512-ENM2708UwkGnogUZiAMh24TW0cT5jjsR+HJIe/HIXib3QQQIWgW8qtsmppoVK7ZeG7KfJGC4RLXWqwK+amr3Wg==");
+    expect(lockedPackage).toContain('"@hraness/design-kit@github:hraness/design-kit#7813c9c"');
+    expect(lockedPackage).toContain("sha512-erlyNqevsQJUqKbI1vSfJRkU6TDiIEHypuYopjkJotXjaatWd5ouDSBeB5vt4RVa5v8tpeIMb4tb4K3hX6D4CA==");
     expect(providers.match(/<DesignThemeProvider /gu)).toHaveLength(1);
     expect(providers).toContain('forcedTheme={isStudio ? "dark" : undefined}');
     expect(providers).not.toMatch(/<DesignThemeProvider[^>]*\bkey=/u);
@@ -67,7 +67,7 @@ describe("Sleepyland shared appearance contract", () => {
       source("./globals.css"),
     ]);
 
-    expect(layout).toContain('<html data-hraness-theme="paper" data-theme="light" lang="en" suppressHydrationWarning>');
+    expect(layout).toContain('<html data-hraness-theme="paper" data-hraness-material="lantern" data-theme="light" lang="en" suppressHydrationWarning>');
     expect(layout).toContain("<SleepylandThemeProvider>");
     expect(layout).toContain('{ color: "#12100f", media: "(prefers-color-scheme: dark)" }');
     expect(providers).toContain('const isStudio = pathname === "/noise"');
