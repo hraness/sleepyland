@@ -21,9 +21,10 @@ export function ResearchShell({
   return (
     <div className="plain-site plain-publication sleepyland-research">
       <SkipLink href="#research-content">Skip to research</SkipLink>
-      <header className="plain-header">
+      <header className="plain-header hraness-material-chrome">
         <div className="plain-header__inner">
           <Link className="plain-wordmark" href="/research">
+            <span aria-hidden="true">💤</span>{" "}
             Sleepyland Research
           </Link>
           <div className="plain-header__actions">

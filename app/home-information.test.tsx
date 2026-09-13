@@ -140,7 +140,7 @@ describe("Sleepyland homepage information layer", () => {
     expect(stylesheet).not.toMatch(/letter-spacing:\s*0\.[0-9]+em/u);
     expect(stylesheet).toMatch(/\.wordmark\s*\{[^}]*font-family:\s*var\(--font-text\);/su);
     expect(stylesheet).toMatch(/\.header-research-link\s*\{[^}]*font-family:\s*var\(--font-text\);/su);
-    expect(stylesheet).toMatch(/\.session-completion\s*\{[^}]*border-radius:\s*var\(--jelly-radius-compact\);/su);
+    expect(stylesheet).toMatch(/\.session-completion\s*\{[^}]*border-radius:\s*var\(--sleepyland-compact-radius\);/su);
     expect(stylesheet).toMatch(/\.noise-app \.header-appearance\s*\{[^}]*--hraness-appearance-control-foreground:\s*var\(--noise-muted\);/su);
     expect(stylesheet).not.toContain(".sleepyland-home-research > header");
     expect(stylesheet).not.toMatch(/(?:linear|radial|conic)-gradient/u);

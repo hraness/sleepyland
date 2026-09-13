@@ -21,6 +21,8 @@ test("the design route receives the complete shared browser stylesheet", () => {
 });
 
 test("global resets leave shared control paint to the design system", () => {
+  expect(stylesheet).not.toContain("--jelly-");
+  expect(foundationStylesheet).not.toContain("--jelly-");
   expect(stylesheet).not.toMatch(
     /(?:^|\n)button\s*\{[^}]*\b(?:color|font)\s*:/su,
   );
@@ -131,10 +133,10 @@ test("the outcome-first deck keeps primary actions compact and tuning secondary"
   expect(stylesheet).toMatch(/\.range-control__header\s*\{[^}]*--sleepyland-wrapping-row-gap:\s*2px 8px;[^}]*justify-content:\s*space-between;/su);
   expect(stylesheet).toMatch(/\.range-control__header > span\s*\{[^}]*flex:\s*1 1 4\.75rem;[^}]*overflow-wrap:\s*anywhere;/su);
   expect(stylesheet).toMatch(/\.range-control output\s*\{[^}]*max-width:\s*100%;[^}]*flex:\s*0 0 auto;[^}]*white-space:\s*nowrap;/su);
-  expect(stylesheet).toMatch(/\.noise-app \.energy-picker__surface\s*\{[^}]*display:\s*block;[^}]*width:\s*100%;[^}]*max-width:\s*none;[^}]*border-radius:\s*var\(--jelly-radius-control\);/su);
+  expect(stylesheet).toMatch(/\.noise-app \.energy-picker__surface\s*\{[^}]*display:\s*block;[^}]*width:\s*100%;[^}]*max-width:\s*none;[^}]*border-radius:\s*var\(--sleepyland-control-radius\);/su);
   expect(stylesheet).toMatch(/\.control-deck\s*\{[^}]*--control-height-transport:\s*72px;[^}]*--noise-action-height:\s*52px;[^}]*--noise-transport-glyph-size:\s*36px;/su);
   expect(stylesheet).toMatch(/\.transport-controls\s*\{[^}]*display:\s*grid;[^}]*width:\s*var\(--control-height-transport\);[^}]*height:\s*var\(--control-height-transport\);[^}]*place-items:\s*center;/su);
-  expect(stylesheet).toMatch(/\.noise-app \.transport-button,[\s\S]*?--jelly-fill:\s*var\(--noise-action\);[\s\S]*?--jelly-label:\s*var\(--primary-foreground\);[\s\S]*?width:\s*var\(--control-height-transport\);[\s\S]*?height:\s*var\(--control-height-transport\);/u);
+  expect(stylesheet).toMatch(/\.noise-app \.transport-button,[\s\S]*?--sleepyland-control-background:\s*var\(--noise-action\);[\s\S]*?--sleepyland-control-foreground:\s*var\(--primary-foreground\);[\s\S]*?width:\s*var\(--control-height-transport\);[\s\S]*?height:\s*var\(--control-height-transport\);/u);
   expect(stylesheet).toMatch(/\.transport-button__control\s*\{[^}]*height:\s*var\(--control-height-transport\);[^}]*min-height:\s*var\(--control-height-transport\);/su);
   expect(stylesheet).toMatch(/\.transport-button__control\s*\{[^}]*border-radius:\s*var\(--radius-round\);/su);
   expect(stylesheet).toMatch(/\.transport-button__control\[data-focus-visible\]\s*\{[^}]*outline-color:\s*var\(--primary-foreground\);/su);
@@ -145,14 +147,14 @@ test("the outcome-first deck keeps primary actions compact and tuning secondary"
     /\.transport-button\[data-pressed\][^{]*\{[^}]*background\s*:/su,
   );
   expect(stylesheet).toMatch(
-    /\.noise-app \.transport-button:is\(:hover, \[data-hovered\]\):not\(\[data-disabled\]\)\s*\{[^}]*--jelly-fill:\s*var\(--noise-action-hover\);/su,
+    /\.noise-app \.transport-button:is\(:hover, \[data-hovered\]\):not\(\[data-disabled\]\)\s*\{[^}]*--sleepyland-control-background:\s*var\(--noise-action-hover\);/su,
   );
   expect(stylesheet).toMatch(
-    /\.noise-app \.transport-button:has\(\.transport-button__control\[data-pressed\]\):not\(\[data-disabled\]\)\s*\{[^}]*--jelly-fill:\s*var\(--noise-action-pressed\);/su,
+    /\.noise-app \.transport-button:has\(\.transport-button__control\[data-pressed\]\):not\(\[data-disabled\]\)\s*\{[^}]*--sleepyland-control-background:\s*var\(--noise-action-pressed\);/su,
   );
   expect(stylesheet).not.toContain(".stop-button");
-  expect(stylesheet).toMatch(/\.energy-picker__options \.sleepyland-segmented-control__item\s*\{[^}]*height:\s*52px;[^}]*border-radius:\s*var\(--jelly-radius-compact\);/su);
-  expect(stylesheet).toMatch(/\.noise-app \.timer-button,\s*\.noise-app \.tune-button\s*\{[^}]*height:\s*var\(--noise-action-height\);[^}]*border-radius:\s*var\(--jelly-radius-compact\);/su);
+  expect(stylesheet).toMatch(/\.energy-picker__options \.sleepyland-segmented-control__item\s*\{[^}]*height:\s*52px;[^}]*border-radius:\s*var\(--sleepyland-compact-radius\);/su);
+  expect(stylesheet).toMatch(/\.noise-app \.timer-button,\s*\.noise-app \.tune-button\s*\{[^}]*height:\s*var\(--noise-action-height\);[^}]*border-radius:\s*var\(--sleepyland-compact-radius\);/su);
   expect(stylesheet).toMatch(/\.timer-button,\s*\.tune-button\s*\{[^}]*width:\s*max-content;[^}]*min-width:\s*0;/su);
   expect(stylesheet).toMatch(/\.noise-app \.timer-button__control,\s*\.noise-app \.tune-button__control\s*\{[^}]*min-height:\s*var\(--noise-action-height\);/su);
   expect(stylesheet).toMatch(/@media \(max-width:\s*650px\)[\s\S]*?\.control-deck\s*\{[^}]*gap:\s*8px;/u);

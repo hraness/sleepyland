@@ -52,8 +52,8 @@ is not provider or production-delivery verification.
 
 Twelve additional cases retain saved Light, Dark, and System preferences while
 navigating from the forced-dark studio to About and back, under both operating-system
-schemes at 320px and desktop widths. They check concrete root and Jelly appearance,
-Paper browser chrome and body portals, unchanged saved preferences, client-side
+schemes at 320px and desktop widths. They check concrete root and native CSS
+appearance, absence of retired renderer hosts, Paper browser chrome and body portals, unchanged saved preferences, client-side
 navigation, and keyboard focus restoration. These cases never start audio.
 
 Screenshots and a JSON receipt are retained in ignored `.browser-artifacts/`

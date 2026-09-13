@@ -1,0 +1,36 @@
+/* Reading chrome uses Lantern. The dark studio keeps its bounded three-row
+ * layout, audio states, and unobstructed spectrum instrument. */
+[data-hraness-material="lantern"] .plain-header.hraness-material-chrome {
+  background: var(--hraness-material-chrome-paint);
+  border-block-end: 1px solid var(--hraness-material-seam);
+}
+
+[data-hraness-material="lantern"] .plain-header.hraness-material-chrome .plain-header__inner {
+  border-block-end: 0;
+}
+
+[data-hraness-material="lantern"] .noise-app .app-header {
+  border-block-end-color: var(--hraness-material-seam);
+}
+
+[data-hraness-material="lantern"] :is(
+  .noise-app .transport-button,
+  .noise-app .timer-button,
+  .noise-app .tune-button
+) {
+  background-image: linear-gradient(to bottom, var(--hraness-material-edge), transparent 2px);
+}
+
+[data-hraness-material="lantern"] .noise-app [data-disabled] {
+  background-image: none;
+}
+
+@media (forced-colors: active) {
+  [data-hraness-material="lantern"] :is(
+    .noise-app .transport-button,
+    .noise-app .timer-button,
+    .noise-app .tune-button
+  ) {
+    background-image: none;
+  }
+}

@@ -122,7 +122,8 @@ export function assertForcedThemeState(state, scenario, forced, timeOrigin) {
   assert.ok(["light", "dark"].includes(scenario.theme), "concrete operating-system scheme");
   const theme = forced ? "dark" : scenario.saved === "system" ? scenario.theme : scenario.saved;
   assert.equal(state.theme, theme, "forced or saved concrete root appearance");
-  assert.equal(state.jelly, theme, "Jelly follows the concrete appearance");
+  assert.equal(state.colorScheme, theme, "native controls follow the concrete CSS appearance");
+  assert.equal(state.retiredHosts, 0, "no retired renderer hosts remain");
   assert.equal(state.saved, scenario.saved, "navigation preserves the saved preference");
   assert.equal(state.os, scenario.theme, "isolated operating-system scheme is unchanged");
   assert.equal(state.timeOrigin, timeOrigin, "route transitions retain the document");
@@ -163,6 +164,8 @@ export function assertSnapshot(snapshot, scenario) {
   const dark = scenario.path === "/noise" || scenario.theme === "dark";
   assert.equal(snapshot.paper, "paper", "Paper opt-in");
   assert.equal(snapshot.theme, dark ? "dark" : "light", "resolved appearance");
+  assert.equal(snapshot.colorScheme, snapshot.theme, "native control CSS appearance");
+  assert.equal(snapshot.retiredHosts, 0, "no retired renderer hosts remain");
   assert.equal(snapshot.background, dark ? "rgb(18, 16, 15)" : "rgb(248, 247, 244)", "Paper background");
   assert.equal(snapshot.foreground, dark ? "rgb(245, 242, 237)" : "rgb(28, 25, 23)", "Paper foreground");
   assert.equal(snapshot.themeColor, dark ? "#12100f" : "#f8f7f4", "hydrated browser chrome");
@@ -287,6 +290,8 @@ async function snapshot(page) {
     return {
       paper: html.dataset.hranessTheme,
       theme: html.dataset.theme,
+      colorScheme: getComputedStyle(html).colorScheme,
+      retiredHosts: document.querySelectorAll("jelly-card, jelly-button").length,
       background: body.backgroundColor,
       foreground: body.color,
       themeColor: document.querySelector('meta[name="theme-color"]:not([media])')?.content,
@@ -421,11 +426,12 @@ async function checkForcedThemeNavigation(page, scenario, retain) {
   const observe = async (forced, phase) => {
     const expected = forced ? "dark" : scenario.saved === "system" ? scenario.theme : scenario.saved;
     await page.waitForFunction((theme) => document.documentElement.dataset.theme === theme
-      && document.documentElement.dataset.jellyMode === theme
+      && getComputedStyle(document.documentElement).colorScheme === theme
       && document.querySelector('meta[name="theme-color"]:not([media])')?.content === (theme === "dark" ? "#12100f" : "#f8f7f4"), expected);
     const state = await retain(page.evaluate((key) => ({
       theme: document.documentElement.dataset.theme,
-      jelly: document.documentElement.dataset.jellyMode,
+      colorScheme: getComputedStyle(document.documentElement).colorScheme,
+      retiredHosts: document.querySelectorAll("jelly-card, jelly-button").length,
       saved: localStorage.getItem(key),
       os: matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light",
       timeOrigin: performance.timeOrigin,

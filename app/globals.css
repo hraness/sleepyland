@@ -4,6 +4,7 @@
 @import "../styles/plain-site.css";
 @import "../styles/plain-publication.css";
 @import "../styles/vendor/hraness-paper/paper-theme.css";
+@import "../styles/material.css";
 
 .editorial-image {
   margin: 1.5rem 0 0;
@@ -227,7 +228,7 @@ input {
   align-items: center;
   justify-content: center;
   padding: 0 8px;
-  border-radius: var(--jelly-radius-compact);
+  border-radius: var(--sleepyland-compact-radius);
   color: var(--noise-muted);
   font-family: var(--font-text);
   font-size: 0.92rem;
@@ -255,9 +256,8 @@ input {
 .noise-app .info-button,
 .noise-app .info-button:defined {
   --sleepyland-icon-button-size: var(--interactive-target-min);
-  --jelly-fill: transparent;
-  --jelly-label: var(--noise-muted);
-  --jelly-radius: var(--radius-round);
+  --sleepyland-control-background: transparent;
+  --sleepyland-control-foreground: var(--noise-muted);
 
   width: var(--interactive-target-min);
   max-width: none;
@@ -273,9 +273,8 @@ input {
 
 .noise-app .header-resources-button,
 .noise-app .header-resources-button:defined {
-  --jelly-fill: transparent;
-  --jelly-label: var(--noise-muted);
-  --jelly-radius: var(--jelly-radius-compact);
+  --sleepyland-control-background: transparent;
+  --sleepyland-control-foreground: var(--noise-muted);
 
   height: var(--interactive-target-min);
   min-height: 0;
@@ -295,8 +294,8 @@ input {
 }
 
 .noise-app .header-resources-button:is(:hover, [data-hovered]) {
-  --jelly-fill: var(--noise-control);
-  --jelly-label: var(--noise-text);
+  --sleepyland-control-background: var(--noise-control);
+  --sleepyland-control-foreground: var(--noise-text);
 }
 
 /* The shared appearance control follows the document theme; inside the fixed
@@ -316,7 +315,7 @@ input {
   inline-size: var(--interactive-target-min);
   min-inline-size: var(--interactive-target-min);
   min-block-size: var(--interactive-target-min);
-  border-radius: var(--jelly-radius-compact);
+  border-radius: var(--sleepyland-compact-radius);
 }
 
 .noise-app .info-button__control {
@@ -327,8 +326,8 @@ input {
 }
 
 .noise-app .info-button:is(:hover, [data-hovered]) {
-  --jelly-fill: var(--noise-control);
-  --jelly-label: var(--noise-text);
+  --sleepyland-control-background: var(--noise-control);
+  --sleepyland-control-foreground: var(--noise-text);
 }
 
 .info-button svg {
@@ -358,7 +357,7 @@ input {
   margin: 0;
   padding: 7px 10px;
   border: 1px solid var(--noise-line);
-  border-radius: var(--jelly-radius-compact);
+  border-radius: var(--sleepyland-compact-radius);
   background: color-mix(in oklch, var(--surface) 92%, transparent);
   color: var(--noise-muted);
   font-family: var(--font-text);
@@ -421,7 +420,7 @@ input {
   max-width: min(460px, calc(100vw - 28px));
   padding: 10px 12px;
   border: 1px solid var(--noise-line);
-  border-radius: var(--jelly-radius-compact);
+  border-radius: var(--sleepyland-compact-radius);
   background: var(--noise-control-hover);
   color: var(--noise-text);
   font-size: 12px;
@@ -504,7 +503,7 @@ input {
   padding: 0;
   border: 0;
   border-radius: var(--radius-round);
-  background: var(--jelly-fill, var(--noise-action));
+  background: var(--sleepyland-control-background, var(--noise-action));
   color: var(--primary-foreground);
 }
 
@@ -573,7 +572,7 @@ input {
   min-width: 0;
   gap: 3px;
   padding: 3px;
-  border-radius: var(--jelly-radius-control);
+  border-radius: var(--sleepyland-control-radius);
   background: var(--noise-control);
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -587,7 +586,7 @@ input {
   gap: 9px;
   padding: 0 12px;
   border: 0;
-  border-radius: var(--jelly-radius-compact);
+  border-radius: var(--sleepyland-compact-radius);
   background: transparent;
   color: var(--noise-muted);
   text-align: left;
@@ -661,15 +660,14 @@ input {
 
 .noise-app .noise-picker__surface,
 .noise-app .energy-picker__surface {
-  --jelly-fill: var(--noise-control);
-  --jelly-label: var(--noise-muted);
-  --jelly-radius: var(--jelly-radius-control);
+  --sleepyland-control-background: var(--noise-control);
+  --sleepyland-control-foreground: var(--noise-muted);
 
   display: block;
   width: 100%;
   max-width: none;
   overflow: visible;
-  border-radius: var(--jelly-radius-control);
+  border-radius: var(--sleepyland-control-radius);
   box-shadow: none;
 }
 
@@ -695,7 +693,7 @@ input {
   min-width: 0;
   height: 52px;
   padding: 0 14px;
-  border-radius: var(--jelly-radius-compact);
+  border-radius: var(--sleepyland-compact-radius);
   background: transparent;
   color: var(--noise-muted);
   font-size: 15px;
@@ -814,7 +812,7 @@ input {
   min-width: 0;
   height: var(--noise-action-height);
   border: 0;
-  border-radius: var(--jelly-radius-compact);
+  border-radius: var(--sleepyland-compact-radius);
   background: var(--noise-control);
 }
 
@@ -874,16 +872,15 @@ input {
   width: 100%;
   min-height: 0;
   padding: 0;
-  border-radius: var(--jelly-radius-control);
+  border-radius: var(--sleepyland-control-radius);
   box-shadow: none;
 }
 
 .noise-app .transport-button,
 .noise-app .transport-button:defined {
   --sleepyland-icon-button-size: var(--control-height-transport);
-  --jelly-fill: var(--noise-action);
-  --jelly-label: var(--primary-foreground);
-  --jelly-radius: var(--radius-round);
+  --sleepyland-control-background: var(--noise-action);
+  --sleepyland-control-foreground: var(--primary-foreground);
 
   width: var(--control-height-transport);
   max-width: none;
@@ -904,60 +901,54 @@ input {
 }
 
 .noise-app .transport-button:is(:hover, [data-hovered]):not([data-disabled]) {
-  --jelly-fill: var(--noise-action-hover);
-  --jelly-label: var(--primary-foreground);
+  --sleepyland-control-background: var(--noise-action-hover);
+  --sleepyland-control-foreground: var(--primary-foreground);
 }
 
 .noise-app .transport-button:has(.transport-button__control[data-pressed]):not([data-disabled]) {
-  --jelly-fill: var(--noise-action-pressed);
+  --sleepyland-control-background: var(--noise-action-pressed);
 }
 
 .noise-app .timer-button,
 .noise-app .tune-button {
-  --jelly-fill: var(--noise-control);
-  --jelly-label: var(--noise-muted);
-  --jelly-radius: var(--jelly-radius-compact);
+  --sleepyland-control-background: var(--noise-control);
+  --sleepyland-control-foreground: var(--noise-muted);
 
   display: block;
   height: var(--noise-action-height);
   min-height: 0;
   padding: 0;
   border: 0;
-  border-radius: var(--jelly-radius-compact);
-  background: var(--jelly-fill);
+  border-radius: var(--sleepyland-compact-radius);
+  background: var(--sleepyland-control-background);
   color: var(--noise-muted);
   box-shadow: none;
-}
-
-.noise-app .timer-button:defined,
-.noise-app .tune-button:defined {
-  background: var(--jelly-fill);
 }
 
 .noise-app .timer-button__control,
 .noise-app .tune-button__control {
   min-height: var(--noise-action-height);
-  border-radius: var(--jelly-radius-compact);
+  border-radius: var(--sleepyland-compact-radius);
 }
 
 .noise-app .timer-button:is(:hover, [data-hovered]),
 .noise-app .tune-button:is(:hover, [data-hovered]),
 .noise-app .timer-button:has(.timer-button__control[data-active="true"]),
 .noise-app .tune-button:has(.tune-button__control[data-active="true"]) {
-  --jelly-fill: var(--noise-control-hover);
-  --jelly-label: var(--noise-text);
+  --sleepyland-control-background: var(--noise-control-hover);
+  --sleepyland-control-foreground: var(--noise-text);
 }
 
 .noise-info-modal__surface {
-  --jelly-fill: var(--surface);
-  --jelly-label: var(--foreground);
+  --sleepyland-control-background: var(--surface);
+  --sleepyland-control-foreground: var(--foreground);
 
   border-color: var(--control-border);
 }
 
 .studio-resources-modal__surface {
-  --jelly-fill: var(--surface);
-  --jelly-label: var(--foreground);
+  --sleepyland-control-background: var(--surface);
+  --sleepyland-control-foreground: var(--foreground);
 
   border-color: var(--control-border);
 }
@@ -972,8 +963,8 @@ input {
 }
 
 .studio-resources-modal .sleepyland-modal__close {
-  --jelly-fill: transparent;
-  --jelly-label: var(--muted);
+  --sleepyland-control-background: transparent;
+  --sleepyland-control-foreground: var(--muted);
 }
 
 .studio-resources {
@@ -1028,7 +1019,7 @@ input {
   display: block;
   overflow: hidden;
   border: 1px solid var(--control-border);
-  border-radius: var(--jelly-radius-compact);
+  border-radius: var(--sleepyland-compact-radius);
   background: var(--background);
 }
 
@@ -1056,8 +1047,8 @@ input {
 }
 
 .session-plan-modal__surface {
-  --jelly-fill: var(--surface);
-  --jelly-label: var(--foreground);
+  --sleepyland-control-background: var(--surface);
+  --sleepyland-control-foreground: var(--foreground);
 
   border-color: var(--control-border);
 }
@@ -1072,8 +1063,8 @@ input {
 }
 
 .session-plan-modal .sleepyland-modal__close {
-  --jelly-fill: transparent;
-  --jelly-label: var(--muted);
+  --sleepyland-control-background: transparent;
+  --sleepyland-control-foreground: var(--muted);
 }
 
 .session-plan-options {
@@ -1090,7 +1081,7 @@ input {
   gap: 3px;
   padding: 9px 11px;
   border: 1px solid var(--control-border);
-  border-radius: var(--jelly-radius-compact);
+  border-radius: var(--sleepyland-compact-radius);
   background: var(--secondary);
   color: var(--muted);
   text-align: left;
@@ -1140,8 +1131,8 @@ input {
 }
 
 .noise-info-modal .sleepyland-modal__close {
-  --jelly-fill: transparent;
-  --jelly-label: var(--muted);
+  --sleepyland-control-background: transparent;
+  --sleepyland-control-foreground: var(--muted);
 }
 
 .noise-info {

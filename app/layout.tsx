@@ -56,7 +56,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html data-hraness-theme="paper" data-theme="light" lang="en" suppressHydrationWarning>
+    <html data-hraness-theme="paper" data-hraness-material="lantern" data-theme="light" lang="en" suppressHydrationWarning>
       <body>
         <PostHogAnalytics
           apiHost={process.env.NEXT_PUBLIC_POSTHOG_HOST}
