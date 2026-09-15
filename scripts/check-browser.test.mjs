@@ -20,7 +20,7 @@ function validSnapshot(scenario) {
     footerPosition: "static",
     footerBackground: dark ? "rgb(18, 16, 15)" : "rgb(248, 247, 244)",
     footerColor: dark ? "rgb(245, 242, 237)" : "rgb(28, 25, 23)",
-    socialTargets: Array.from({ length: 5 }, () => ({ width: 44, height: 44 })),
+    socialTargets: Array.from({ length: 4 }, () => ({ width: 44, height: 44 })),
   };
 }
 

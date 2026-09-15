@@ -150,7 +150,7 @@ export const PRODUCT_PAGES = [
             "If you email Sleepyland support, your sender address, message, attachments, and ordinary email transport metadata leave the site and are processed by the sender’s and maintainer’s email services. Do not send medical or other sensitive information.",
           ],
           [
-            "If you use the footer newsletter form, your email address, the Sleepyland audience identifier, the form source, and a short-lived Cloudflare Turnstile proof are sent to Hraness Accounts at account.hraness.com. Cloudflare verifies the anti-abuse proof. Hraness Accounts records the pending request and Resend sends a confirmation message from news.hraness.com. You are not subscribed until you confirm that message.",
+            "If you use the footer newsletter form, your email address, the Sleepyland audience identifier, and the form source are sent to Hraness Accounts at account.hraness.com. Hraness Accounts records the pending request and Resend sends a confirmation message from news.hraness.com. You are not subscribed until you confirm that message.",
           ],
         ],
       },
@@ -158,7 +158,7 @@ export const PRODUCT_PAGES = [
         heading: "Processor and transport boundary",
         paragraphs: [
           [
-            "Vercel is the hosting provider. PostHog is the analytics and error processor. Cloudflare verifies newsletter anti-abuse challenges. Hraness Accounts stores newsletter consent state, and Resend delivers confirmation and newsletter email. The production application sends allowed analytics events over HTTPS to the configured PostHog ingestion host. The application contains no advertising integration or product-data sale path.",
+            "Vercel is the hosting provider. PostHog is the analytics and error processor. Hraness Accounts stores newsletter consent state, and Resend delivers confirmation and newsletter email. The production application sends allowed analytics events over HTTPS to the configured PostHog ingestion host. The application contains no advertising integration or product-data sale path.",
           ],
           [
             "Cookieless analytics still requires a network request. The receiving providers can process normal transport metadata even though Sleepyland does not create a product account or a persistent PostHog person profile. A newsletter record is separate from Sleepyland product use and records consent for the Sleepyland audience only.",

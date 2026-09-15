@@ -182,7 +182,7 @@ export function assertSnapshot(snapshot, scenario) {
     assert.equal(snapshot.footerPosition, "static", "footer remains in document flow");
     assert.equal(snapshot.footerBackground, snapshot.background, "footer inherits Paper surface");
     assert.equal(snapshot.footerColor, snapshot.foreground, "footer inherits Paper ink");
-    assert.equal(snapshot.socialTargets.length, 5, "all five footer social links remain visible");
+    assert.equal(snapshot.socialTargets.length, 4, "all four footer social links remain visible");
     for (const target of snapshot.socialTargets) {
       const minimum = scenario.device === "desktop" ? 40 : 44;
       assert.ok(target.width >= minimum && target.height >= minimum, "footer pointer target");
