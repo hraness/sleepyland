@@ -96,7 +96,7 @@ describe("Sleepyland public product records", () => {
     expect(markup).toContain("Vercel");
     expect(markup).toContain("PostHog");
     expect(markup).toContain("Hraness Accounts");
-    expect(markup).toContain("Cloudflare Turnstile");
+    expect(markup).not.toContain("Cloudflare Turnstile");
     expect(markup).toContain("Resend sends a confirmation message from news.hraness.com");
     expect(markup).toContain("not subscribed until you confirm");
     expect(markup).toContain("product-specific unsubscribe link");
