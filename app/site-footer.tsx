@@ -13,5 +13,13 @@ export function SleepylandSiteFooter({
 
   if (pathname === "/noise") return null;
 
-  return <HranessSiteFooter mailingList={mailingList} />;
+  return <HranessSiteFooter
+    mailingList={mailingList}
+    support={{
+      id: "sleepyland",
+      name: "Sleepyland",
+      updates: true,
+      valueProposition: "Support evidence-led sleep research and the private browser sound machine.",
+    }}
+  />;
 }

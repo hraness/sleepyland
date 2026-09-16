@@ -45,6 +45,7 @@ describe("Sleepyland search metadata", () => {
 
     expect(footer).toContain('pathname === "/noise"');
     expect(footer).toContain("return null");
-    expect(footer).toContain("<HranessSiteFooter mailingList={mailingList} />");
+    expect(footer).toContain("<HranessSiteFooter");
+    expect(footer).toContain("mailingList={mailingList}");
   });
 });
