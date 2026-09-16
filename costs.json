@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "surfaces": {
+    "posthog:site-events": {
+      "kind": "telemetry",
+      "retention": "ttl:P365D",
+      "owner": "app/analytics.ts",
+      "maxBytesPerEvent": 1024,
+      "note": "checked event schema; cookieless canonical-production-only"
+    }
+  },
+  "exempt": []
+}
