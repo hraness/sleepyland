@@ -24,7 +24,8 @@
     "test": "bun test ./app ./lib ./scripts/check-browser.test.mjs ./next.config.test.ts",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
-    "check": "bun run check:theme && bun run test && bun run typecheck && bun run lint && bun run build"
+    "check:cost-surfaces": "bun ./scripts/check-cost-surfaces.mjs",
+    "check": "bun run check:cost-surfaces && bun run check:theme && bun run test && bun run typecheck && bun run lint && bun run build"
   },
   "dependencies": {
     "@hraness/design-kit": "github:hraness/design-kit#v0.8.0",
