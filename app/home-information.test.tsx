@@ -1,3 +1,4 @@
+import { hranessAttribution } from "@hraness/site-footer";
 import { describe, expect, test } from "bun:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -6,8 +7,8 @@ import { NOISE_DOCUMENT_PARAGRAPHS } from "./agent-access";
 import {
   HOME_INFORMATION_HEADING,
   HOME_INFORMATION_LEAD,
-  HOME_MAKER_LINKS,
   HOME_PILLARS,
+  HOME_PUBLISHER_URL,
   HOME_TRUST_ITEMS,
   HomeInformation,
 } from "./home-information";
@@ -64,7 +65,6 @@ describe("Sleepyland homepage information layer", () => {
       "trust",
       "section",
       "questions",
-      "maker",
     ]);
   });
 
@@ -74,7 +74,7 @@ describe("Sleepyland homepage information layer", () => {
     expect(first).toBe(HOME_INFORMATION_HEADING);
     expect(HOME_INFORMATION_HEADING.split(" ")).toHaveLength(8);
     expect(HOME_INFORMATION_HEADING).not.toEndWith(".");
-    expect(rest.length).toBeGreaterThanOrEqual(5);
+    expect(rest.length).toBeGreaterThanOrEqual(4);
     for (const heading of rest) {
       expect(heading).toEndWith(".");
       expect(heading).toBe(heading.charAt(0).toUpperCase() + heading.slice(1));
@@ -107,7 +107,7 @@ describe("Sleepyland homepage information layer", () => {
     expect(markup).not.toContain("offline");
   });
 
-  test("links research, the privacy page, and the maker", () => {
+  test("links research, the privacy page, and the publisher", () => {
     for (const resource of featuredResearchResources()) {
       expect(markup).toContain(`href="${resource.path}"`);
       expect(markup).toContain(resource.title);
@@ -115,13 +115,18 @@ describe("Sleepyland homepage information layer", () => {
     expect(markup).toContain('data-emphasis="secondary" href="/research"');
     expect(markup).toContain('href="/privacy"');
     expect(markup).toContain('href="/demo"');
-    expect(HOME_MAKER_LINKS.map((link) => link.href)).toEqual([
-      "https://hraness.com",
-      "https://x.com/hraness",
-      repositoryUrl,
-    ]);
-    expect(markup).toContain("Ben Guo");
-    expect(markup).toContain("Puerto Rico");
+    expect(HOME_PUBLISHER_URL).toBe("https://hraness.com");
+    expect(markup).toContain(`href="${HOME_PUBLISHER_URL}"`);
+    expect(markup).toContain(`href="${repositoryUrl}"`);
+  });
+
+  test("attributes the product to the organization, matching the shared footer", () => {
+    expect(hranessAttribution.title).toBe("Built by Hraness");
+    expect(markup).toContain(`${hranessAttribution.title}.`);
+    expect(markup).toContain(hranessAttribution.subtitle);
+    expect(markup).not.toContain('data-hraness-marketing="maker"');
+    expect(markup).not.toContain('id="home-maker-title"');
+    expect(markup).not.toMatch(/Ben Guo|Puerto Rico|Venmo|Built by [A-Z][a-z]+ [A-Z][a-z]+/u);
   });
 
   test("inherits the shared Paper accent at accessible contrast in both appearances", async () => {

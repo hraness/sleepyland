@@ -1,11 +1,11 @@
 import {
-  MarketingMaker,
   MarketingPage,
   MarketingPillars,
   MarketingQuestionList,
   MarketingSection,
   MarketingTrustBoundary,
 } from "@hraness/design-kit/react/server";
+import { hranessAttribution } from "@hraness/site-footer";
 import Link from "next/link";
 
 import { NOISE_DOCUMENT_PARAGRAPHS } from "./agent-access";
@@ -18,8 +18,10 @@ import { SOUND_MODES, type SoundModeId } from "./sound-modes";
 /**
  * Homepage information layer on the shared Hraness marketing grammar. Every
  * statement here already appears on the site: the studio explanation, the
- * about and privacy pages, the research disclosure, or the sound-mode
- * registry. Add a claim here only after it exists on one of those surfaces.
+ * about and privacy pages, the research disclosure, the sound-mode registry,
+ * or the shared site footer. Add a claim here only after it exists on one of
+ * those surfaces. Maker attribution belongs to the organization and is owned
+ * by `@hraness/site-footer`; this layer never carries a personal credit.
  */
 
 export const HOME_INFORMATION_HEADING = "A sound machine that runs in your browser";
@@ -71,16 +73,7 @@ export const HOME_TRUST_ITEMS = [
   },
 ] as const;
 
-export const HOME_MAKER_BIO =
-  "Ben Guo is a musician and builder. He was a founder and an engineering leader at companies including Venmo and Stripe, and he now builds from Puerto Rico.";
-export const HOME_MAKER_PUBLISHER =
-  "Sleepyland is published by Hraness and is open source on GitHub under the MIT License.";
-
-export const HOME_MAKER_LINKS = [
-  { href: "https://hraness.com", label: "hraness.com" },
-  { href: "https://x.com/hraness", label: "@hraness on X" },
-  { href: repositoryUrl, label: "Source on GitHub" },
-] as const;
+export const HOME_PUBLISHER_URL = "https://hraness.com";
 
 export function HomeInformation({
   research,
@@ -206,27 +199,22 @@ export function HomeInformation({
           {
             question: "Who made it?",
             answer: (
-              <p>
-                Ben Guo, publishing as <a href="https://hraness.com">Hraness</a>, which
-                lists sleepy.land among its public projects. Sleepyland is{" "}
-                <a href={repositoryUrl}>open source on GitHub</a> under the MIT License,
-                and <a href={researchContributionUrl}>research contributions are welcome</a>.
-              </p>
+              <>
+                <p>
+                  {hranessAttribution.title}. {hranessAttribution.subtitle}{" "}
+                  <a href={HOME_PUBLISHER_URL}>hraness.com</a> lists sleepy.land among its
+                  public projects.
+                </p>
+                <p>
+                  Sleepyland is <a href={repositoryUrl}>open source on GitHub</a> under the
+                  MIT License, and{" "}
+                  <a href={researchContributionUrl}>research contributions are welcome</a>.
+                </p>
+              </>
             ),
           },
         ]}
       />
-
-      <MarketingMaker
-        heading="Built by Ben Guo."
-        headingId="home-maker-title"
-        id="maker"
-        label="Maker"
-        links={HOME_MAKER_LINKS}
-      >
-        <p>{HOME_MAKER_BIO}</p>
-        <p>{HOME_MAKER_PUBLISHER}</p>
-      </MarketingMaker>
     </MarketingPage>
   );
 }
