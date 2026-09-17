@@ -12,6 +12,8 @@ import {
   type DesignTheme,
   GlobalErrorDocument as SharedGlobalErrorDocument,
   ThemeMenuButton,
+  useDesignPalette,
+  useDesignPortalClassName,
   useDesignPortalTheme,
 } from "@hraness/design-kit/react";
 import Link from "next/link";
@@ -227,8 +229,16 @@ export function Modal({
   title: ReactNode;
 }>) {
   const theme = useDesignPortalTheme() ?? "dark";
+  const palette = useDesignPalette();
+  const portalClassName = useDesignPortalClassName();
   return (
-    <ModalOverlay className="sleepyland-modal-overlay" data-hraness-theme="paper" data-theme={theme} isDismissable>
+    <ModalOverlay
+      className={classNames("sleepyland-modal-overlay", portalClassName)}
+      data-hraness-theme="paper"
+      data-palette={palette?.preference.palette}
+      data-theme={theme}
+      isDismissable
+    >
       <AriaModal
         className={classNames("sleepyland-modal__surface", surfaceClassName, "sleepyland-modal", className)}
         data-size={size}

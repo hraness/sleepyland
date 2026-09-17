@@ -53,9 +53,10 @@ describe("Sleepyland shared appearance contract", () => {
     const lockedPackage = lock.split("\n").find((line) => line.startsWith('    "@hraness/design-kit": ['));
     expect(lockedPackage).toContain('"@hraness/design-kit@github:hraness/design-kit#7813c9c"');
     expect(lockedPackage).toContain("sha512-erlyNqevsQJUqKbI1vSfJRkU6TDiIEHypuYopjkJotXjaatWd5ouDSBeB5vt4RVa5v8tpeIMb4tb4K3hX6D4CA==");
-    expect(providers.match(/<DesignThemeProvider /gu)).toHaveLength(1);
-    expect(providers).toContain('forcedTheme={isStudio ? "dark" : undefined}');
-    expect(providers).not.toMatch(/<DesignThemeProvider[^>]*\bkey=/u);
+    expect(providers.match(/<DesignPaletteProvider[\s>]/gu)).toHaveLength(1);
+    expect(providers).toContain('defaultPreference={{ palette: "paper", mode: "system" }}');
+    expect(providers).toContain('forcedPreference={isStudio ? { palette: "paper", mode: "dark" } : undefined}');
+    expect(providers).not.toMatch(/<DesignPaletteProvider[^>]*\bkey=/u);
   });
 
   test("keeps a fixed dark Paper studio inside the shared appearance runtime", async () => {
@@ -67,14 +68,18 @@ describe("Sleepyland shared appearance contract", () => {
       source("./globals.css"),
     ]);
 
-    expect(layout).toContain('<html data-hraness-theme="paper" data-hraness-material="lantern" data-theme="light" lang="en" suppressHydrationWarning>');
+    expect(layout).toContain('data-hraness-theme="paper"');
+    expect(layout).toContain('data-hraness-material="lantern"');
+    expect(layout).toContain('data-palette="paper"');
+    expect(layout).toContain('className={initialPalette.className}');
+    expect(layout).toContain('src="/theme-bootstrap.js"');
+    expect(layout).not.toContain('data-theme="light"');
     expect(layout).toContain("<SleepylandThemeProvider>");
     expect(layout).toContain('{ color: "#12100f", media: "(prefers-color-scheme: dark)" }');
     expect(providers).toContain('const isStudio = pathname === "/noise"');
-    expect(providers).toContain('forcedTheme={isStudio ? "dark" : undefined}');
+    expect(providers).toContain('forcedPreference={isStudio ? { palette: "paper", mode: "dark" } : undefined}');
     expect(providers).toContain("<ThemeColorSync");
     expect(providers).toContain('lightColor={isStudio ? "#12100f" : "#f8f7f4"}');
-    expect(providers).toContain('<DesignPortalThemeProvider theme="dark">');
     expect(noisePage).toContain('colorScheme: "dark"');
     expect(noisePage).toContain('themeColor: "#12100f"');
     expect(noisePage).toContain("<h1>{NOISE_HEADING}</h1>");
@@ -132,7 +137,9 @@ describe("Sleepyland shared appearance contract", () => {
     expect(localUi).toContain('className="sleepyland-design__header"');
     expect(localUi).toContain('className="sleepyland-design__appearance"');
     expect(localUi).toContain("<ThemeMenuButton");
-    expect(localUi).toContain('className="sleepyland-modal-overlay" data-hraness-theme="paper" data-theme={theme}');
+    expect(localUi).toContain('data-hraness-theme="paper"');
+    expect(localUi).toContain('data-palette={palette?.preference.palette}');
+    expect(localUi).toContain('data-theme={theme}');
     expect(localUi).not.toContain("<ThemeToggle");
     expect(stylesheet).toContain('@import "../styles/foundation.css"');
     expect(stylesheet).not.toMatch(canonicalFoundationDeclaration);

@@ -1,3 +1,4 @@
+import { getDesignPaletteTheme } from "@hraness/design-kit";
 import { PostHogAnalytics } from "@hraness/posthog/react";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
@@ -54,9 +55,29 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+/**
+ * Paper is the default palette; the initial class supplies its compiled
+ * values and the blocking bootstrap adds a concrete `data-theme` before
+ * paint. With JavaScript disabled no `data-theme` is rendered, so the
+ * Paper theme's light-dark() colors keep following the OS appearance.
+ */
+const initialPalette = getDesignPaletteTheme("paper", "light");
+
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html data-hraness-theme="paper" data-hraness-material="lantern" data-theme="light" lang="en" suppressHydrationWarning>
+    <html
+      className={initialPalette.className}
+      data-hraness-material="lantern"
+      data-hraness-theme="paper"
+      data-palette="paper"
+      lang="en"
+      suppressHydrationWarning
+    >
+      <head>
+        {/* The blocking external bootstrap applies a saved palette before first paint. */}
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script src="/theme-bootstrap.js" />
+      </head>
       <body>
         <PostHogAnalytics
           apiHost={process.env.NEXT_PUBLIC_POSTHOG_HOST}
