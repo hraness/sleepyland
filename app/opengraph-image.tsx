@@ -3,7 +3,8 @@ import {
   socialImageContentType,
   socialImageSize,
 } from "@hraness/web-discovery/social-image";
-import { site } from "./site";
+import { noiseDescription, noiseTitle, site } from "./site";
+import { SleepylandMark } from "./social-mark";
 
 export const alt =
   "Sleepyland noise machine for sleep, calm, and focus";
@@ -12,17 +13,16 @@ export const size = socialImageSize;
 
 export default function Image() {
   return createSocialImageResponse({
-    description:
-      "Generated soundscapes built from colored noise, procedural ocean waves, rhythmic movement, and live spectral shaping.",
-    domain: "sleepy.land",
-    eyebrow: "Sleepyland",
-    mark: site.emoji,
+    description: noiseDescription,
+    domain: site.domain,
+    eyebrow: site.shortName,
+    mark: <SleepylandMark />,
     theme: {
       accent: "#D58A3A",
       background: "#080604",
       foreground: "#F0D5B3",
       muted: "#A88D70",
     },
-    title: "Sound for sleep, calm, and focus",
+    title: noiseTitle,
   });
 }

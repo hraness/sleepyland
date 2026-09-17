@@ -18,6 +18,9 @@ import { homepageUpdatedAt, site } from "../site";
 
 export const researchDescription =
   "Evidence-led guides to insomnia, light, routines, sound, circadian rhythm, and the limits of current research.";
+export const researchArchiveTitle = "All sleep research guides | Sleepyland";
+export const researchArchiveDescription =
+  "Browse Sleepyland's admitted evidence-led guides to sleep, sound, light, routines, and environmental wellness claims.";
 export const RESEARCH_SOCIAL_IMAGE_PATH = "/research/opengraph-image";
 
 export function researchArticleImagePath(slug: ResearchSlug): string | undefined {

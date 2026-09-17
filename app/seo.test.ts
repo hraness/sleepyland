@@ -39,7 +39,7 @@ describe("Sleepyland search surface", () => {
     };
 
     expect(site.emoji).toBe("💤");
-    expect(openGraphImage).toContain("mark: site.emoji");
+    expect(openGraphImage).toContain("mark: <SleepylandMark />");
     expect(await sha256("./icon.png")).toBe(
       "397934f6b2338cff6fe70865d60b9414d609bf1a972648092c84692b9a9b2988",
     );
