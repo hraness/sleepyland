@@ -30,6 +30,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "/",
+    siteName: site.shortName,
     title: noiseTitle,
     description: noiseDescription,
     images: [defaultSocialImage],

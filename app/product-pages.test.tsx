@@ -15,6 +15,7 @@ import {
   PRODUCT_PAGES,
   SUPPORT_EMAIL,
 } from "./product-pages";
+import { site } from "./site";
 
 async function sha256(file: Bun.BunFile): Promise<string> {
   const hasher = new Bun.CryptoHasher("sha256");
@@ -52,6 +53,13 @@ describe("Sleepyland public product records", () => {
         alternates: {
           canonical: page.path,
           types: { "text/markdown": `${page.path}.md` },
+        },
+        openGraph: {
+          type: "website",
+          url: page.path,
+          siteName: site.shortName,
+          title: page.title,
+          description: page.description,
         },
       });
       expect(markup).toContain(`<h1>${page.heading}</h1>`);

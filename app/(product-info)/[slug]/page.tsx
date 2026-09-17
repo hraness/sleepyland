@@ -12,6 +12,7 @@ import {
   type ProductPageInline,
 } from "../../product-pages";
 import { defaultSocialImage } from "../../seo";
+import { site } from "../../site";
 
 type ProductPageParams = Readonly<{
   params: Promise<Readonly<{ slug: string }>>;
@@ -44,6 +45,7 @@ export async function generateMetadata({ params }: ProductPageParams): Promise<M
     openGraph: {
       type: "website",
       url: page.path,
+      siteName: site.shortName,
       title: page.title,
       description: page.description,
       images: [defaultSocialImage],
