@@ -10,7 +10,7 @@ test("uses the released Nebula Sans default without replacing serif or mono role
   expect(packageJson.dependencies).toMatchObject({
     "@hraness/design-kit": "github:hraness/design-kit#v0.8.0",
     "@hraness/ui": "github:hraness/ui#v0.5.13",
-    "@hraness/web-discovery": "github:hraness/web-discovery#v0.2.0",
+    "@hraness/web-discovery": "github:hraness/web-discovery#v0.6.0",
   });
   expect(globals).toStartWith('@import "@hraness/design-kit/styles.css";');
   expect(foundation).toContain("--font-heading: var(--font-text)");

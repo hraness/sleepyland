@@ -34,7 +34,7 @@
     "@hraness/site-footer": "github:hraness/site-footer#v0.13.0",
     "@hraness/ui": "github:hraness/ui#v0.5.13",
     "@hraness/vercel-delivery": "github:hraness/vercel-delivery#v0.1.2",
-    "@hraness/web-discovery": "github:hraness/web-discovery#v0.2.0",
+    "@hraness/web-discovery": "github:hraness/web-discovery#v0.6.0",
     "next": "16.2.12",
     "react": "19.2.3",
     "react-aria-components": "1.19.0",
