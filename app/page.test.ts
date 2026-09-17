@@ -5,7 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 import Home, { metadata } from "./page";
 import { getResearchArticle } from "./research/articles";
-import { noiseDescription, noiseTitle } from "./site";
+import { noiseDescription, noiseTitle, site } from "./site";
 
 describe("Sleepyland product homepage", () => {
   test("owns the root canonical and sound-machine metadata", () => {
@@ -22,6 +22,7 @@ describe("Sleepyland product homepage", () => {
       openGraph: {
         type: "website",
         url: "/",
+        siteName: site.shortName,
         title: noiseTitle,
         description: noiseDescription,
       },
