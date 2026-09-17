@@ -17,8 +17,9 @@
   "scripts": {
     "check:browser": "bun scripts/check-browser.mjs",
     "check:theme": "bun scripts/check-paper-theme.mjs",
-    "dev": "next dev --webpack",
-    "build": "next build --webpack",
+    "build:theme": "bun scripts/build-theme-bootstrap.ts",
+    "dev": "bun run build:theme && next dev --webpack",
+    "build": "bun run build:theme && next build --webpack",
     "start": "next start",
     "search:notify": "bun scripts/submit-indexnow.ts",
     "test": "bun test ./app ./lib ./scripts/check-browser.test.mjs ./next.config.test.ts",

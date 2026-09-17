@@ -1,8 +1,7 @@
 "use client";
 
 import {
-  DesignPortalThemeProvider,
-  DesignThemeProvider,
+  DesignPaletteProvider,
   ThemeColorSync,
 } from "@hraness/design-kit/react";
 import { usePathname } from "next/navigation";
@@ -13,16 +12,15 @@ export function SleepylandThemeProvider({ children }: Readonly<{ children: React
   const isStudio = pathname === "/noise";
 
   return (
-    <DesignThemeProvider forcedTheme={isStudio ? "dark" : undefined}>
+    <DesignPaletteProvider
+      defaultPreference={{ palette: "paper", mode: "system" }}
+      forcedPreference={isStudio ? { palette: "paper", mode: "dark" } : undefined}
+    >
       <ThemeColorSync
         darkColor="#12100f"
         lightColor={isStudio ? "#12100f" : "#f8f7f4"}
       />
-      {isStudio ? (
-        <DesignPortalThemeProvider theme="dark">
-          {children}
-        </DesignPortalThemeProvider>
-      ) : children}
-    </DesignThemeProvider>
+      {children}
+    </DesignPaletteProvider>
   );
 }

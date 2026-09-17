@@ -3,6 +3,7 @@
 !.env.example
 .next/
 .browser-artifacts/
+public/theme-bootstrap.js
 .turbo/
 .vercel/
 coverage/
