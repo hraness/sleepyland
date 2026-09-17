@@ -55,7 +55,7 @@ describe("Sleepyland product homepage", () => {
       'aria-label="Sound controls"',
       'id="home-information-title"',
       featured.title,
-      'id="home-maker-title"',
+      'id="home-questions-title"',
     ];
     const positions = orderedMarkers.map((marker) => markup.indexOf(marker));
     expect(positions.every((position) => position >= 0)).toBeTrue();

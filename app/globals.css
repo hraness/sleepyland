@@ -81,8 +81,7 @@ html body:has(> .noise-app) {
 /* Prose links take the accent; marketing actions keep their own paint. */
 .sleepyland-home-information :where(
   .hraness-marketing-section__body,
-  .hraness-marketing-question__answer,
-  .hraness-marketing-maker__links
+  .hraness-marketing-question__answer
 ) a:not(.hraness-marketing-action) {
   color: var(--hraness-marketing-accent);
 }
@@ -1603,7 +1602,7 @@ input {
   line-height: var(--hraness-paper-heading-leading);
   letter-spacing: var(--hraness-paper-heading-tracking);
 }
-[data-hraness-theme="paper"] :where(.hraness-marketing-section__heading, .hraness-marketing-install__heading, .hraness-marketing-primitives__heading, .hraness-marketing-interfaces__heading, .hraness-marketing-trust__heading, .hraness-marketing-quotes__heading, .hraness-marketing-pricing__heading, .hraness-marketing-questions__heading, .hraness-marketing-maker__heading) {
+[data-hraness-theme="paper"] :where(.hraness-marketing-section__heading, .hraness-marketing-install__heading, .hraness-marketing-primitives__heading, .hraness-marketing-interfaces__heading, .hraness-marketing-trust__heading, .hraness-marketing-quotes__heading, .hraness-marketing-pricing__heading, .hraness-marketing-questions__heading) {
   font-size: var(--hraness-paper-section-heading-size);
   line-height: var(--hraness-paper-heading-leading);
 }
