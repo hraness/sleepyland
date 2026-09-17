@@ -481,6 +481,15 @@
   margin: 0;
 }
 
+/* Decorative topic icons (agent-generated line art, public/icons/). */
+.plain-site.plain-publication .plain-publication__tag-icon {
+  display: inline-block;
+  flex: none;
+  height: 24px;
+  opacity: 0.9;
+  width: 24px;
+}
+
 .plain-site.plain-publication .plain-publication__method > h2 {
   margin: 0 0 0.9rem;
 }

@@ -7,6 +7,14 @@ import { EditorialImageThumbnail } from "../editorial-image";
 import type { EditorialImage } from "../editorial-images";
 import type { ResearchSlug, ResearchTagId } from "./articles";
 
+function TopicTagIcon({ slug }: Readonly<{ slug: string }>) {
+  // Decorative local SVG; next/image cannot optimize vector sources.
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img className="plain-publication__tag-icon" src={`/icons/${slug}.svg`} alt="" aria-hidden="true" width="24" height="24" loading="lazy" decoding="async" />
+  );
+}
+
 export interface ResearchIndexTag {
   readonly id: ResearchTagId;
   readonly label: string;
@@ -77,7 +85,10 @@ function ResearchIndexEntry({
           </span>
           <ul aria-label="Topics" className="plain-publication__entry-tags">
             {article.tags.map((tag) => (
-              <li key={tag.id}>{tag.label}</li>
+              <li key={tag.id}>
+                <TopicTagIcon slug={tag.id} />
+                {tag.label}
+              </li>
             ))}
           </ul>
         </div>
