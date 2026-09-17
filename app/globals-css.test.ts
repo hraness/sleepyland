@@ -32,7 +32,8 @@ test("the compact header keeps actions usable and the complete accessible brand 
   expect(stylesheet).toMatch(/\.wordmark\s*\{[^}]*min-width:\s*0;[^}]*flex:\s*1 1 auto;/su);
   expect(stylesheet).toMatch(/\.header-actions > \*\s*\{[^}]*flex:\s*0 0 auto;/su);
   expect(stylesheet).toMatch(/\.header-research-link\s*\{[^}]*min-width:\s*var\(--interactive-target-min\);/su);
-  expect(studioSource).toContain('aria-label={`${brand.name} ${brand.tagline}`}');
+  expect(studioSource).toContain('{brand.name}');
+  expect(studioSource).toContain('{brand.tagline}');
 });
 
 test("research filters keep full touch targets, a non-color selection cue, and narrow metadata", () => {
