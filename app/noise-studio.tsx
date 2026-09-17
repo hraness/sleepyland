@@ -1425,11 +1425,11 @@ export function NoiseStudio({
   return (
     <ViewportFrame as="main" className="noise-app">
       <header className="app-header">
-        <h1 aria-label={`${brand.name} ${brand.tagline}`} className="wordmark">
+        <div className="wordmark">
           <span aria-hidden="true">💤</span>{" "}
           {brand.name}
           <span className="wordmark__tagline"> {brand.tagline}</span>
-        </h1>
+        </div>
         <div className="header-actions">
           <Link className="header-research-link" href="/research">Research</Link>
           <StudioResources groups={resourceGroups} />
