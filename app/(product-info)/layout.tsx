@@ -24,7 +24,8 @@ export default function ProductInfoLayout({
       <header className="plain-header hraness-material-chrome">
         <div className="plain-header__inner">
           <Link className="plain-wordmark" href="/">
-            <span aria-hidden="true">💤</span>{" "}
+            {/* eslint-disable-next-line @next/next/no-img-element -- the canonical mark is a fixed-size authored SVG */}
+            <img alt="" aria-hidden="true" height={20} src="/marks/sleepyland.svg" width={20} />{" "}
             Sleepyland
           </Link>
           <div className="plain-header__actions">
