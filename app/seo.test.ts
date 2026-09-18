@@ -41,10 +41,10 @@ describe("Sleepyland search surface", () => {
     expect(site.emoji).toBe("💤");
     expect(openGraphImage).toContain("mark: <SleepylandMark />");
     expect(await sha256("./icon.png")).toBe(
-      "533917e299a886b026ff22c4e7266b00821afa6896be25cf8471629403e01213",
+      "56812e5d5e0f79c226a16323a5def4ecc436a38fecc8bbbb85546a4d9f36b733",
     );
     expect(await sha256("./apple-icon.png")).toBe(
-      "9b5696b76b031335e02730a4fadcd5844b2ee6a2266bcd573679f6c6d1731a7f",
+      "5b09755df36c8dc5b3657c9ddd20c80b329bdbe547e1b7be88c68c7387e45295",
     );
   });
 

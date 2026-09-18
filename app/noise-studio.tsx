@@ -1426,7 +1426,8 @@ export function NoiseStudio({
     <ViewportFrame as="main" className="noise-app">
       <header className="app-header">
         <div className="wordmark">
-          <span aria-hidden="true">💤</span>{" "}
+          {/* eslint-disable-next-line @next/next/no-img-element -- the canonical mark is a fixed-size authored SVG */}
+          <img alt="" aria-hidden="true" height={20} src="/marks/sleepyland.svg" width={20} />{" "}
           {brand.name}
           <span className="wordmark__tagline"> {brand.tagline}</span>
         </div>

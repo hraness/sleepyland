@@ -17,7 +17,7 @@ test("the outcome-first studio keeps detailed tuning available on demand", () =>
 
   expect(markup).toContain('aria-label="Sound controls"');
   expect(markup).toContain(
-    '<div class="wordmark"><span aria-hidden="true">💤</span> Sleepyland<span class="wordmark__tagline"> noise machine</span></div>',
+    '<div class="wordmark"><img alt="" aria-hidden="true" height="20" src="/marks/sleepyland.svg" width="20"/> Sleepyland<span class="wordmark__tagline"> noise machine</span></div>',
   );
   expect(markup).not.toContain("listening-stats");
   expect(markup).toContain('<a class="header-research-link" href="/research">Research</a>');
