@@ -41,6 +41,16 @@ const nextConfig: NextConfig = {
         permanent: true,
         source: "/research/binaural-beats-for-sleep.md",
       },
+      {
+        destination: "/research/screens-blue-light-glasses-and-sleep",
+        permanent: true,
+        source: "/research/blue-light-scatter-and-visual-detail",
+      },
+      {
+        destination: "/research/screens-blue-light-glasses-and-sleep.md",
+        permanent: true,
+        source: "/research/blue-light-scatter-and-visual-detail.md",
+      },
     ];
   },
   webpack(config) {

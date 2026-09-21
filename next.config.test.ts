@@ -62,6 +62,26 @@ describe("site migration redirects", () => {
     ]);
   });
 
+  test("consolidates the retired blue-light scatter page into the screen canonical", async () => {
+    if (nextConfig.redirects === undefined) {
+      throw new Error("Next.js redirects are not configured.");
+    }
+
+    const redirects = await nextConfig.redirects();
+    expect(redirects.filter(({ source }) => source.includes("blue-light-scatter"))).toEqual([
+      {
+        destination: "/research/screens-blue-light-glasses-and-sleep",
+        permanent: true,
+        source: "/research/blue-light-scatter-and-visual-detail",
+      },
+      {
+        destination: "/research/screens-blue-light-glasses-and-sleep.md",
+        permanent: true,
+        source: "/research/blue-light-scatter-and-visual-detail.md",
+      },
+    ]);
+  });
+
   test("does not redirect retired editorial routes to unrelated pages", async () => {
     if (nextConfig.redirects === undefined) {
       throw new Error("Next.js redirects are not configured.");
@@ -69,8 +89,5 @@ describe("site migration redirects", () => {
 
     const redirects = await nextConfig.redirects();
     expect(redirects.some(({ source }) => source.startsWith("/reading"))).toBe(false);
-    expect(redirects.some(({ source }) =>
-      source === "/research/blue-light-scatter-and-visual-detail"
-    )).toBe(false);
   });
 });
