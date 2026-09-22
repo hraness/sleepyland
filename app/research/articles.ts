@@ -1220,11 +1220,13 @@ export const researchArticles = [
       "white noise masking voices",
       "sound masking for sleep",
       "critical bands hearing",
+      "is sound masking soundproofing",
+      "sound masking technology",
     ],
     tags: ["sleep", "sound", "environment"],
     evidenceLabel: "Acoustics established; sleep benefit depends on the disturbance",
     publishedAt: "2026-08-28",
-    updatedAt: "2026-08-28",
+    updatedAt: "2026-09-22",
     sourceIds: [
       "maskingReview2021",
       "auditoryProcessing2008",
@@ -1238,6 +1240,7 @@ export const researchArticles = [
       "sound-masking-vs-earplugs-vs-noise-cancelling",
       "white-pink-brown-noise-for-sleep",
       "best-sleep-sounds",
+      "noise-and-sleep-2026",
     ],
     body: [
       callout(
@@ -1395,6 +1398,19 @@ export const researchArticles = [
           RESEARCH_SOURCES.safeListening2026.url,
         ),
         " treats level and duration together. Sleepyland's live spectrum and tap interaction can make spectral overlap visible, but the graph is not a calibrated room measurement. Use it to understand shape, then judge the actual sound at the pillow and choose the lowest useful result.",
+      ),
+      heading("Questions readers ask"),
+      paragraph(
+        strong("Is sound masking the same as soundproofing? "),
+        "No. Soundproofing and other reduction keep acoustic energy from reaching the ear; masking adds a controlled background that makes the remaining intrusion less noticeable. Masking can soften what reduction cannot remove, and a loud enough problem still needs the physical fix.",
+      ),
+      paragraph(
+        strong("What is sound masking technology? "),
+        "The label covers consumer noise machines and apps as well as installed workplace systems that distribute shaped sound through ceiling or desktop speakers. All of them choose a spectrum and a level; the psychoacoustic limits above decide whether a given device helps in a given room. No brand or color changes the basic trade.",
+      ),
+      paragraph(
+        strong("Does sound masking improve sleep? "),
+        "The perceptual effect is established; the sleep outcome is not. Reviews and the 2026 Basner trial give mixed, low-certainty results, and earplugs performed better in the tested laboratory conditions. Whether masking helps a particular sleeper depends on the disturbance it is asked to cover, not on masking itself.",
       ),
     ],
   },
