@@ -2784,7 +2784,7 @@ export const researchArticles = [
           "2018 seated-vibration experiment",
           RESEARCH_SOURCES.vehicleVibration2018.url,
         ),
-        ", exposure to vehicle-like vibration increased physiological signs of drowsiness within about twenty minutes. Later driving research has continued to study frequency-dependent vibration and fatigue.",
+        ", vibration delivered through a car seat during a simulated drive increased heart-rate signs of drowsiness within 15 to 30 minutes. Later driving research has continued to study frequency-dependent vibration and fatigue.",
       ),
       paragraph(
         "Motion and vibration overlap but are not identical. Slow swaying strongly engages vestibular sensing. Faster vibration can affect alertness through repeated mechanical stimulation, posture, monotony, and fatigue. A real ride layers both.",

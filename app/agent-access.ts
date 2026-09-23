@@ -392,7 +392,7 @@ function sitemapSection(): string {
   return [
     "## Sitemap",
     "",
-    "See the full [sitemap](/sitemap.md) for every public page.",
+    "The [sitemap](/sitemap.md) lists the research guides, the sound machine, and the product pages.",
   ].join("\n");
 }
 
@@ -446,7 +446,7 @@ export function homepageMarkdown(
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.evidenceLabel}.`,
     ]),
     "",
-    `- [Browse every guide](${absoluteUrl("/research.md")})`,
+    `- [Browse the research guides](${absoluteUrl("/research.md")})`,
   ].join("\n"));
 }
 
@@ -611,7 +611,7 @@ export function llmsTxt(
     "",
     "## Research",
     "",
-    `- [Sleepyland Research](${absoluteUrl("/research.md")}): Every published guide, newest first.`,
+    `- [Sleepyland Research](${absoluteUrl("/research.md")}): The research guides open to search, newest first.`,
     ...discoverableResearchArticles(candidateArticles).map((article) =>
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.dek}`),
     "",

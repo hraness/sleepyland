@@ -1208,9 +1208,9 @@ export const SLEEP_HEALTH_ARTICLES = [
       ),
       heading("Where relaxation and mindfulness fit"),
       paragraph(
-        "Slow breathing, progressive muscle relaxation, guided imagery, and mindfulness can reduce arousal. They work poorly when used as a desperate test that must knock you out immediately. An ",
-        link("updated mindfulness meta-analysis", SLEEP_HEALTH_SOURCES.mindfulnessMeta2022.url),
-        " found mixed effects and does not support mindfulness alone as a universal substitute for CBT-I. Practice the technique as a way to change the relationship to wakefulness, not as an off switch.",
+        "Slow breathing, progressive muscle relaxation, guided imagery, and mindfulness can reduce arousal. They work poorly when used as a desperate test that must knock you out immediately. A ",
+        link("2022 meta-analysis of mindfulness-based stress reduction", SLEEP_HEALTH_SOURCES.mindfulnessMeta2022.url),
+        " found no improvement in sleep quality for people with chronic insomnia, and only a possible improvement in self-reported sleep quality compared with a waitlist. Practice the technique as a way to change the relationship to wakefulness, not as an off switch.",
       ),
       heading("When a racing mind needs more than a trick"),
       paragraph(

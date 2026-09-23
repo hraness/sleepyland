@@ -27,7 +27,7 @@ Each guide answers one practical question, so a keyword does not turn into sever
 | Who | What they can do | Where |
 | --- | --- | --- |
 | Readers | Read the short answer, evidence label, sources, revision date, and limits. | [sleepy.land/research](https://sleepy.land/research) |
-| Agents | Read any public page as Markdown and find every public page. | [`/llms.txt`](https://sleepy.land/llms.txt), [`/sitemap.md`](https://sleepy.land/sitemap.md), or `Accept: text/markdown` |
+| Agents | Read public pages as Markdown and find the listed guides and product pages. | [`/llms.txt`](https://sleepy.land/llms.txt), [`/sitemap.md`](https://sleepy.land/sitemap.md), or `Accept: text/markdown` |
 | Listeners | Start the sound, then pick a mode or open Tune when needed. | [sleepy.land](https://sleepy.land) |
 
 Sleepyland has no API. Agents should cite the visible guide and keep its evidence label and limits.
@@ -46,7 +46,7 @@ Those registries generate or feed:
 
 Substantive research changes must keep those surfaces aligned. Read [the editorial method](docs/editorial-method.md) before changing a claim or source.
 
-After you add or change a PubMed, PMC, or DOI source, run `bun run check:citations --write`. It compares each source's title, journal, and year with the record at its link, labels preprints, and refreshes `app/research/citation-records.json`, which the test suite checks without network access.
+After you add or change a PubMed, PMC, or DOI source, run `bun run check:citations --write`. It compares each source's title, journal, and year with the record at its link, checks that preprints are labeled as preprints, and refreshes `app/research/citation-records.json`, which the test suite checks without network access.
 
 ## Limits
 
@@ -63,7 +63,7 @@ No audio is uploaded or generated on a server. Settings are saved in browser sto
 
 ### How are the sources checked?
 
-`bun run check:citations` compares every PubMed, PMC, and DOI source's title, journal, and year with the record at its link, and the test suite checks the registry against a committed snapshot of those records. Whether a source supports the nearby wording is an editorial check described in [the editorial method](docs/editorial-method.md). No clinician has reviewed the guides.
+`bun run check:citations` compares every PubMed, PMC, and DOI source's title, journal, and year with the record at its link, and the test suite checks the registry against a committed snapshot of those records. Whether a source supports the nearby wording is an editorial check described in [the editorial method](docs/editorial-method.md).
 
 ### How do I challenge a claim?
 

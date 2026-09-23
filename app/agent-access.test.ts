@@ -214,7 +214,7 @@ describe("agent discovery documents", () => {
   test("gives agents no repository rules and points the research line at the archive", () => {
     const llms = llmsTxt();
     expect(llms).not.toContain("to analytics");
-    expect(llms).toContain("Every published guide, newest first.");
+    expect(llms).toContain("The research guides open to search, newest first.");
   });
 
   test("keeps 404 recovery copy pointed at discovery files", () => {
