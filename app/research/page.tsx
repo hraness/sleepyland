@@ -26,5 +26,5 @@ export const metadata: Metadata = {
 };
 
 export default function ResearchArchivePage() {
-  return <ResearchIndexPage showAll />;
+  return <ResearchIndexPage />;
 }

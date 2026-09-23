@@ -32,15 +32,16 @@ describe("Sleepyland sound-machine route", () => {
     });
   });
 
-  test("renders the sound machine with a crawlable research return path", () => {
+  test("renders the sound machine with a visible heading and a research link", () => {
     const markup = renderToStaticMarkup(createElement(NoisePage));
 
     expect(markup).toContain(
-      'Sleepyland<span class="wordmark__tagline"> calming sound machine</span>',
+      'Sleepyland<span class="wordmark__tagline"> calming sound machine</span></h1>',
     );
-    expect(markup).toContain('href="/"');
-    expect(markup).toContain("Read Sleepyland Research");
-    expect(markup).toContain("sleepyland-visually-hidden");
+    expect(markup.match(/<h1[\s>]/gu)).toHaveLength(1);
+    expect(markup).toContain('<h1 class="wordmark">');
+    expect(markup).not.toContain('aria-hidden="true" class="sleepyland-visually-hidden"');
+    expect(markup).toContain('href="/research"');
   });
 
   test("fails closed when a quarantined guide is proposed for the product surface", () => {

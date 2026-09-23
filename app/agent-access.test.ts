@@ -29,6 +29,7 @@ import {
   homepageAgentRequest,
 } from "./homepage-content";
 import { PRODUCT_PAGES } from "./product-pages";
+import { RESEARCH_ARTICLE_BOUNDARY } from "./research/editorial-disclosure";
 import {
   CLINICAL_REVIEW_REQUIRED_RESEARCH_SLUGS,
   getResearchArticle,
@@ -183,9 +184,9 @@ describe("agent discovery documents", () => {
     expect(markdown).toContain(`canonical_url: "https://sleepy.land${researchArticlePath(article.slug)}"`);
     expect(markdown).toContain(`# ${article.title}`);
     expect(markdown).toContain(article.dek);
-    expect(markdown).toContain(
-      "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
-    );
+    expect(markdown).toContain(RESEARCH_ARTICLE_BOUNDARY);
+    expect(markdown).not.toMatch(/Drafted by an AI agent|Codex AI reviewer/u);
+    expect(markdown).not.toContain(" — ");
     expect(markdown).toContain(
       `https://sleepy.land/editorial/research/${article.slug}.webp`,
     );
@@ -200,6 +201,20 @@ describe("agent discovery documents", () => {
     const imageLessMarkdown = researchArticleMarkdown(imageLessArticle);
     expect(imageLessMarkdown).not.toContain("/editorial/research/");
     expect(imageLessMarkdown).toContain(`# ${imageLessArticle.title}`);
+  });
+
+  test("closes Markdown emphasis before the space that follows a label", () => {
+    for (const article of researchArticles) {
+      const markdown = researchArticleMarkdown(article);
+      expect({ slug: article.slug, unclosed: markdown.match(/\*\*[^*\n]*\s\*\*/gu) ?? [] })
+        .toEqual({ slug: article.slug, unclosed: [] });
+    }
+  });
+
+  test("gives agents no repository rules and points the research line at the archive", () => {
+    const llms = llmsTxt();
+    expect(llms).not.toContain("to analytics");
+    expect(llms).toContain("The research guides open to search, newest first.");
   });
 
   test("keeps 404 recovery copy pointed at discovery files", () => {

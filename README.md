@@ -3,36 +3,34 @@
 [![CI](https://github.com/hraness/sleepyland/actions/workflows/ci.yml/badge.svg)](https://github.com/hraness/sleepyland/actions/workflows/ci.yml)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-[Sleepyland](https://sleepy.land) gives readers a direct answer, the sources behind it, and the limit of the evidence before they make a sleep decision. The same site includes a [private browser sound machine](https://sleepy.land/noise) for sleep, relaxation, and focus.
+[Sleepyland](https://sleepy.land) is a free sound machine that runs in your browser, with sourced guides to sleep and sound. The sound machine generates brown, pink, and white noise and ocean waves on your device for sleep, relaxation, or focus.
 
-The admitted publication covers insomnia, circadian light, routines, environmental sound, and common wellness claims. It is educational publishing, not medical advice. Medication, supplement-safety, and other higher-risk pages remain outside discovery until their exact claims receive documented qualified review.
+The [research guides](https://sleepy.land/research) cover insomnia, light and the body clock, bedtime routines, environmental sound, and popular wellness claims. Each one starts with a short answer and links its sources. The guides are educational and are not medical advice, and no clinician has reviewed them. Guides on medications, supplement safety, and other higher-risk topics stay unlisted until a clinician or pharmacist reviews their exact claims.
 
-## First proof
+## Example guide
 
-[Does White Noise Help You Sleep? What Three 2026 Studies Found](https://sleepy.land/research/noise-and-sleep-2026) leads with a qualified answer, compares three recent studies without forcing a single verdict, links its sources, and publishes its revision date. Its HTML, structured data, social image, RSS record, sitemap entry, and [Markdown representation](https://sleepy.land/research/noise-and-sleep-2026.md) come from the same typed article and image registries.
+[Does White Noise Help You Sleep? What Three 2026 Studies Found](https://sleepy.land/research/noise-and-sleep-2026) starts with a short answer, compares three recent studies, links its sources, and shows its revision date. Its HTML, structured data, social image, RSS entry, sitemap entry, and [Markdown version](https://sleepy.land/research/noise-and-sleep-2026.md) come from the same typed article and image registries.
 
-Request the canonical page as Markdown:
+Request the page as Markdown:
 
 ```sh
 curl -H 'Accept: text/markdown' \
   https://sleepy.land/research/noise-and-sleep-2026
 ```
 
-## Working model
+## How the guides work
 
-1. **Name the question.** Each guide owns one practical reader decision instead of stretching a keyword into several thin pages.
-2. **Follow the evidence.** Material claims sit beside the studies, guidelines, labels, and public-health sources that support them.
-3. **Keep the limit.** Population, protocol, uncertainty, and the line between evidence and inference remain visible.
+Each guide answers one practical question, so a keyword does not turn into several thin pages. Its claims sit next to the studies, guidelines, labels, and public-health sources that support them, and it says who was studied, how, and where the evidence turns into inference.
 
 ## Interfaces
 
-| Surface | Reader job | Entry point |
+| Who | What they can do | Where |
 | --- | --- | --- |
-| Human | Read the short answer, evidence label, decision support, linked sources, revision date, and limits. | [sleepy.land](https://sleepy.land) |
-| Agent | Retrieve the same canonical record as Markdown and discover the bounded public corpus. | [`/llms.txt`](https://sleepy.land/llms.txt), [`/sitemap.md`](https://sleepy.land/sitemap.md), or `Accept: text/markdown` |
-| Listener | Start local browser-generated sound, then choose a mode or open Tune only when needed. | [sleepy.land/noise](https://sleepy.land/noise) |
+| Readers | Read the short answer, evidence label, sources, revision date, and limits. | [sleepy.land/research](https://sleepy.land/research) |
+| Agents | Read public pages as Markdown and find the listed guides and product pages. | [`/llms.txt`](https://sleepy.land/llms.txt), [`/sitemap.md`](https://sleepy.land/sitemap.md), or `Accept: text/markdown` |
+| Listeners | Start the sound, then pick a mode or open Tune when needed. | [sleepy.land](https://sleepy.land) |
 
-Sleepyland does not publish an API, OAuth flow, GraphQL endpoint, MCP server, developer portal, or uploaded-track library. Agents should cite the visible guide and preserve its evidence label and limits.
+Sleepyland has no API. Agents should cite the visible guide and keep its evidence label and limits.
 
 ## Evidence and generated surfaces
 
@@ -48,31 +46,32 @@ Those registries generate or feed:
 
 Substantive research changes must keep those surfaces aligned. Read [the editorial method](docs/editorial-method.md) before changing a claim or source.
 
-## Boundaries
+After you add or change a PubMed, PMC, or DOI source, run `bun run check:citations --write`. It compares each source's title, journal, and year with the record at its link, checks that preprints are labeled as preprints, and refreshes `app/research/citation-records.json`, which the test suite checks without network access.
 
-- **Evidence:** Sleepyland distinguishes direct findings, mechanism, inference, and experience. It does not claim clinician review that did not happen.
-- **Review:** Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.
+## Limits
+
+- **Evidence:** Sleepyland separates direct findings, mechanism, inference, and experience. No clinician or pharmacist has reviewed the guides.
 - **Health:** Sleepyland does not diagnose, prescribe, provide individualized dosing, or promise an outcome.
 - **Sound:** The sound machine synthesizes brown, pink, and white noise, procedural ocean surf, slow spatial movement, and spectrum pulses with the Web Audio API. It uses no recorded audio, product account, microphone input, uploaded mix, or server-side sound generation.
-- **Privacy:** Settings remain on the device. Canonical production analytics are cookieless, omit session replay and person profiles, and admit only the checked categorical event schema.
+- **Privacy:** Settings are saved in the browser. On sleepy.land, analytics are cookieless and anonymous, with no session replay or person profiles, and send only the events listed on the [privacy page](https://sleepy.land/privacy).
 
 ## Questions
 
 ### Does the sound machine send audio or settings to a server?
 
-No audio is uploaded or generated on a server. Settings stay in browser-local storage. Bounded anonymous analytics can include categorical mode and session kind, but not tuning values, exact playback duration, or spectrum gestures.
+No audio is uploaded or generated on a server. Settings are saved in browser storage. Anonymous analytics can include the mode you pick and the kind of session you play, but not Tune settings, exact listening time, or spectrum gestures.
 
-### How is AI-drafted research checked?
+### How are the sources checked?
 
-An AI agent can organize and compare sources. Before publication, a separate Codex AI reviewer checks material wording against the linked sources, and inference stays labeled as inference. No human clinical review is claimed.
+`bun run check:citations` compares every PubMed, PMC, and DOI source's title, journal, and year with the record at its link, and the test suite checks the registry against a committed snapshot of those records. Whether a source supports the nearby wording is an editorial check described in [the editorial method](docs/editorial-method.md).
 
 ### How do I challenge a claim?
 
 Use the [research correction template](https://github.com/hraness/sleepyland/issues/new?template=research_correction.yml) with the page, disputed wording, and a stronger source. The typed registry keeps the visible guide, metadata, feed, sitemap, and Markdown record together.
 
-## Smallest useful action
+## Start here
 
-Choose one question in the [research library](https://sleepy.land/#research-guides), or [open the sound machine](https://sleepy.land/noise) when steady sound is the immediate job.
+Choose a question in the [research guides](https://sleepy.land/research), or [open the sound machine](https://sleepy.land) when you want steady sound now.
 
 ## Development
 
@@ -105,6 +104,7 @@ Code, accessibility improvements, research corrections, source additions, reprod
 - `lib/` contains product-owned UI and browser-storage helpers.
 - `styles/` contains the fixed-viewport sound-machine and serif publication systems.
 - `public/` contains the IndexNow proof, silent product demo, and registered editorial images.
+- `scripts/check-citations.ts` checks source metadata against PubMed, PMC, and Crossref.
 - `docs/editorial-method.md` defines how research claims and sources are reviewed.
 - `docs/editorial-lifecycle.md` records clinical quarantine and durable merge history.
 

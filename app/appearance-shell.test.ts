@@ -82,8 +82,9 @@ describe("Sleepyland shared appearance contract", () => {
     expect(providers).toContain('lightColor={isStudio ? "#12100f" : "#f8f7f4"}');
     expect(noisePage).toContain('colorScheme: "dark"');
     expect(noisePage).toContain('themeColor: "#12100f"');
-    expect(noisePage).toContain("<h1>{NOISE_HEADING}</h1>");
-    expect(noisePage).toContain('className="sleepyland-visually-hidden"');
+    expect(noisePage).not.toContain("<h1>");
+    expect(noisePage).not.toContain('aria-hidden="true" className="sleepyland-visually-hidden"');
+    expect(studio).toContain('<h1 className="wordmark">');
     expect(studio).not.toContain("ThemeMenuButton");
     expect(studio).not.toContain("ThemeToggle");
     expect(studio).not.toContain("ThemedSurface");

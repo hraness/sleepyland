@@ -21,7 +21,8 @@ describe("interactive spectrogram", () => {
     expect(markup).toContain("sleepyland-visually-hidden");
     expect(markup).not.toContain('role="button"');
     expect(markup).not.toContain("aria-pressed");
-    expect(markup).toContain("Tap for a pulse or press and hold");
+    expect(markup).toContain("Press for a pulse, or press and");
+    expect(markup).toContain("hold to keep it playing.");
     expect(markup).not.toContain("title=");
     expect(markup).not.toContain("sleepyland-icon-tooltip");
   });

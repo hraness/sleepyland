@@ -79,6 +79,8 @@ Crowdsourced reports can reveal questions, vocabulary, and failure modes. They c
 
 Read [the editorial method](docs/editorial-method.md) before changing an article or source record. Article data lives in `app/research/articles.ts` and focused expansions beside it; `app/research/admissions.ts` owns the case-specific decision to index and distribute each route. Those registries drive routes, metadata, structured data, RSS, sitemaps, Markdown alternatives, and related reading, so update the typed sources rather than generated output.
 
+After you add or change a PubMed, PMC, or DOI source, run `bun run check:citations --write` and commit the refreshed `app/research/citation-records.json`. The command needs network access; the test suite then checks the snapshot offline.
+
 ## Pull requests
 
 A useful pull request includes:

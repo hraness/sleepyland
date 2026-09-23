@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 import Home, { metadata } from "./page";
 import { getResearchArticle } from "./research/articles";
+import { RESEARCH_HEALTH_BOUNDARY } from "./research/editorial-disclosure";
 import { noiseDescription, noiseTitle, site } from "./site";
 
 describe("Sleepyland product homepage", () => {
@@ -41,9 +42,11 @@ describe("Sleepyland product homepage", () => {
     expect(markup).toContain('aria-label="Play sound"');
     expect(markup).toContain(featured.title);
     expect(markup).toContain('href="/research"');
-    expect(markup).toContain(
-      "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
-    );
+    expect(markup).toContain(RESEARCH_HEALTH_BOUNDARY);
+    expect(markup).not.toMatch(/Drafted by an AI agent|Codex AI reviewer/u);
+    expect(markup.match(/<h1[\s>]/gu)).toHaveLength(1);
+    expect(markup).toContain('<h1 class="wordmark">');
+    expect(markup).not.toContain('aria-hidden="true" class="sleepyland-visually-hidden"');
     const classLists = [...markup.matchAll(/class="([^"]*)"/gu)]
       .map((match) => new Set((match[1] ?? "").split(/\s+/u)));
     expect(classLists.filter((classes) => (

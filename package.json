@@ -1,7 +1,7 @@
 {
   "name": "sleepyland",
   "version": "1.0.0",
-  "description": "Open-source sleep research and a private-by-design browser sound machine.",
+  "description": "Sleep research and a calming sound machine that runs in your browser.",
   "private": true,
   "license": "MIT",
   "type": "module",
@@ -16,6 +16,7 @@
   },
   "scripts": {
     "check:browser": "bun scripts/check-browser.mjs",
+    "check:citations": "bun scripts/check-citations.ts",
     "check:theme": "bun scripts/check-paper-theme.mjs",
     "build:theme": "bun scripts/build-theme-bootstrap.ts",
     "dev": "bun run build:theme && next dev --webpack",

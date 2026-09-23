@@ -2,7 +2,7 @@ import { ThemeMenuButton } from "@hraness/design-kit/react";
 import { INDEXABLE_ROBOTS } from "@hraness/web-discovery";
 import type { Metadata, Viewport } from "next";
 
-import { NOISE_DOCUMENT_PARAGRAPHS, NOISE_HEADING, markdownAlternatePath } from "./agent-access";
+import { markdownAlternatePath } from "./agent-access";
 import { HomeInformation } from "./home-information";
 import { NoiseStudio, type StudioResourceGroup } from "./noise-studio";
 import { featuredResearchResources } from "./noise/research-resources";
@@ -57,10 +57,6 @@ export default function Home() {
         id="sleepyland-application-structured-data"
         type="application/ld+json"
       />
-      <section aria-hidden="true" className="sleepyland-visually-hidden">
-        <h1>{NOISE_HEADING}</h1>
-        {NOISE_DOCUMENT_PARAGRAPHS.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-      </section>
       <NoiseStudio
         brand={{ name: site.shortName, tagline: "calming sound machine" }}
         headerActions={

@@ -125,6 +125,24 @@ function requestPlaybackAudioSession(): void {
   }
 }
 
+// Diagnostic messages stay stable for error reports; people see the guidance
+// from audioErrorGuidance instead.
+const AUDIO_RESUME_TIMEOUT_MESSAGE = "The browser did not resume audio.";
+const WEB_AUDIO_UNSUPPORTED_MESSAGE = "This browser does not support the Web Audio API.";
+const AUDIO_CONTEXT_CLOSED_MESSAGE = "The browser audio context is closed.";
+
+/** Turns an audio failure into a message that tells the listener what to do. */
+export function audioErrorGuidance(cause: unknown): string {
+  const message = cause instanceof Error ? cause.message : "";
+  if (message === WEB_AUDIO_UNSUPPORTED_MESSAGE) {
+    return "This browser doesn’t support Web Audio, which Sleepyland needs to make sound. Try an up-to-date browser.";
+  }
+  if (message === AUDIO_CONTEXT_CLOSED_MESSAGE) {
+    return "Audio stopped unexpectedly. Reload the page to start again.";
+  }
+  return "Audio didn’t start. Try again, and check that this tab and your device aren’t muted.";
+}
+
 function playbackCancelledError(): DOMException {
   return new DOMException("Audio playback start was cancelled.", "AbortError");
 }
@@ -147,7 +165,7 @@ async function resumePrimed(
   let rejectCancellation: ((reason: DOMException) => void) | null = null;
   const timeout = new Promise<never>((_, reject) => {
     timer = window.setTimeout(
-      () => reject(new Error("The browser did not resume audio.")),
+      () => reject(new Error(AUDIO_RESUME_TIMEOUT_MESSAGE)),
       AUDIO_RESUME_TIMEOUT_MS,
     );
   });
@@ -218,7 +236,7 @@ export class SoundEngine {
     random: RandomSource = Math.random,
   ) {
     if (typeof globalThis.AudioContext !== "function") {
-      throw new Error("This browser does not support the Web Audio API.");
+      throw new Error(WEB_AUDIO_UNSUPPORTED_MESSAGE);
     }
 
     requestPlaybackAudioSession();
@@ -293,7 +311,7 @@ export class SoundEngine {
   async play(signal?: AbortSignal): Promise<void> {
     throwIfPlaybackCancelled(signal);
     if (this.context.state === "closed") {
-      throw new Error("The browser audio context is closed.");
+      throw new Error(AUDIO_CONTEXT_CLOSED_MESSAGE);
     }
     if (this.pauseTimer !== null) {
       window.clearTimeout(this.pauseTimer);
@@ -427,7 +445,7 @@ export class SoundEngine {
     point: SpectrumGesturePoint,
   ): Promise<void> {
     if (this.context.state === "closed") {
-      throw new Error("The browser audio context is closed.");
+      throw new Error(AUDIO_CONTEXT_CLOSED_MESSAGE);
     }
     this.endSpectrumGesture(pointerId);
     const pending = {

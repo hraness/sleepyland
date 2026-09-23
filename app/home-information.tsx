@@ -10,15 +10,15 @@ import Link from "next/link";
 
 import { NOISE_DOCUMENT_PARAGRAPHS } from "./agent-access";
 import type { StudioResource } from "./noise-studio";
-import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "./research/editorial-disclosure";
+import { RESEARCH_HEALTH_BOUNDARY } from "./research/editorial-disclosure";
 import { applicationFeatures } from "./seo";
-import { repositoryUrl, researchContributionUrl } from "./site";
+import { analyticsSummary, repositoryUrl, researchContributionUrl } from "./site";
 import { SOUND_MODES, type SoundModeId } from "./sound-modes";
 
 /**
  * Homepage information layer on the shared Hraness marketing grammar. Every
- * statement here already appears on the site: the studio explanation, the
- * about and privacy pages, the research disclosure, the sound-mode registry,
+ * statement here already appears on the site: the in-app "How to use
+ * Sleepyland" dialog, the about and privacy pages, the sound-mode registry,
  * or the shared site footer. Add a claim here only after it exists on one of
  * those surfaces. Maker attribution belongs to the organization and is owned
  * by `@hraness/site-footer`; this layer never carries a personal credit.
@@ -26,50 +26,47 @@ import { SOUND_MODES, type SoundModeId } from "./sound-modes";
 
 export const HOME_INFORMATION_HEADING = "A sound machine that runs in your browser";
 export const HOME_INFORMATION_LEAD =
-  "Brown, pink, and white noise with ocean waves and cabin rumble, all synthesized on your device. No audio files, no account, no uploaded mix.";
+  "Sleepyland generates brown, pink, and white noise, ocean waves, and an airplane-like rumble in your browser as you listen. It uses no recordings and needs no account.";
 
 export const HOME_LISTENING_NOTE =
   "Start quietly, especially with headphones, and set the mix that feels most comfortable to you.";
 
+/** The same descriptions as the in-app "Choose a starting sound" section. */
 const SOUND_MODE_SUMMARIES = {
-  sleep: "a dark brown bed with slow surf.",
-  calm: "a softer pink field with broad spatial movement.",
-  focus: "a clearer pink field with steady, low-salience rhythmic movement, and no surf.",
+  sleep: "Deep brown noise with slow waves.",
+  calm: "Softer pink noise with spacious waves.",
+  focus: "Brighter pink noise with a subtle, steady rhythm and no waves.",
 } as const satisfies Record<SoundModeId, string>;
 
 export const HOME_PILLARS = SOUND_MODES.map((mode) => ({
   label: mode.label,
-  summary: `${mode.detail}: ${SOUND_MODE_SUMMARIES[mode.id]}`,
+  summary: SOUND_MODE_SUMMARIES[mode.id],
 }));
 
 export const HOME_TRUST_ITEMS = [
   {
-    label: "On-device synthesis",
-    detail:
-      "Sleepyland synthesizes brown, pink, or white noise, procedural ocean waves, and an airplane-like rumble in the page.",
+    label: "Made on your device",
+    detail: "Noise, waves, and the airplane-like rumble are generated in the page as you listen.",
   },
   {
-    label: "No audio files",
-    detail:
-      "The sound generator uses no recorded or hosted audio files, product accounts, or server-side audio.",
+    label: "No recordings",
+    detail: "The sound machine plays no audio files, and no sound is made on a server.",
   },
   {
     label: "No account",
-    detail: "The hosted product is free to use without an account.",
+    detail: "The sound machine is free and needs no account.",
   },
   {
-    label: "Settings stay in this browser",
-    detail: "Your state, Energy, session, and tuning are stored in this browser.",
+    label: "Settings saved in this browser",
+    detail: "Your mode, Energy, session, and Tune settings are saved in this browser.",
   },
   {
-    label: "No microphone or replay",
-    detail:
-      "There are no accounts, ads, session replay, cloud audio, or microphone permissions.",
+    label: "No microphone, ads, or replay",
+    detail: "Sleepyland never asks for microphone access, shows no ads, and uses no session replay.",
   },
   {
     label: "Analytics",
-    detail:
-      "On the canonical production site, anonymous, cookieless events can include the selected state and session kind; they do not include Energy, tuning, exact playback duration, or audio.",
+    detail: analyticsSummary,
   },
 ] as const;
 
@@ -90,19 +87,19 @@ export function HomeInformation({
         <p>{NOISE_DOCUMENT_PARAGRAPHS[2]}</p>
         <p>{HOME_LISTENING_NOTE}</p>
         <p>
-          A silent <Link href="/demo">product demo</Link> shows mode selection, Tune,
-          playback, and the live spectrum.
+          A silent <Link href="/demo">product demo</Link> shows a mode change, Tune,
+          and playback.
         </p>
       </MarketingSection>
 
       <MarketingPillars ariaLabel="Sleep, Relax, and Focus" pillars={HOME_PILLARS} />
 
       <MarketingSection
-        heading="What you can do."
+        heading="Pick a mode, then shape the sound."
         headingId="home-features-title"
         id="features"
         label="Controls"
-        summary="Each state is a distinct engine recipe with its own rhythm, spectrum, and movement."
+        summary="Each mode starts from its own mix. Tune changes the noise color, volumes, warmth, and movement."
       >
         <ul className="sleepyland-home-features">
           {applicationFeatures.map((feature) => <li key={feature}>{feature}</li>)}
@@ -110,12 +107,12 @@ export function HomeInformation({
       </MarketingSection>
 
       <MarketingTrustBoundary
-        heading="Sound is made on your device, and your settings stay there."
+        heading="Sound is made on your device, and your settings are saved there."
         headingId="home-trust-title"
         id="privacy"
         items={HOME_TRUST_ITEMS}
         label="Privacy"
-        summary="The privacy page describes what can leave the device and where retention and deletion remain provider-controlled."
+        summary="The privacy page lists everything that can leave your device and which services receive it."
       />
 
       <MarketingSection
@@ -123,7 +120,7 @@ export function HomeInformation({
         headingId="home-research-title"
         id="research"
         label="Research"
-        summary={RESEARCH_AUTHORSHIP_DISCLOSURE}
+        summary={`Each guide links the sources behind its answer. ${RESEARCH_HEALTH_BOUNDARY}`}
       >
         <ul className="sleepyland-home-research">
           {research.map((resource) => (
@@ -150,8 +147,8 @@ export function HomeInformation({
             question: "Does it need an account?",
             answer: (
               <p>
-                No. The hosted product is free to use without an account. There are no
-                accounts, ads, session replay, cloud audio, or microphone permissions.
+                No. The sound machine is free and needs no account. Sleepyland never asks
+                for microphone access, shows no ads, and uses no session replay.
               </p>
             ),
           },
@@ -160,16 +157,12 @@ export function HomeInformation({
             answer: (
               <>
                 <p>
-                  Not sound. The sound generator uses no recorded or hosted audio files,
-                  product accounts, or server-side audio, and settings are stored on this
-                  device.
+                  Not sound. The sound machine plays no audio files and makes no sound on
+                  a server, and your settings are saved in this browser.
                 </p>
                 <p>
-                  On the canonical production site, anonymous, cookieless events can
-                  include the selected state and session kind; they do not include Energy,
-                  tuning, exact playback duration, or audio. The{" "}
-                  <Link href="/privacy">privacy page</Link> lists what can leave the
-                  device.
+                  {analyticsSummary} The <Link href="/privacy">privacy page</Link> lists
+                  everything that can leave your device.
                 </p>
               </>
             ),
@@ -178,8 +171,8 @@ export function HomeInformation({
             question: "What does it need to run?",
             answer: (
               <p>
-                A browser with JavaScript and Web Audio API support. Sound is generated in
-                the page; there is no server-side audio.
+                A browser with JavaScript and Web Audio support. The sound is generated in
+                the page.
               </p>
             ),
           },

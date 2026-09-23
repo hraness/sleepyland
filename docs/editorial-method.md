@@ -2,7 +2,7 @@
 
 Sleepyland publishes practical, evidence-led guides for people making decisions about sleep, sound, light, routines, supplements, and medications. The publication is educational and does not provide medical advice.
 
-Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed. A future clinical or pharmacist review must name the reviewer, scope, and date in the clinical-review ledger before the site claims it.
+AI agents draft and edit the guides. No clinician or pharmacist has reviewed them, and the site says so beside every guide. A future clinical or pharmacist review must name the reviewer, scope, and date in the clinical-review ledger before the site claims it. Sleepyland does not show AI-drafting labels on its pages; this document and the repository history are the record of who drafted the guides.
 
 ## Choose the reader question
 
@@ -53,7 +53,8 @@ Medication guides and comparisons, supplement interaction or adverse-effect guid
 A substantive article change should pass this checklist:
 
 - The direct answer matches the body and metadata.
-- Each material claim has a source that supports the nearby wording.
+- Each material claim has a source that supports the nearby wording. Read the paper at the link, not only its title: a link that resolves does not show that it is the paper the sentence describes.
+- `bun run check:citations --write` passes, so every PubMed, PMC, and DOI source names the title, journal, and year of the record at its link and labels a preprint as a preprint. Commit the refreshed `app/research/citation-records.json` with the change.
 - The evidence is sufficient for the exact claims and the page adds original decision support; a source-count target is not a substitute for either.
 - Evidence, mechanism, inference, history, and experience remain distinguishable.
 - Related links are intentional and no existing page owns the same reader job.

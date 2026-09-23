@@ -3,6 +3,7 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
 import { NoiseInfo } from "./noise-studio";
+import { analyticsSummary } from "./site";
 
 describe("Sleepyland product explanation", () => {
   test("exposes a familiar named info action", () => {
@@ -32,10 +33,13 @@ describe("Sleepyland product explanation", () => {
     expect(source).toContain("Play the visualization");
     expect(source).toContain("hold and move to explore different pitches");
     expect(source).not.toMatch(/low-salience|spectral slopes|cavity impact/u);
-    expect(source).toContain("no accounts, ads, session replay, cloud audio");
-    expect(source).toContain("anonymous, cookieless events");
-    expect(source).toContain("selected state and");
-    expect(source).toContain("session kind; they do not include Energy, tuning, exact playback");
+    expect(source).toContain("needs no account, shows no ads, uses no");
+    expect(source).toContain("session replay, and never asks for microphone access");
+    expect(source).toContain("{analyticsSummary}");
+    expect(analyticsSummary).toContain("without cookies");
+    expect(analyticsSummary).toContain("the mode you pick and the kind of session");
+    expect(analyticsSummary).toContain("They don’t include Energy, Tune settings, exact listening time, or audio.");
+    expect(source).not.toMatch(/canonical production site|bounded anonymous/u);
     expect(source).toContain("Open source and open to correction");
     expect(source).toContain("public under the MIT License");
     expect(source).toContain("research contributions are welcome on GitHub");
