@@ -1871,7 +1871,7 @@ export const researchArticles = [
     tags: ["sleep", "sound"],
     evidenceLabel: "Practical setup; no universal bedroom level",
     publishedAt: "2026-07-24",
-    updatedAt: "2026-07-24",
+    updatedAt: "2026-09-23",
     sourceIds: [
       "basner2026",
       "vincens2026",
@@ -1886,6 +1886,7 @@ export const researchArticles = [
       "sound-masking-vs-earplugs-vs-noise-cancelling",
       "white-pink-brown-noise-for-sleep",
       "noise-and-sleep-2026",
+      "how-sound-masking-works",
     ],
     body: [
       callout(
