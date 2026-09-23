@@ -2,7 +2,6 @@ import { INDEXABLE_ROBOTS, NOINDEX_ROBOTS } from "@hraness/web-discovery";
 import type { Metadata } from "next";
 
 import { researchEditorialImage } from "../editorial-images";
-import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "./editorial-disclosure";
 import {
   RESEARCH_SOURCES,
   discoverableResearchArticles,
@@ -16,11 +15,10 @@ import { RESEARCH_FEED_PATH } from "../search-discovery";
 import { absoluteUrl, isoDateTime } from "../seo";
 import { homepageUpdatedAt, site } from "../site";
 
-export const researchDescription =
-  "Evidence-led guides to insomnia, light, routines, sound, circadian rhythm, and the limits of current research.";
 export const researchArchiveTitle = "All sleep research guides | Sleepyland";
 export const researchArchiveDescription =
-  "Browse Sleepyland's admitted evidence-led guides to sleep, sound, light, routines, and environmental wellness claims.";
+  "Sourced guides to sleep, sound, light, routines, and popular wellness claims. Each starts with a short answer and links its sources.";
+export const researchDescription = researchArchiveDescription;
 export const RESEARCH_SOCIAL_IMAGE_PATH = "/research/opengraph-image";
 
 export function researchArticleImagePath(slug: ResearchSlug): string | undefined {
@@ -47,7 +45,7 @@ export function researchArticleMetadata(
         "text/markdown": `${path}.md`,
       },
     },
-    authors: [{ name: "Sleepyland Research", url: "/#editorial-method" }],
+    authors: [{ name: "Sleepyland Research", url: "/research" }],
     creator: "Sleepyland Research",
     publisher: site.shortName,
     category: "Sleep research",
@@ -60,7 +58,7 @@ export function researchArticleMetadata(
       description: article.seoDescription,
       publishedTime: isoDateTime(article.publishedAt),
       modifiedTime: isoDateTime(article.updatedAt),
-      authors: [absoluteUrl("/#editorial-method")],
+      authors: [absoluteUrl("/research")],
       section: "Sleep research",
       tags: [
         ...article.tags.map(researchTagLabel),
@@ -142,11 +140,10 @@ export function researchArticleJsonLd(article: ResearchArticle) {
     dateModified: isoDateTime(article.updatedAt),
     author: {
       "@type": "Organization",
-      "@id": `${site.canonicalUrl}/#editorial-method`,
+      "@id": `${site.canonicalUrl}/research#sleepyland-research`,
       name: "Sleepyland Research",
-      url: absoluteUrl("/#editorial-method"),
+      url: absoluteUrl("/research"),
     },
-    creditText: RESEARCH_AUTHORSHIP_DISCLOSURE,
     publisher: { "@id": `${site.canonicalUrl}/#organization` },
     isPartOf: { "@id": `${site.canonicalUrl}/#website` },
     isAccessibleForFree: true,

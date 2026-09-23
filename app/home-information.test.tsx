@@ -13,9 +13,9 @@ import {
   HomeInformation,
 } from "./home-information";
 import { featuredResearchResources } from "./noise/research-resources";
-import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "./research/editorial-disclosure";
+import { RESEARCH_HEALTH_BOUNDARY } from "./research/editorial-disclosure";
 import { applicationFeatures } from "./seo";
-import { repositoryUrl } from "./site";
+import { analyticsSummary, repositoryUrl } from "./site";
 import { SOUND_MODES } from "./sound-modes";
 
 const stylesheet = await Bun.file(new URL("./globals.css", import.meta.url)).text();
@@ -88,7 +88,7 @@ describe("Sleepyland homepage information layer", () => {
 
   test("states only what the site already claims", () => {
     expect(markup).toContain(NOISE_DOCUMENT_PARAGRAPHS[2]);
-    expect(markup).toContain(RESEARCH_AUTHORSHIP_DISCLOSURE);
+    expect(markup).toContain(RESEARCH_HEALTH_BOUNDARY);
     for (const feature of applicationFeatures) {
       expect(markup).toContain(feature);
     }
@@ -96,14 +96,16 @@ describe("Sleepyland homepage information layer", () => {
       .map((match) => match[1]);
     for (const mode of SOUND_MODES) {
       const pillar = HOME_PILLARS.find((candidate) => candidate.label === mode.label);
-      expect(pillar?.summary.startsWith(`${mode.detail}: `)).toBeTrue();
+      expect(pillar?.summary.toLowerCase()).toContain(`${mode.recipe.noiseType} noise`);
       expect(definitionLabels).toContain(mode.label);
     }
     const analytics = HOME_TRUST_ITEMS.find((item) => item.label === "Analytics");
-    expect(analytics).toBeDefined();
-    expect(studioSource.replaceAll(/\s+/gu, " ")).toContain(analytics?.detail ?? "");
+    expect(analytics?.detail).toBe(analyticsSummary);
+    expect(studioSource).toContain("{analyticsSummary}");
+    expect(markup).toContain(analyticsSummary);
     expect(markup).toContain("Sleepyland is not a medical device, diagnosis, or treatment.");
-    expect(markup).toContain("The hosted product is free to use without an account.");
+    expect(markup).toContain("The sound machine is free and needs no account.");
+    expect(markup).not.toMatch(/canonical production site|bounded anonymous|engine recipe/u);
     expect(markup).not.toContain("offline");
   });
 

@@ -8,7 +8,7 @@ import { site } from "../site";
 
 describe("Sleepyland design metadata", () => {
   test("keeps its own noindex identity instead of the homepage", () => {
-    expect(metadata.title).toBe("Design system");
+    expect(metadata.title).toBe("Design system | Sleepyland");
     expect(metadata.description).toBe(
       "Sleepyland's living browser design-system specification and responsive component stress lab.",
     );
@@ -20,12 +20,12 @@ describe("Sleepyland design metadata", () => {
       type: "website",
       url: "/design",
       siteName: site.shortName,
-      title: "Design system",
+      title: "Design system | Sleepyland",
       description: metadata.description,
     });
     expect(metadata.twitter).toMatchObject({
       card: "summary_large_image",
-      title: "Design system",
+      title: "Design system | Sleepyland",
       description: metadata.description,
     });
   });

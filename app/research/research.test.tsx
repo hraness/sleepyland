@@ -24,6 +24,10 @@ import { metadata as researchIndexMetadata } from "./page";
 import { homepageUpdatedAt, site } from "../site";
 import ResearchArticlePage from "./[slug]/page";
 import { ArticleBody } from "./article-body";
+import {
+  RESEARCH_ARTICLE_BOUNDARY,
+  RESEARCH_HEALTH_BOUNDARY,
+} from "./editorial-disclosure";
 import { RESEARCH_IMAGE_WORDMARK } from "./article-image";
 import ResearchLayout, { viewport } from "./layout";
 import {
@@ -121,7 +125,7 @@ describe("Sleepyland Research content", () => {
       ).toBeTrue();
     }
 
-    const markup = renderToStaticMarkup(createElement(ResearchIndex, { showAll: true }));
+    const markup = renderToStaticMarkup(createElement(ResearchIndex));
     const augustArticle = markup.indexOf("Is Eight Hours of Sleep Necessary?");
     const julyArticle = markup.indexOf("Can Sound Help You Focus?");
 
@@ -138,10 +142,9 @@ describe("Sleepyland Research content", () => {
     expect(markup).not.toContain("benadryl-diphenhydramine-for-sleep");
     expect(markup).not.toContain("z-drugs-zaleplon-zolpidem-eszopiclone");
 
-    const homepageMarkup = renderToStaticMarkup(createElement(ResearchIndex));
-    const homepageEntries = homepageMarkup.match(/class="plain-publication__entry"/gu)?.length ?? 0;
-    expect(homepageEntries).toBeGreaterThan(0);
-    expect(homepageEntries).toBeLessThanOrEqual(7);
+    const homepageGuides = homepageResearchArticles();
+    expect(homepageGuides.length).toBeGreaterThan(0);
+    expect(homepageGuides.length).toBeLessThanOrEqual(8);
   });
 
   test("publishes one substantial evidence cluster without thin query variants", () => {
@@ -529,9 +532,9 @@ describe("Sleepyland Research content", () => {
     expect(markup).not.toMatch(/guaranteed sleep|cures insomnia|clinically proven/iu);
   });
 
-  test("keeps authorship, one compact editorial boundary, and product links visible", async () => {
-    const [indexSource, articleSource] = await Promise.all([
-      Bun.file(new URL("./research-index-page.tsx", import.meta.url)).text(),
+  test("keeps authorship, one compact health boundary, and product links visible", async () => {
+    const [shellSource, articleSource] = await Promise.all([
+      Bun.file(new URL("./research-shell.tsx", import.meta.url)).text(),
       Bun.file(new URL("./[slug]/page.tsx", import.meta.url)).text(),
     ]);
     const indexMarkup = renderToStaticMarkup(createElement(ResearchIndex));
@@ -540,21 +543,20 @@ describe("Sleepyland Research content", () => {
     });
     const articleMarkup = renderToStaticMarkup(articlePage);
 
-    expect(indexSource).toContain("Editorial boundary");
-    expect(indexMarkup).toContain("Educational evidence synthesis, not medical advice");
-    expect(indexMarkup).toContain("open source on GitHub");
-    expect(indexMarkup).not.toContain("One publication, two readable surfaces");
+    expect(indexMarkup).toContain(RESEARCH_HEALTH_BOUNDARY);
+    expect(indexMarkup).toContain("not listed here until a clinician or pharmacist reviews them");
     expect(indexMarkup).not.toContain("Accept: text/markdown");
-    expect(indexSource).toContain("researchContributionUrl");
-    expect(indexSource).toContain('href="/noise"');
+    expect(shellSource).toContain("researchContributionUrl");
+    expect(shellSource).toContain('href="/noise"');
     expect(articleSource).toContain("Open the calming sound machine");
-    expect(articleSource).toContain("Educational evidence synthesis");
-    expect(articleSource).toContain("RESEARCH_AUTHORSHIP_DISCLOSURE");
-    expect(articleMarkup).toContain(
-      "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
-    );
+    expect(articleMarkup).toContain(RESEARCH_ARTICLE_BOUNDARY);
+    expect(articleMarkup.split(RESEARCH_ARTICLE_BOUNDARY)).toHaveLength(2);
+    for (const markup of [indexMarkup, articleMarkup]) {
+      expect(markup).not.toMatch(/Drafted by an AI agent|Codex AI reviewer|AI-drafted/u);
+    }
     expect(articleSource).toContain("contributions are <a");
-    expect(articleSource).toContain('href="/#editorial-method"');
+    expect(articleSource).toContain('<Link href="/research">Sleepyland Research</Link>');
+    expect(articleSource).not.toContain("/#editorial-method");
     expect(articleSource).toContain("Published ");
     expect(articleSource).toContain("Updated ");
     expect(articleSource).toContain('href="/noise"');
@@ -743,9 +745,13 @@ describe("Sleepyland Research search surface", () => {
         datePublished: `${article.publishedAt}T00:00:00.000Z`,
         dateModified: `${article.updatedAt}T00:00:00.000Z`,
         isAccessibleForFree: true,
-        creditText:
-          "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
+        author: {
+          "@type": "Organization",
+          name: "Sleepyland Research",
+          url: "https://sleepy.land/research",
+        },
       });
+      expect(structuredData).not.toHaveProperty("creditText");
       expect(structuredData.citation).toEqual(
         article.sourceIds.map((sourceId) => RESEARCH_SOURCES[sourceId].url),
       );

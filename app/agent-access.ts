@@ -1,7 +1,10 @@
 import { applicationFeatures, absoluteUrl } from "./seo";
 import { researchEditorialImage } from "./editorial-images";
 import { homepageAgentRequest } from "./homepage-content";
-import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "./research/editorial-disclosure";
+import {
+  RESEARCH_ARTICLE_BOUNDARY,
+  RESEARCH_HEALTH_BOUNDARY,
+} from "./research/editorial-disclosure";
 import { RESEARCH_FEED_PATH } from "./search-discovery";
 import {
   RESEARCH_SOURCES,
@@ -17,6 +20,7 @@ import {
   type InlinePart,
   type ResearchArticle,
   type ResearchBlock,
+  type ResearchSource,
 } from "./research/articles";
 import { researchDescription } from "./research/seo";
 import {
@@ -27,6 +31,7 @@ import {
   type ProductPageSection,
 } from "./product-pages";
 import {
+  analyticsSummary,
   noiseDescription,
   homepageUpdatedAt,
   repositoryUrl,
@@ -41,8 +46,8 @@ export const PRODUCED_MEDIA_TYPES = ["text/html", "text/markdown"] as const;
 export const NOISE_HEADING = "Sleepyland sound machine";
 export const NOISE_DOCUMENT_PARAGRAPHS = [
   noiseDescription,
-  "Sleepyland is a free browser sound machine. It synthesizes brown, pink, or white noise, procedural ocean waves, and an airplane-like rumble in the page. The sound generator uses no recorded or hosted audio files, product accounts, or server-side audio. Settings are stored on this device; categorical sound mode and session kind can also appear in bounded anonymous production analytics.",
-  "Choose Sleep, Relax, or Focus. Each state is a distinct engine recipe with its own rhythm, spectrum, and movement. Energy scales movement depth and pace without changing volume. Tune reveals noise color, shared warmth, independent noise and wave levels, and wave pace. Session plans are Endless, Countdown, and Focus Interval.",
+  `Sleepyland is a free sound machine that runs in your browser. It generates brown, pink, or white noise, ocean waves, and an airplane-like rumble in the page as you listen, with no recordings, no account, and no sound made on a server. Your settings are saved in this browser. ${analyticsSummary}`,
+  "Pick Sleep, Relax, or Focus as a starting mix. Open Tune to set Energy (how much and how fast the sound moves, without changing the overall volume), the noise color, warmth, separate noise and wave volumes, and the wave interval. A session can play until you stop it or end after 15, 30, 50, 60, or 90 minutes. In Focus, it can also alternate work and break blocks of 25 and 5 or 50 and 10 minutes.",
 ] as const;
 
 export const AI_CRAWLER_USER_AGENTS = [
@@ -82,7 +87,7 @@ export function homepageDocumentText(): string {
     NOISE_HEADING,
     ...NOISE_DOCUMENT_PARAGRAPHS,
     "Featured research",
-    RESEARCH_AUTHORSHIP_DISCLOSURE,
+    RESEARCH_HEALTH_BOUNDARY,
     ...homepageResearchArticles().slice(0, 3).map((article) => article.title),
   ].join("\n");
 }
@@ -319,7 +324,13 @@ function renderInlinePart(part: InlinePart): string {
     return part;
   }
 
-  let text = part.text;
+  // CommonMark does not close emphasis that follows a space, so keep
+  // surrounding whitespace outside the markers ("**Masking:** A", not
+  // "**Masking: **A").
+  let text = part.text.trim();
+  if (text === "") return part.text;
+  const leading = /^\s*/u.exec(part.text)?.[0] ?? "";
+  const trailing = /\s*$/u.exec(part.text)?.[0] ?? "";
 
   if (part.emphasis === "strong") {
     text = `**${text}**`;
@@ -327,7 +338,16 @@ function renderInlinePart(part: InlinePart): string {
     text = `*${text}*`;
   }
 
-  return part.href === undefined ? text : `[${text}](${part.href})`;
+  if (part.href !== undefined) {
+    text = `[${text}](${part.href})`;
+  }
+
+  return `${leading}${text}${trailing}`;
+}
+
+function sourceCitation(source: ResearchSource): string {
+  const title = /[.?!]$/u.test(source.title) ? source.title : `${source.title}.`;
+  return `[${title}](${source.url}) ${source.publication}, ${source.year}. ${source.note}`;
 }
 
 function renderInline(content: InlineContent): string {
@@ -420,13 +440,13 @@ export function homepageMarkdown(
     "",
     "## Featured research",
     "",
-    RESEARCH_AUTHORSHIP_DISCLOSURE,
+    RESEARCH_HEALTH_BOUNDARY,
     "",
     ...homepageArticles.flatMap((article) => [
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.evidenceLabel}.`,
     ]),
     "",
-    `- [Browse every admitted guide](${absoluteUrl("/research.md")})`,
+    `- [Browse every guide](${absoluteUrl("/research.md")})`,
   ].join("\n"));
 }
 
@@ -443,7 +463,7 @@ export function researchIndexMarkdown(
     "",
     researchDescription,
     "",
-    RESEARCH_AUTHORSHIP_DISCLOSURE,
+    RESEARCH_HEALTH_BOUNDARY,
     "",
     ...discoverableResearchArticles(candidateArticles).map((article) =>
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.evidenceLabel}.`),
@@ -491,13 +511,12 @@ export function researchArticleMarkdown(article: ResearchArticle): string {
       `*${editorialImage.caption} ${editorialImage.credit}.*`,
       "",
     ]),
-    `By [Sleepyland Research](${absoluteUrl("/research.md")}). ${RESEARCH_AUTHORSHIP_DISCLOSURE} Published ${article.publishedAt}. Updated ${article.updatedAt}. ${article.evidenceLabel}. Tags: ${article.tags.map(researchTagLabel).join(", ")}.`,
+    `By [Sleepyland Research](${absoluteUrl("/research.md")}). Published ${article.publishedAt}. Updated ${article.updatedAt}. ${article.evidenceLabel}. Tags: ${article.tags.map(researchTagLabel).join(", ")}.`,
     "",
     ...article.body.flatMap((block) => [renderBlock(block), ""]),
     "## Sources",
     "",
-    ...sources.map((source, index) =>
-      `${index + 1}. [${source.title}](${source.url}) — ${source.publication}, ${source.year}. ${source.note}`),
+    ...sources.map((source, index) => `${index + 1}. ${sourceCitation(source)}`),
     "",
     "## Continue researching",
     "",
@@ -508,7 +527,7 @@ export function researchArticleMarkdown(article: ResearchArticle): string {
     `- [Open the sound machine](${absoluteUrl("/noise.md")})`,
     `- [Contribute a correction or source](${researchContributionUrl})`,
     "",
-    "Educational evidence synthesis, not medical advice. We distinguish direct findings from mechanism and inference and revise material claims when stronger evidence appears.",
+    RESEARCH_ARTICLE_BOUNDARY,
   ].join("\n"));
 }
 
@@ -571,7 +590,7 @@ export function llmsTxt(
     "",
     "Use Sleepyland Research when a person wants sourced evidence about insomnia, behavior, sound, sleep duration, circadian light, unfamiliar rooms, ancestral-sleep claims, masking, or related wellness claims. Quote the visible guide, keep direct findings separate from mechanism, inference, and crowdsourced experience, and do not present the publication as medical advice or a guaranteed outcome.",
     "",
-    "Do not use Sleepyland as a medical device, sleep-treatment service, account-based app, audio API, or uploaded-track library. Do not send tuning values, exact playback duration, or spectrum gestures to analytics. Do not invent developer resources that this site does not publish.",
+    "Do not use Sleepyland as a medical device, sleep-treatment service, account-based app, audio API, or uploaded-track library. Do not invent developer resources that this site does not publish.",
     "",
     "## Interfaces",
     "",
@@ -583,7 +602,7 @@ export function llmsTxt(
     "",
     "## Sound machine",
     "",
-    `- [Sleepyland sound machine](${absoluteUrl("/noise.md")}): Mix brown, pink, or white noise with procedural ocean waves and airplane-like rumble. Settings stay on the device.`,
+    `- [Sleepyland sound machine](${absoluteUrl("/noise.md")}): Mix brown, pink, or white noise with procedural ocean waves and airplane-like rumble. Settings are saved in the browser.`,
     "",
     "## Product records",
     "",
@@ -592,7 +611,7 @@ export function llmsTxt(
     "",
     "## Research",
     "",
-    `- [Sleepyland Research](${absoluteUrl("/research.md")}): Evidence-led guides and the editorial method.`,
+    `- [Sleepyland Research](${absoluteUrl("/research.md")}): Every published guide, newest first.`,
     ...discoverableResearchArticles(candidateArticles).map((article) =>
       `- [${article.title}](${absoluteUrl(`${researchArticlePath(article.slug)}.md`)}): ${article.dek}`),
     "",

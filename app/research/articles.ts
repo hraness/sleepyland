@@ -260,7 +260,7 @@ export const RESEARCH_SOURCES = {
   dynamicBinaural2024: {
     title:
       "Effect of dynamic binaural beats on sleep quality: a proof-of-concept study with questionnaire and biosignals",
-    publication: "Frontiers in Human Neuroscience",
+    publication: "Sleep",
     year: 2024,
     url: "https://pubmed.ncbi.nlm.nih.gov/38629490/",
     note:
@@ -287,7 +287,7 @@ export const RESEARCH_SOURCES = {
   oceanCabg1992: {
     title:
       "The effects of ocean sounds on sleep after coronary artery bypass graft surgery",
-    publication: "Heart & Lung",
+    publication: "American Journal of Critical Care",
     year: 1992,
     url: "https://pubmed.ncbi.nlm.nih.gov/1307884/",
     note:
@@ -333,7 +333,7 @@ export const RESEARCH_SOURCES = {
       "The effects of physical vibration on heart rate variability as a measure of drowsiness",
     publication: "Ergonomics",
     year: 2018,
-    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC4963542/",
+    url: "https://pubmed.ncbi.nlm.nih.gov/29871584/",
     note:
       "A seated-vibration experiment showing that vehicle-like whole-body vibration can increase drowsiness over a short exposure.",
   },
@@ -450,7 +450,7 @@ export const RESEARCH_SOURCES = {
   },
   focusNoiseMeta2024: {
     title:
-      "Systematic Review and Meta-Analysis: Do White Noise and Pink Noise Help With Attention in Attention-Deficit/Hyperactivity Disorder?",
+      "Systematic Review and Meta-Analysis: Do White Noise or Pink Noise Help With Task Performance in Youth With Attention-Deficit/Hyperactivity Disorder or With Elevated Attention Problems?",
     publication: "Journal of the American Academy of Child & Adolescent Psychiatry",
     year: 2024,
     url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC11283987/",
@@ -530,7 +530,7 @@ export const RESEARCH_SOURCES = {
   },
   vanDongen2003: {
     title:
-      "The cumulative cost of additional wakefulness: dose-response effects on neurobehavioral functions and sleep physiology",
+      "The cumulative cost of additional wakefulness: dose-response effects on neurobehavioral functions and sleep physiology from chronic sleep restriction and total sleep deprivation",
     publication: "Sleep",
     year: 2003,
     url: "https://pubmed.ncbi.nlm.nih.gov/12683469/",
@@ -582,7 +582,7 @@ export const RESEARCH_SOURCES = {
   tobaLongitudinal2025: {
     title:
       "Modern Times: Longitudinal Study of Toba/Qom Communities Reveals Delay and Shortening of Sleep in Real-Time Across Electrification",
-    publication: "SLEEP Advances",
+    publication: "bioRxiv (preprint)",
     year: 2025,
     url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12324345/",
     note:
@@ -606,7 +606,7 @@ export const RESEARCH_SOURCES = {
   },
   firstNightMeta2022: {
     title: "A meta-analysis of the first-night effect in healthy individuals for the full age spectrum",
-    publication: "Sleep Medicine Reviews",
+    publication: "Sleep Medicine",
     year: 2022,
     url: "https://pubmed.ncbi.nlm.nih.gov/34998093/",
     note:
@@ -632,7 +632,7 @@ export const RESEARCH_SOURCES = {
   firstNightNonconsecutive2024: {
     title:
       "The first-night effect of sleep occurs over nonconsecutive nights in unfamiliar and familiar environments",
-    publication: "Journal of Sleep Research",
+    publication: "Sleep",
     year: 2024,
     url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC11467056/",
     note:
@@ -673,7 +673,7 @@ export const RESEARCH_SOURCES = {
   },
   dailyLightReview2021: {
     title:
-      "Are we still in the dark? A systematic review on personal daily light exposure, sleep-wake rhythm, and mood in healthy adults",
+      "Are we still in the dark? A systematic review on personal daily light exposure, sleep-wake rhythm, and mood in healthy adults from the general population",
     publication: "Sleep Health",
     year: 2021,
     url: "https://pubmed.ncbi.nlm.nih.gov/34420891/",

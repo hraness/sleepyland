@@ -327,7 +327,7 @@ const RESEARCH_ADMISSION_DECISIONS = {
     evidenceAnchor: {
       sourceId: "fanNoiseReview2021",
       fit:
-        "The fan-noise evidence review anchors the absence of a reliable general sleep effect; thermal and masking sources separately support component hypotheses.",
+        "The technical fan-noise review anchors only the acoustic claim that fan sound combines broadband airflow noise with blade-passing tones; it measures no sleep outcome. Thermal and masking sources separately support component hypotheses.",
     },
     nearestSlugs: [
       "how-to-use-white-noise-for-sleep",

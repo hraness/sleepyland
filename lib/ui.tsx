@@ -354,7 +354,7 @@ export function RouteNotFoundPage(props: Readonly<{ showThemeToggle?: boolean }>
       <h1>Page not found</h1>
       <p>The address may be out of date, or this page may have moved.</p>
       <nav aria-label="Where to look next" className="sleepyland-route-state__actions">
-        <Link href="/">Research</Link>
+        <Link href="/research">Research</Link>
         <Link href="/noise">Sound machine</Link>
         <Link href="/llms.txt">llms.txt</Link>
         <Link href="/sitemap.md">Sitemap</Link>

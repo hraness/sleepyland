@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { defaultSocialImage } from "../seo";
 import { site } from "../site";
 
-const title = "Design system";
+const title = "Design system | Sleepyland";
 const description =
   "Sleepyland's living browser design-system specification and responsive component stress lab.";
 

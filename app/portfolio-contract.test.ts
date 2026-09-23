@@ -19,27 +19,21 @@ describe("Sleepyland portfolio contract", () => {
     );
   });
 
-  test("keeps the README ordered around proof, interfaces, limits, and action", async () => {
+  test("keeps the README's links, commands, and limits current", async () => {
     const readme = await Bun.file(new URL("README.md", repositoryRoot)).text();
-    const headings = [
-      "## First proof",
-      "## Working model",
-      "## Interfaces",
-      "## Evidence and generated surfaces",
-      "## Boundaries",
-      "## Questions",
-      "## Smallest useful action",
-    ];
-    const positions = headings.map((heading) => readme.indexOf(heading));
 
-    expect(positions.every((position) => position >= 0)).toBeTrue();
-    expect(positions).toEqual([...positions].toSorted((left, right) => left - right));
+    expect(readme).toContain("https://sleepy.land/research");
+    expect(readme).not.toMatch(/sleepy\.land\/#/u);
     expect(readme).toContain(
       "curl -H 'Accept: text/markdown'",
     );
     expect(readme).toContain("uses no recorded audio, product account, microphone input");
     expect(readme).toContain("does not diagnose, prescribe, provide individualized dosing");
+    expect(readme).toContain("not medical advice");
+    expect(readme).toContain("no clinician has reviewed them");
+    expect(readme).not.toMatch(/Drafted by an AI agent|Codex AI reviewer/u);
     expect(readme).toContain("bun install --frozen-lockfile");
     expect(readme).toContain("bun run check");
+    expect(readme).toContain("bun run check:citations --write");
   });
 });

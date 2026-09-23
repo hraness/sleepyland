@@ -1,4 +1,4 @@
-import { repositoryUrl, researchContributionUrl } from "./site";
+import { analyticsSummary, repositoryUrl, researchContributionUrl } from "./site";
 
 export type ProductPageInline =
   | string
@@ -49,29 +49,28 @@ export const PRODUCT_PAGES = [
   {
     slug: "about",
     path: "/about",
-    heading: "What Sleepyland is",
-    title: "What Sleepyland is | Sleepyland",
+    heading: "About Sleepyland",
+    title: "About | Sleepyland",
     description:
-      "Sleepyland is an open-source sleep publication and browser sound machine that synthesizes noise and procedural waves locally on this device.",
+      "Sleepyland is a free, open-source sound machine that generates noise and ocean waves in your browser, plus sourced guides to sleep and sound.",
     updatedAt: PRODUCT_PAGE_UPDATED_AT,
     intro: [
-      "Sleepyland is a free browser sound machine. It synthesizes brown, pink, or white noise, procedural ocean waves, and an airplane-like rumble in the page. The generator uses no recorded or hosted audio files, product accounts, or server-side audio.",
+      "Sleepyland is a free sound machine that runs in your browser. It generates brown, pink, or white noise, ocean waves, and an airplane-like rumble in the page as you listen. It uses no recordings, needs no account, and makes no sound on a server.",
     ],
     sections: [
       {
         heading: "What you can do",
         items: [
-          ["Choose Sleep, Relax, or Focus. Each state is a distinct engine recipe with its own rhythm, spectrum, and movement."],
-          ["Use Gentle, Balanced, or Strong Energy. Energy scales movement depth and pace without changing volume."],
-          ["Open Tune for noise color, shared warmth, independent noise and wave levels, and wave pace."],
-          ["Run Endless, Countdown, or Focus Interval sessions."],
-          ["Watch the live post-mix spectrogram and spectrum curve, including an interactive tap-and-hold filtered-noise spectrum."],
+          ["Choose Sleep, Relax, or Focus. Each mode is a different starting mix."],
+          ["Open Tune to set Energy (Gentle, Balanced, or Strong), the noise color, warmth, separate noise and wave volumes, and the wave interval. Energy changes how much and how fast the sound moves without changing the overall volume."],
+          ["Play until you stop, set a countdown of 15, 30, 50, 60, or 90 minutes, or, in Focus, alternate work and break blocks."],
+          ["Watch a live spectrum of the sound you hear. Tap it to play a pulse, or hold and move to explore pitches."],
         ],
         paragraphs: [
           [
-            "Settings stay in this browser. Selected mode and session kind can also appear as categorical fields in bounded anonymous production analytics. Read the ",
+            `Your settings are saved in this browser. ${analyticsSummary} The `,
             link("privacy page", "/privacy"),
-            " for what can leave the device.",
+            " lists everything that can leave your device.",
           ],
         ],
       },
@@ -79,9 +78,9 @@ export const PRODUCT_PAGES = [
         heading: "What Sleepyland is not",
         paragraphs: [
           [
-            "Sleepyland is not a medical device, diagnosis, or treatment. The names Sleep, Relax, and Focus describe intended listening contexts, not guaranteed outcomes. ",
-            link("Sleepyland Research", "/"),
-            " publishes sourced guides and states that the publication is educational, not medical advice. ",
+            "Sleepyland is not a medical device, diagnosis, or treatment. The names Sleep, Relax, and Focus describe intended listening contexts, not guaranteed outcomes. The ",
+            link("research guides", "/research"),
+            " are educational and are not medical advice. ",
             link("Support", "/support"),
             " does not provide medical advice, hearing-safety certification, or crisis services.",
           ],
@@ -252,17 +251,17 @@ export const PRODUCT_PAGES = [
   {
     slug: "accessibility",
     path: "/accessibility",
-    heading: "Accessibility evidence",
-    title: "Accessibility evidence | Sleepyland",
+    heading: "Accessibility",
+    title: "Accessibility | Sleepyland",
     description:
-      "The accessibility behavior Sleepyland currently tests, the contact path for barriers, and the assessment claims it does not make.",
+      "The accessibility behavior Sleepyland’s tests check today, how to report a barrier, and which independent reviews are not on record yet.",
     updatedAt: PRODUCT_PAGE_UPDATED_AT,
     intro: [
-      "This page records behavior that the repository and browser interface currently verify. It is not a third-party audit, a WCAG conformance claim, or an NYC 988 accessibility assessment.",
+      "This page lists the accessibility behavior that Sleepyland’s automated tests check today. It is not a third-party audit or a WCAG conformance claim.",
     ],
     sections: [
       {
-        heading: "Current checked behavior",
+        heading: "What the tests check",
         items: [
           ["Play, mode, session, Tune, segmented choices, and range controls expose semantic names, roles, values, and selected states."],
           ["The spectrogram is a named keyboard-reachable control with a keyboard pulse path as well as pointer input."],
@@ -274,10 +273,10 @@ export const PRODUCT_PAGES = [
         ],
       },
       {
-        heading: "Known evidence boundary",
+        heading: "Limits",
         paragraphs: [
           [
-            "The repository uses unit, server-render, CSS-contract, and browser design-surface checks. It does not yet contain an independent screen-reader matrix, third-party accessibility report, formal WCAG conformance evaluation, or NYC 988 assessment. Sleepyland must not claim those reviews have occurred.",
+            "These checks are unit, server-render, CSS, and browser tests. Sleepyland has no independent screen-reader review, third-party accessibility audit, or formal WCAG evaluation on record yet.",
           ],
         ],
       },
@@ -345,19 +344,19 @@ export const PRODUCT_PAGES = [
       "A silent 7.5-second Sleepyland walkthrough showing mode selection, Tune controls, playback, and the live spectrum.",
     updatedAt: PRODUCT_PAGE_UPDATED_AT,
     intro: [
-      "This silent 7.5-second walkthrough starts in Sleep, selects Relax, opens Tune, and starts playback so the final post-mix spectrum becomes visible.",
+      "This silent 7.5-second walkthrough starts in Sleep, switches to Relax, opens Tune, and starts playback, so the live spectrum appears at the end.",
     ],
     sections: [
       {
         heading: "What the demo shows",
         items: [
-          ["Sleep, Relax, and Focus remain the three primary modes."],
-          ["Tune reveals Energy, noise color, independent noise and wave levels, warmth, and wave interval."],
-          ["Starting playback changes the persistent Play control to Stop and activates the post-mix spectrum."],
+          ["Sleep, Relax, and Focus are the three modes."],
+          ["Tune shows Energy, the noise color, separate noise and wave volumes, warmth, and the wave interval."],
+          ["Starting playback turns the Play button into Stop and starts the live spectrum."],
         ],
         paragraphs: [
           [
-            "The video contains no audio, voice, captions, user data, health claim, or outcome claim. It was captured from the checked browser product at 1280 by 720 and encoded as H.264 without an audio track.",
+            "The video is silent, with no voice or captions, and shows no user data or health claims. It was recorded from the sound machine in a browser at 1280 × 720 and encoded as H.264 with no audio track.",
           ],
           [
             link("Open the MP4 asset", LAUNCH_DEMO_PATH),

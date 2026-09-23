@@ -3,11 +3,10 @@ import {
   socialImageContentType,
   socialImageSize,
 } from "@hraness/web-discovery/social-image";
-import { noiseDescription, noiseTitle, site } from "./site";
+import { noiseDescription, noiseTitle, site, socialImageAlt } from "./site";
 import { SleepylandMark } from "./social-mark";
 
-export const alt =
-  "Sleepyland noise machine for sleep, calm, and focus";
+export const alt = socialImageAlt;
 export const contentType = socialImageContentType;
 export const size = socialImageSize;
 

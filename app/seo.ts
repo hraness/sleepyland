@@ -1,20 +1,20 @@
-import { noiseDescription, noiseTitle, repositoryUrl, site } from "./site";
+import { noiseDescription, noiseTitle, repositoryUrl, site, socialImageAlt } from "./site";
 
 export const applicationFeatures = [
-  "Sleep, Relax, and Focus functional soundscapes with distinct rhythm, spectrum, and movement",
-  "Gentle, Balanced, and Strong Energy without hidden volume changes",
-  "Brown, pink, and white noise synthesized locally in the browser",
-  "Procedural ocean waves with changing swell, foam, wash, and undertow",
-  "Deep airplane-like cabin sound through dark brown-noise shaping",
-  "Independent noise and ocean-wave volume controls",
-  "Live post-mix spectrogram and spectrum curve",
-  "Interactive tap and hold filtered-noise spectrum",
-  "Endless, countdown, and Focus interval sessions with smooth completion",
-  "On-device sound generation and browser-local settings storage",
+  "Sleep, Relax, and Focus modes, each a different starting mix",
+  "Gentle, Balanced, and Strong Energy levels that change how the sound moves without changing its overall volume",
+  "Brown, pink, and white noise generated in your browser",
+  "Ocean waves generated with changing swell, foam, wash, and undertow",
+  "A low airplane-like rumble shaped from dark brown noise",
+  "Separate volume controls for noise and waves",
+  "A live spectrogram of the sound you hear",
+  "Tap the spectrum to play a pulse, or hold and move to explore pitches",
+  "Sessions that play until you stop, end after 15 to 90 minutes, or run Focus work and break blocks",
+  "Sound made on your device, with settings saved in this browser",
 ] as const;
 
 export const defaultSocialImage = {
-  alt: "Sleepyland noise machine with Sleep, Relax, and Focus modes",
+  alt: socialImageAlt,
   height: 630,
   url: "/opengraph-image",
   width: 1200,

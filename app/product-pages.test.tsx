@@ -75,14 +75,16 @@ describe("Sleepyland public product records", () => {
       params: Promise.resolve({ slug: about.slug }),
     }));
 
-    expect(markup).toContain("<h1>What Sleepyland is</h1>");
-    expect(markup).toContain("free browser sound machine");
-    expect(markup).toContain("no recorded or hosted audio files");
+    expect(markup).toContain("<h1>About Sleepyland</h1>");
+    expect(markup).toContain("free sound machine that runs in your browser");
+    expect(markup).toContain("uses no recordings, needs no account, and makes no sound on a server");
     expect(markup).toContain("Sleep, Relax, or Focus");
-    expect(markup).toContain("Energy scales movement depth and pace without changing volume");
+    expect(markup).toContain("Open Tune to set Energy");
+    expect(markup).toContain("without changing the overall volume");
+    expect(markup).toContain("15, 30, 50, 60, or 90 minutes");
     expect(markup).toContain("not a medical device");
     expect(markup).toContain('href="https://hraness.com"');
-    expect(markup).toContain('href="/"');
+    expect(markup).toContain('href="/research"');
     expect(markup).toContain('href="/noise"');
     expect(markup).toContain('href="https://github.com/hraness/sleepyland"');
     expect(markup).toContain("research contributions are welcome");
@@ -144,8 +146,8 @@ describe("Sleepyland public product records", () => {
     expect(markup).toContain("44-pixel minimum target");
     expect(markup).toContain("Reduced-motion preference");
     expect(markup).toContain("not a third-party audit");
-    expect(markup).toContain("not yet contain an independent screen-reader matrix");
-    expect(markup).toContain("NYC 988 assessment");
+    expect(markup).toContain("no independent screen-reader review, third-party accessibility audit, or formal WCAG evaluation");
+    expect(markup).not.toMatch(/must not claim|NYC 988/u);
     expect(markup).not.toMatch(/WCAG (?:compliant|certified|conformant)/iu);
   });
 

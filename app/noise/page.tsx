@@ -1,18 +1,12 @@
 import { INDEXABLE_ROBOTS } from "@hraness/web-discovery";
 import type { Metadata, Viewport } from "next";
-import Link from "next/link";
 
-import {
-  NOISE_DOCUMENT_PARAGRAPHS,
-  NOISE_HEADING,
-  markdownAlternatePath,
-} from "../agent-access";
+import { markdownAlternatePath } from "../agent-access";
 import {
   NoiseStudio,
   type StudioResourceGroup,
 } from "../noise-studio";
 import {
-  applicationFeatures,
   defaultSocialImage,
   serializeJsonLd,
   webApplicationJsonLd,
@@ -66,17 +60,6 @@ export default function NoisePage() {
         id="sleepyland-application-structured-data"
         type="application/ld+json"
       />
-      <section aria-hidden="true" className="sleepyland-visually-hidden">
-        <h1>{NOISE_HEADING}</h1>
-        {NOISE_DOCUMENT_PARAGRAPHS.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
-        <h2>What you can do</h2>
-        <ul>
-          {applicationFeatures.map((feature) => <li key={feature}>{feature}</li>)}
-        </ul>
-        <p><Link href="/">Read Sleepyland Research</Link></p>
-      </section>
       <NoiseStudio
         brand={{ name: site.shortName, tagline: "calming sound machine" }}
         resourceGroups={studioResourceGroups}

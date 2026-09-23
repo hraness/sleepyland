@@ -4,7 +4,6 @@ import {
 } from "@hraness/web-discovery";
 
 import { researchEditorialImage } from "./editorial-images";
-import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "./research/editorial-disclosure";
 import {
   discoverableResearchArticles,
   latestResearchUpdatedAt,
@@ -58,7 +57,7 @@ export function researchFeedXml(
 ): string {
   const latestUpdate = latestResearchUpdatedAt();
   const feedUrl = absoluteUrl(RESEARCH_FEED_PATH);
-  const channelUrl = absoluteUrl("/");
+  const channelUrl = absoluteUrl("/research");
   const items = discoverableResearchArticles(candidateArticles)
     .map((article) => {
       const url = absoluteUrl(researchArticlePath(article.slug));
@@ -70,7 +69,7 @@ export function researchFeedXml(
         `      <link>${xmlEscape(url)}</link>`,
         `      <guid isPermaLink="true">${xmlEscape(url)}</guid>`,
         `      <pubDate>${new Date(isoDateTime(article.publishedAt)).toUTCString()}</pubDate>`,
-        `      <description>${xmlEscape(`${article.dek} ${RESEARCH_AUTHORSHIP_DISCLOSURE}`)}</description>`,
+        `      <description>${xmlEscape(article.dek)}</description>`,
         "      <dc:creator>Sleepyland Research</dc:creator>",
         ...(editorialImage === undefined ? [] : [
           `      <media:content height="${editorialImage.height}" medium="image" type="image/webp" url="${xmlEscape(absoluteUrl(editorialImage.src))}" width="${editorialImage.width}">`,
@@ -90,7 +89,7 @@ export function researchFeedXml(
     "  <channel>",
     `    <title>${site.shortName} Research</title>`,
     `    <link>${xmlEscape(channelUrl)}</link>`,
-    `    <description>${xmlEscape("Evidence-led sound wellness research from Sleepyland.")}</description>`,
+    `    <description>${xmlEscape("Sourced guides to sleep, sound, and light from Sleepyland.")}</description>`,
     "    <language>en-US</language>",
     `    <lastBuildDate>${new Date(isoDateTime(latestUpdate)).toUTCString()}</lastBuildDate>`,
     `    <atom:link href="${xmlEscape(feedUrl)}" rel="self" type="application/rss+xml" />`,

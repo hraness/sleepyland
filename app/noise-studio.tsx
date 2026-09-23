@@ -27,7 +27,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { SoundEngine } from "./audio-engine";
+import { SoundEngine, audioErrorGuidance } from "./audio-engine";
 import { sleepylandPostHogSite } from "./analytics";
 import { EditorialImageThumbnail } from "./editorial-image";
 import type { EditorialImage } from "./editorial-images";
@@ -75,7 +75,7 @@ import {
   wavePaceAtPeriod,
   wavePeriodSeconds,
 } from "./waves";
-import { repositoryUrl, researchContributionUrl } from "./site";
+import { analyticsSummary, repositoryUrl, researchContributionUrl } from "./site";
 
 type Brand = Readonly<{
   name: string;
@@ -268,12 +268,10 @@ export function NoiseInfo() {
             <section>
               <h3>What stays in your browser</h3>
               <p>
-                Your state, Energy, session, and tuning are stored in this
-                browser. There are no accounts, ads, session replay, cloud audio,
-                or microphone permissions. On the canonical production site,
-                anonymous, cookieless events can include the selected state and
-                session kind; they do not include Energy, tuning, exact playback
-                duration, or audio.
+                Your mode, Energy, session, and Tune settings are saved in this
+                browser. Sleepyland needs no account, shows no ads, uses no
+                session replay, and never asks for microphone access.{" "}
+                {analyticsSummary}
               </p>
             </section>
             <section>
@@ -998,8 +996,8 @@ export function Spectrogram({
         onPointerUp={handlePointerEnd}
       >
         <span className="sleepyland-visually-hidden">
-          Live rolling spectrogram with an interactive filtered-noise instrument.
-          Tap for a pulse or press and hold for continuous sound.
+          Live spectrum of the sound you hear. Press for a pulse, or press and
+          hold to keep it playing.
         </span>
       </Pressable>
     </div>
@@ -1264,11 +1262,7 @@ export function NoiseStudio({
       capturePostHogException(sleepylandPostHogSite, cause, {
         error_origin: "audio_playback_start",
       });
-      setError(
-        cause instanceof Error
-          ? cause.message
-          : "The browser could not start audio playback.",
-      );
+      setError(audioErrorGuidance(cause));
     } finally {
       playbackStartFenceRef.current.clear(startup.token);
     }
@@ -1290,11 +1284,7 @@ export function NoiseStudio({
       capturePostHogException(sleepylandPostHogSite, cause, {
         error_origin: "spectrum_instrument_start",
       });
-      setError(
-        cause instanceof Error
-          ? cause.message
-          : "The browser could not start the spectrum instrument.",
-      );
+      setError(audioErrorGuidance(cause));
       return;
     }
     void engine.beginSpectrumGesture(pointerId, point).catch((cause: unknown) => {
@@ -1302,11 +1292,7 @@ export function NoiseStudio({
       capturePostHogException(sleepylandPostHogSite, cause, {
         error_origin: "spectrum_instrument_resume",
       });
-      setError(
-        cause instanceof Error
-          ? cause.message
-          : "The browser could not start the spectrum instrument.",
-      );
+      setError(audioErrorGuidance(cause));
     });
   }, [ensureEngine]);
 
@@ -1425,12 +1411,12 @@ export function NoiseStudio({
   return (
     <ViewportFrame as="main" className="noise-app">
       <header className="app-header">
-        <div className="wordmark">
+        <h1 className="wordmark">
           {/* eslint-disable-next-line @next/next/no-img-element -- the canonical mark is a fixed-size authored SVG */}
           <img alt="" aria-hidden="true" height={20} src="/marks/sleepyland.svg" width={20} />{" "}
           {brand.name}
           <span className="wordmark__tagline"> {brand.tagline}</span>
-        </div>
+        </h1>
         <div className="header-actions">
           <Link className="header-research-link" href="/research">Research</Link>
           <StudioResources groups={resourceGroups} />

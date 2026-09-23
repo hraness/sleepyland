@@ -7,7 +7,7 @@ import { serializeJsonLd } from "../../seo";
 import { EditorialImageFigure } from "../../editorial-image";
 import { researchEditorialImage } from "../../editorial-images";
 import { ArticleBody } from "../article-body";
-import { RESEARCH_AUTHORSHIP_DISCLOSURE } from "../editorial-disclosure";
+import { RESEARCH_ARTICLE_BOUNDARY } from "../editorial-disclosure";
 import {
   RESEARCH_SOURCES,
   articleReadingMinutes,
@@ -101,7 +101,7 @@ export default async function ResearchArticlePage({
         <p className="plain-publication__article-dek">{article.dek}</p>
         <p className="plain-publication__article-meta">
           <span>By </span>
-          <Link href="/#editorial-method">Sleepyland Research</Link>
+          <Link href="/research">Sleepyland Research</Link>
           <span aria-hidden="true"> · </span>
           <span>Published </span>
           <time dateTime={article.publishedAt}>
@@ -145,12 +145,10 @@ export default async function ResearchArticlePage({
           <ArticleBody blocks={article.body} />
 
           <aside className="plain-publication__cta">
-            <h2>Build a quieter mix in Sleepyland.</h2>
+            <h2>Try it in the sound machine</h2>
             <p>
-              Compare brown, pink, and white noise, shape the tone, add slow
-              procedural waves, choose Sleep, Relax, or Focus, adjust Energy,
-              and run an endless, countdown, or interval session. Everything
-              is generated locally in your browser.
+              Switch between brown, pink, and white noise, add ocean waves, and
+              set a timer. The sound is generated in your browser.
             </p>
             <Link className="plain-publication__primary-link" href="/noise">
               Open the calming sound machine <span aria-hidden="true">→</span>
@@ -175,12 +173,7 @@ export default async function ResearchArticlePage({
           </section>
 
           <p className="plain-publication__disclosure">
-            Educational evidence synthesis, not medical advice. We distinguish
-            direct findings from mechanism and inference and revise material
-            claims when stronger evidence appears.
-          </p>
-          <p className="plain-publication__disclosure">
-            {RESEARCH_AUTHORSHIP_DISCLOSURE}
+            {RESEARCH_ARTICLE_BOUNDARY}
           </p>
           <p className="plain-publication__disclosure">
             Found a stronger source or a claim that needs review? Research

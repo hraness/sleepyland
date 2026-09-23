@@ -27,6 +27,7 @@ describe("Sleepyland search discovery", () => {
     expect(xml).toContain(
       `<atom:link href="https://sleepy.land${RESEARCH_FEED_PATH}" rel="self" type="application/rss+xml" />`,
     );
+    expect(xml).toContain("<link>https://sleepy.land/research</link>");
     const indexableArticles = researchArticles.filter(isIndexableResearchArticle);
     expect(xml.match(/<item>/g)?.length).toBe(indexableArticles.length);
     expect(xml).toContain('xmlns:media="http://search.yahoo.com/mrss/"');
@@ -41,9 +42,7 @@ describe("Sleepyland search discovery", () => {
       const itemStart = xml.indexOf(`<link>${articleUrl}</link>`);
       const itemEnd = xml.indexOf("</item>", itemStart);
       const item = xml.slice(itemStart, itemEnd);
-      expect(item).toContain(
-        "Drafted by an AI agent and checked against the linked sources by a separate Codex AI reviewer; no human clinical review is claimed.",
-      );
+      expect(item).not.toMatch(/Drafted by an AI agent|Codex AI reviewer/u);
       expect(item).toContain("<dc:creator>Sleepyland Research</dc:creator>");
       if (editorialImage === undefined) {
         expect(item).not.toContain("<media:content");

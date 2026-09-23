@@ -32,7 +32,7 @@ export default function ProductInfoLayout({
             <nav aria-label="Product navigation" className="plain-nav">
               <Link href="/about">About</Link>
               <Link href="/demo">Demo</Link>
-              <Link href="/">Research</Link>
+              <Link href="/research">Research</Link>
               <Link href="/noise">Sound machine</Link>
               <Link href="/support">Support</Link>
             </nav>
@@ -42,7 +42,7 @@ export default function ProductInfoLayout({
       </header>
       {children}
       <nav aria-label="Sleepyland resources" className="sleepyland-resource-nav">
-        <Link href="/">Research</Link>
+        <Link href="/research">Research</Link>
         <Link href="/noise">Sound machine</Link>
         <Link href="/about">About</Link>
         <Link href="/privacy">Privacy</Link>

@@ -88,7 +88,7 @@ export const SLEEP_HEALTH_SOURCES = {
   },
   magnesiumReview2022: {
     title:
-      "The association between magnesium status and sleep quality: a systematic review",
+      "The role of magnesium in sleep health: a systematic review of available literature",
     publication: "Biological Trace Element Research",
     year: 2022,
     url: "https://pubmed.ncbi.nlm.nih.gov/35184264/",
@@ -106,8 +106,8 @@ export const SLEEP_HEALTH_SOURCES = {
   },
   magnesiumBisglycinate2025: {
     title:
-      "Magnesium bisglycinate supplementation in adults with poor sleep: a randomized controlled trial",
-    publication: "Nutrients",
+      "Magnesium bisglycinate supplementation in healthy adults reporting poor sleep: a randomized, placebo-controlled trial",
+    publication: "Nature and Science of Sleep",
     year: 2025,
     url: "https://pubmed.ncbi.nlm.nih.gov/40918053/",
     note:
@@ -139,8 +139,8 @@ export const SLEEP_HEALTH_SOURCES = {
   },
   lTheanineReview2026: {
     title:
-      "L-theanine as a sleep aid: a systematic review of standalone interventions",
-    publication: "Journal of Nutrition",
+      "Examining the effect of L-theanine on sleep: a systematic review of dietary supplementation trials",
+    publication: "Nutritional Neuroscience",
     year: 2026,
     url: "https://pubmed.ncbi.nlm.nih.gov/41176609/",
     note:
@@ -172,7 +172,7 @@ export const SLEEP_HEALTH_SOURCES = {
   },
   californiaValerianTrial2026: {
     title:
-      "Combined Eschscholtzia californica and Valeriana officinalis extracts for insomnia associated with anxiety",
+      "Efficacy of combined Eschscholtzia californica Cham. and Valeriana officinalis L. extracts in alleviating insomnia associated with anxiety: a randomized, double-blind, placebo-controlled trial",
     publication: "Sleep Epidemiology",
     year: 2026,
     url: "https://doi.org/10.1016/j.sleepe.2026.100138",
@@ -180,9 +180,8 @@ export const SLEEP_HEALTH_SOURCES = {
       "A randomized placebo-controlled trial of a fixed two-herb product that cannot isolate either herb or establish equivalence across preparations.",
   },
   plantExtractSleepReview2020: {
-    title:
-      "Plant extracts for sleep disturbances: a systematic review of clinical evidence",
-    publication: "Nutrients",
+    title: "Plant extracts for sleep disturbances: a systematic review",
+    publication: "Evidence-Based Complementary and Alternative Medicine",
     year: 2020,
     url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC7191368/",
     note:
@@ -197,16 +196,18 @@ export const SLEEP_HEALTH_SOURCES = {
       "Current federal review of Pacific history, anxiety evidence, limited insomnia research, liver injury, interactions, and preparation uncertainty.",
   },
   kavaAnxietyReview2018: {
-    title: "Kava for generalised anxiety disorder: a systematic review",
-    publication: "Journal of Clinical Psychopharmacology",
+    title:
+      "The effectiveness and safety of kava kava for treating anxiety symptoms: a systematic review and analysis of randomized clinical trials",
+    publication: "Complementary Therapies in Clinical Practice",
     year: 2018,
     url: "https://pubmed.ncbi.nlm.nih.gov/30396607/",
     note:
       "A review suggesting possible short-term anxiety benefits while emphasizing limited studies and safety concerns rather than direct insomnia efficacy.",
   },
   kavaSleepTrial2004: {
-    title: "Effects of kava and valerian on stress-induced insomnia",
-    publication: "Phytotherapy Research",
+    title:
+      "Clinical efficacy of kava extract WS 1490 in sleep disturbances associated with anxiety disorders",
+    publication: "Journal of Affective Disorders",
     year: 2004,
     url: "https://pubmed.ncbi.nlm.nih.gov/14706720/",
     note:
@@ -214,7 +215,7 @@ export const SLEEP_HEALTH_SOURCES = {
   },
   kavaInternetTrial2005: {
     title:
-      "Internet-based randomized trial of kava and valerian for anxiety and insomnia",
+      "An internet-based randomized, placebo-controlled trial of kava and valerian for anxiety and insomnia",
     publication: "Medicine",
     year: 2005,
     url: "https://pubmed.ncbi.nlm.nih.gov/16010204/",
@@ -249,7 +250,7 @@ export const SLEEP_HEALTH_SOURCES = {
   },
   diphenhydramineNextDay2010: {
     title:
-      "Next-day residual sedative effect after nighttime diphenhydramine",
+      "Next-day residual sedative effect after nighttime administration of an over-the-counter antihistamine sleep aid, diphenhydramine, measured by positron emission tomography",
     publication: "Journal of Clinical Psychopharmacology",
     year: 2010,
     url: "https://pubmed.ncbi.nlm.nih.gov/21105284/",
@@ -274,8 +275,9 @@ export const SLEEP_HEALTH_SOURCES = {
       "A large nested case-control study finding class-specific associations and illustrating why pooled anticholinergic signals require careful interpretation.",
   },
   anticholinergicDementia2025: {
-    title: "Anticholinergic burden and incident dementia",
-    publication: "Age and Ageing",
+    title:
+      "Anticholinergic burden and incident dementia: a Swedish nationwide case-control study",
+    publication: "Alzheimer's Research & Therapy",
     year: 2025,
     url: "https://pubmed.ncbi.nlm.nih.gov/41121438/",
     note:
@@ -292,7 +294,7 @@ export const SLEEP_HEALTH_SOURCES = {
   },
   blueGlassesCochrane2023: {
     title:
-      "Blue-light filtering spectacle lenses for visual performance, sleep, and macular health",
+      "Blue-light filtering spectacle lenses for visual performance, sleep, and macular health in adults",
     publication: "Cochrane Database of Systematic Reviews",
     year: 2023,
     url: "https://pubmed.ncbi.nlm.nih.gov/37593770/",
@@ -301,7 +303,7 @@ export const SLEEP_HEALTH_SOURCES = {
   },
   screenRestriction2020: {
     title:
-      "Restricting mobile phone use before bedtime: a randomized pilot trial",
+      "Effect of restricting bedtime mobile phone use on sleep, arousal, mood, and working memory: a randomized pilot trial",
     publication: "PLOS ONE",
     year: 2020,
     url: "https://pubmed.ncbi.nlm.nih.gov/32040492/",
@@ -310,17 +312,17 @@ export const SLEEP_HEALTH_SOURCES = {
   },
   tabletLight2018: {
     title:
-      "Evening use of light-emitting tablets and sleep in healthy adults",
+      "Unrestricted evening use of light-emitting tablet computers delays self-selected bedtime and disrupts circadian timing and alertness",
     publication: "Physiological Reports",
     year: 2018,
     url: "https://pubmed.ncbi.nlm.nih.gov/29845764/",
     note:
-      "A controlled study separating evening light exposure from ordinary device use and measuring melatonin, alertness, and sleep-related outcomes.",
+      "A nine-person study comparing five evenings of unrestricted tablet use with reading printed material. Tablet evenings brought later bedtimes, suppressed and delayed melatonin, later sleep onset, and lower alertness the next morning.",
   },
   blueGlassUtility2025: {
     title:
       "Optimizing the potential utility of blue-blocking glasses for sleep and circadian health",
-    publication: "Sleep Medicine Reviews",
+    publication: "Translational Vision Science & Technology",
     year: 2025,
     url: "https://pubmed.ncbi.nlm.nih.gov/40728371/",
     note:
@@ -368,7 +370,7 @@ export const SLEEP_HEALTH_SOURCES = {
   },
   hypnoticFdaMeta2012: {
     title:
-      "Efficacy of non-benzodiazepine hypnotics in treatment of adult insomnia",
+      "Effectiveness of non-benzodiazepine hypnotics in treatment of adult insomnia: meta-analysis of data submitted to the Food and Drug Administration",
     publication: "BMJ",
     year: 2012,
     url: "https://pubmed.ncbi.nlm.nih.gov/23248080/",
@@ -376,8 +378,8 @@ export const SLEEP_HEALTH_SOURCES = {
       "A meta-analysis using submitted FDA data that found statistically significant but generally small average benefits and a placebo response.",
   },
   zDrugReview2012: {
-    title: "Clinical pharmacology of sleep medications",
-    publication: "Sleep Medicine Clinics",
+    title: "Clinical pharmacology in sleep medicine",
+    publication: "ISRN Pharmacology",
     year: 2012,
     url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3504423/",
     note:
@@ -394,37 +396,39 @@ export const SLEEP_HEALTH_SOURCES = {
   },
   constructiveWorry2006: {
     title:
-      "Constructive worry as an intervention for insomnia and bedtime cognitive arousal",
-    publication: "Behaviour Research and Therapy",
+      "Effects of a structured problem-solving procedure on pre-sleep cognitive arousal in college students with insomnia",
+    publication: "Behavioral Sleep Medicine",
     year: 2006,
     url: "https://pubmed.ncbi.nlm.nih.gov/16390282/",
     note:
       "A small study asking students with insomnia to write worries and next steps before bed, with reduced pre-sleep cognitive arousal.",
   },
   clockMonitoring2006: {
-    title: "The effect of clock monitoring on insomnia",
-    publication: "Behaviour Research and Therapy",
-    year: 2006,
+    title:
+      "Sleeping with the enemy: clock monitoring in the maintenance of insomnia",
+    publication: "Journal of Behavior Therapy and Experimental Psychiatry",
+    year: 2007,
     url: "https://pubmed.ncbi.nlm.nih.gov/16793001/",
     note:
       "Experimental evidence that monitoring time can increase worry and perceived sleep-onset difficulty.",
   },
   cognitiveReview2024: {
-    title: "Cognitive factors in insomnia: a systematic review",
-    publication: "Sleep Medicine Reviews",
-    year: 2024,
+    title:
+      "Cognitive factors and processes in models of insomnia: a systematic review",
+    publication: "Journal of Sleep Research",
+    year: 2023,
     url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10909484/",
     note:
       "A broad synthesis of worry, rumination, attention, beliefs, and sleep effort that supports a multi-mechanism view of the racing-mind problem.",
   },
   mindfulnessMeta2022: {
     title:
-      "Mindfulness meditation for insomnia: an updated systematic review and meta-analysis",
-    publication: "Sleep Medicine Reviews",
+      "Effects of mindfulness-based stress reduction on adults with sleep disturbance: an updated systematic review and meta-analysis",
+    publication: "BMJ Open",
     year: 2022,
     url: "https://pubmed.ncbi.nlm.nih.gov/36332952/",
     note:
-      "An updated synthesis finding mixed effects and no basis for treating mindfulness alone as a universal substitute for CBT-I.",
+      "A meta-analysis of 20 randomized trials of mindfulness-based stress reduction (MBSR). MBSR did not improve sleep quality in chronic insomnia, and compared with a waitlist it may have improved self-reported sleep quality.",
   },
 } as const;
 

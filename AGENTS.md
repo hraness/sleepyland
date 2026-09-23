@@ -6,7 +6,7 @@
 - `public/` contains static public assets.
 - `docs/editorial-method.md` defines the public research-review method.
 - `app/research/admissions.ts` is the executable admission, overlap, source-check, review-state, ownership, lifecycle, and reassessment registry for indexable editorial routes; `docs/editorial-lifecycle.md` records clinical quarantine and detailed consolidation history.
-- `STYLE.md` defines the public and reader-facing prose contract.
+- `STYLE.md` defines the public and reader-facing prose contract; `WRITING.md` covers internal prose. Both are synced from hraness/.github.
 - `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, and `CODE_OF_CONDUCT.md` define the public project and contribution boundaries.
 
 # Guidelines
@@ -20,10 +20,17 @@
 - Keep medication guides and comparisons, supplement interaction or adverse-effect guidance, other material health-safety instructions, controlled-substance topics, and dangerous-use queries noindex and out of every discovery surface until the exact claims have a documented clinical or pharmacist review.
 - Curate at most eight research guides on the homepage, choose them by first-time-reader utility rather than recency, and route the complete accepted registry through `/research`.
 - Follow `STYLE.md` for public research, product copy, documentation, and README prose.
-- Follow `docs/editorial-method.md` and `CONTRIBUTING.md` for research changes. Update the typed article, source, and admission registries rather than generated output.
+- Follow `docs/editorial-method.md` and `CONTRIBUTING.md` for research changes. Update the typed article, source, and admission registries rather than generated output. After adding or changing a PubMed, PMC, or DOI source, run `bun run check:citations --write` (network) and commit the refreshed snapshot; `bun run check` verifies it offline.
 - Admit an indexable research route only at 9/12 or higher with no zero across reader utility, original evidence, factual confidence, Sleepyland fit, voice integrity, and maintenance value. Never use word, source, link, image, keyword, recency, or publishing-count quotas as proxies for usefulness.
 - Keep public files self-contained. Never commit credentials, private analytics, personal health information, provider tokens, local absolute paths, or unpublished operational records.
 - Use `apply_patch` for edits. Run focused tests while working and `bun run check` before handoff.
+
+<!-- hraness-public-copy:start -->
+- Public copy (websites, READMEs, docs, package and GitHub descriptions, CLI help, `llms.txt`, generated pages) follows `STYLE.md`, synced from hraness/.github. Text a model writes for publication also follows `GENERATION_STYLE.md`.
+- The delivery vocabulary in this file (admission, qualification, custody, receipt, bounded, lane, gate, surface, projection) is internal. Translate it into what the reader gets.
+- Take one-line product and sibling descriptions from the portfolio registry and versions from the release record. Tests pin facts, not prose.
+- Run `bun run check:copy` before handoff when the repository has it.
+<!-- hraness-public-copy:end -->
 
 <!-- oompa-local-efficiency:start -->
 - Treat the user's request to change this repository as standing authorization for routine task-owned commits, pushes, pull requests, merges, releases, deployments, and production verification after the gates applicable to that action pass. Do not ask for duplicate confirmation. Build confidence through relevant automated checks, bounded diagnostics, and independent review, not another human approval. Passing checks does not expand task scope or authority.
