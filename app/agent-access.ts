@@ -46,7 +46,7 @@ export const PRODUCED_MEDIA_TYPES = ["text/html", "text/markdown"] as const;
 export const NOISE_HEADING = "Sleepyland sound machine";
 export const NOISE_DOCUMENT_PARAGRAPHS = [
   noiseDescription,
-  `Sleepyland is a free sound machine that runs in your browser. It generates brown, pink, or white noise, ocean waves, and an airplane-like rumble in the page as you listen, with no recordings, no account, and no sound made on a server. Your settings are saved in this browser. ${analyticsSummary}`,
+  `Sleepyland is a free sound machine that runs in your browser. It generates brown, pink, or white noise and ocean waves in the page as you listen, with no recordings, no account, and no sound made on a server. Your settings are saved in this browser. ${analyticsSummary}`,
   "Pick Sleep, Relax, or Focus as a starting mix. Open Tune to set Energy (how much and how fast the sound moves, without changing the overall volume), the noise color, warmth, separate noise and wave volumes, and the wave interval. A session can play until you stop it or end after 15, 30, 50, 60, or 90 minutes. In Focus, it can also alternate work and break blocks of 25 and 5 or 50 and 10 minutes.",
 ] as const;
 
@@ -581,7 +581,7 @@ export function llmsTxt(
     "",
     `> ${site.description}`,
     "",
-    "Sleepyland publishes sourced sleep research and provides a free sleep, relaxation, and focus sound generator in the browser. It does not host an API, OAuth flow, GraphQL endpoint, MCP server, developer portal, or store.",
+    `${site.introduction} It does not host an API, OAuth flow, GraphQL endpoint, MCP server, developer portal, or store.`,
     `Its source and contribution guidance are public at ${repositoryUrl} under the MIT License.`,
     "",
     "## When to use Sleepyland",
@@ -602,7 +602,7 @@ export function llmsTxt(
     "",
     "## Sound machine",
     "",
-    `- [Sleepyland sound machine](${absoluteUrl("/noise.md")}): Mix brown, pink, or white noise with procedural ocean waves and airplane-like rumble. Settings are saved in the browser.`,
+    `- [Sleepyland sound machine](${absoluteUrl("/noise.md")}): Brown, pink, or white noise and ocean waves, made in your browser as you listen. Settings are saved in the browser.`,
     "",
     "## Product records",
     "",

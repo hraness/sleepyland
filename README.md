@@ -3,7 +3,7 @@
 [![CI](https://github.com/hraness/sleepyland/actions/workflows/ci.yml/badge.svg)](https://github.com/hraness/sleepyland/actions/workflows/ci.yml)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-[Sleepyland](https://sleepy.land) is a free sound machine that runs in your browser, with sourced guides to sleep and sound. The sound machine generates brown, pink, and white noise and ocean waves on your device for sleep, relaxation, or focus.
+[Sleepyland](https://sleepy.land) is a free sound machine that makes brown, pink, or white noise and ocean waves in your browser as you listen, with no recordings, account, or ads. Beside it are sourced guides to sleep.
 
 The [research guides](https://sleepy.land/research) cover insomnia, light and the body clock, bedtime routines, environmental sound, and popular wellness claims. Each one starts with a short answer and links its sources. The guides are educational and are not medical advice, and no clinician has reviewed them. Guides on medications, supplement safety, and other higher-risk topics stay unlisted until a clinician or pharmacist reviews their exact claims.
 

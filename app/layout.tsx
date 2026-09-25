@@ -19,7 +19,7 @@ import { SleepylandSiteFooter } from "./site-footer";
 export const metadata: Metadata = {
   metadataBase: new URL(site.canonicalUrl),
   applicationName: site.shortName,
-  category: "sleep research",
+  category: "Sleep sound machine",
   alternates: {
     types: {
       "application/rss+xml": RESEARCH_FEED_PATH,

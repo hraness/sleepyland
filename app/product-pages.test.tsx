@@ -77,7 +77,7 @@ describe("Sleepyland public product records", () => {
 
     expect(markup).toContain("<h1>About Sleepyland</h1>");
     expect(markup).toContain("free sound machine that runs in your browser");
-    expect(markup).toContain("uses no recordings, needs no account, and makes no sound on a server");
+    expect(markup).toContain("no recordings to download and no account to create");
     expect(markup).toContain("Sleep, Relax, or Focus");
     expect(markup).toContain("Open Tune to set Energy");
     expect(markup).toContain("without changing the overall volume");

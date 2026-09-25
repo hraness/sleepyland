@@ -20,7 +20,6 @@ import {
   noiseDescription,
   noiseTitle,
   publicationDescription,
-  publicationTitle,
   homepageUpdatedAt,
   repositoryUrl,
   site,
@@ -48,22 +47,22 @@ describe("Sleepyland search surface", () => {
     );
   });
 
-  test("separates the publication identity from the noise-machine identity", () => {
-    expect(site.title).toBe(publicationTitle);
+  test("publishes the canonical product identity across metadata surfaces", () => {
+    expect(site.title).toBe(noiseTitle);
     expect(site.description).toBe(publicationDescription);
     expect(site.title.length).toBeLessThanOrEqual(60);
     expect(site.description.length).toBeLessThanOrEqual(160);
-    expect(site.description.toLowerCase()).toContain("insomnia");
+    expect(site.description.toLowerCase()).toContain("sound machine");
     expect(site.description.toLowerCase()).not.toContain("supplements");
-    expect(noiseTitle).toContain("White Noise");
+    expect(noiseTitle.startsWith(`${site.shortName} | `)).toBeTrue();
+    expect(noiseTitle.toLowerCase()).toContain("browser");
     expect(noiseDescription.toLowerCase()).toContain("brown");
     expect(noiseDescription.toLowerCase()).toContain("pink");
     expect(noiseDescription.toLowerCase()).toContain("white noise");
     expect(site.description.toLowerCase()).toContain("sleep");
-    expect(noiseDescription.toLowerCase()).toContain("relaxation");
-    expect(noiseDescription.toLowerCase()).toContain("focus");
     expect(noiseDescription.toLowerCase()).toContain("ocean waves");
-    expect(noiseDescription.toLowerCase()).toContain("airplane-like");
+    expect(noiseDescription.toLowerCase()).toContain("free");
+    expect(noiseDescription.toLowerCase()).not.toContain("airplane-like");
   });
 
   test("publishes honest WebApplication facts without invented ratings", () => {

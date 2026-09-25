@@ -1,4 +1,3 @@
-import { hranessAttribution } from "@hraness/site-footer";
 import { describe, expect, test } from "bun:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -73,7 +72,7 @@ describe("Sleepyland homepage information layer", () => {
 
     expect(first).toBe(HOME_INFORMATION_HEADING);
     expect(HOME_INFORMATION_HEADING.split(" ")).toHaveLength(8);
-    expect(HOME_INFORMATION_HEADING).not.toEndWith(".");
+    expect(HOME_INFORMATION_HEADING).toEndWith(".");
     expect(rest.length).toBeGreaterThanOrEqual(4);
     for (const heading of rest) {
       expect(heading).toEndWith(".");
@@ -123,12 +122,13 @@ describe("Sleepyland homepage information layer", () => {
   });
 
   test("attributes the product to the organization, matching the shared footer", () => {
-    expect(hranessAttribution.title).toBe("Built by Hraness");
-    expect(markup).toContain(`${hranessAttribution.title}.`);
-    expect(markup).toContain(hranessAttribution.subtitle);
+    expect(markup).toContain("Sleepyland is built by");
+    expect(markup).toContain(`href="${HOME_PUBLISHER_URL}">Hraness</a>`);
+    expect(markup).toContain("open source on GitHub");
     expect(markup).not.toContain('data-hraness-marketing="maker"');
     expect(markup).not.toContain('id="home-maker-title"');
     expect(markup).not.toMatch(/Ben Guo|Puerto Rico|Venmo|Built by [A-Z][a-z]+ [A-Z][a-z]+/u);
+    expect(markup).not.toContain("advanced software research organization");
   });
 
   test("inherits the shared Paper accent at accessible contrast in both appearances", async () => {

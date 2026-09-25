@@ -1,16 +1,17 @@
-import { hranessAttribution } from "@hraness/site-footer";
+import { renderHranessSiteFooter } from "@hraness/site-footer";
 import { describe, expect, test } from "bun:test";
 
 import { metadata } from "./layout";
+import { sleepylandMailingListConfig } from "./mailing-config";
 import { site } from "./site";
 
-const SITE_FOOTER_RELEASE = "github:hraness/site-footer#v0.13.0";
+const SITE_FOOTER_RELEASE = "github:hraness/site-footer#v0.18.0";
 
 describe("Sleepyland search metadata", () => {
   test("keeps only site-wide defaults that other routes can inherit", () => {
     expect(metadata).toMatchObject({
       applicationName: site.shortName,
-      category: "sleep research",
+      category: "Sleep sound machine",
       openGraph: {
         siteName: site.shortName,
         type: "website",
@@ -51,11 +52,19 @@ describe("Sleepyland search metadata", () => {
 
     expect(manifest.dependencies["@hraness/site-footer"]).toBe(SITE_FOOTER_RELEASE);
     expect(lock).toContain(`"@hraness/site-footer": "${SITE_FOOTER_RELEASE}"`);
-    expect(hranessAttribution).toEqual({
-      title: "Built by Hraness",
-      subtitle:
-        "Hraness is an advanced software research organization dedicated to advancing the frontier of machine intelligence.",
+    const footer = renderHranessSiteFooter({
+      mailingList: sleepylandMailingListConfig(),
+      support: {
+        id: "sleepyland",
+        name: "Sleepyland",
+        updates: true,
+        valueProposition:
+          "Support a free sound machine and the sourced sleep guides beside it.",
+      },
     });
+    expect(footer).toContain("by Hraness");
+    expect(footer).not.toContain("advanced software research organization");
+    expect(footer).not.toContain("keep you signed in");
   });
 
   test("keeps the network footer and its challenge out of the sound studio", async () => {

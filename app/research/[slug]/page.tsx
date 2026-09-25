@@ -151,7 +151,7 @@ export default async function ResearchArticlePage({
               set a timer. The sound is generated in your browser.
             </p>
             <Link className="plain-publication__primary-link" href="/noise">
-              Open the calming sound machine <span aria-hidden="true">→</span>
+              Open the sound machine <span aria-hidden="true">→</span>
             </Link>
           </aside>
 
