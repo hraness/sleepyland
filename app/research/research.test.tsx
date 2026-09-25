@@ -548,7 +548,7 @@ describe("Sleepyland Research content", () => {
     expect(indexMarkup).not.toContain("Accept: text/markdown");
     expect(shellSource).toContain("researchContributionUrl");
     expect(shellSource).toContain('href="/noise"');
-    expect(articleSource).toContain("Open the calming sound machine");
+    expect(articleSource).toContain("Open the sound machine");
     expect(articleMarkup).toContain(RESEARCH_ARTICLE_BOUNDARY);
     expect(articleMarkup.split(RESEARCH_ARTICLE_BOUNDARY)).toHaveLength(2);
     for (const markup of [indexMarkup, articleMarkup]) {

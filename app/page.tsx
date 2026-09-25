@@ -7,7 +7,7 @@ import { HomeInformation } from "./home-information";
 import { NoiseStudio, type StudioResourceGroup } from "./noise-studio";
 import { featuredResearchResources } from "./noise/research-resources";
 import { defaultSocialImage, serializeJsonLd, webApplicationJsonLd } from "./seo";
-import { noiseDescription, noiseTitle, site } from "./site";
+import { noiseDescription, noiseTagline, noiseTitle, site } from "./site";
 
 const featuredResources = featuredResearchResources();
 const studioResourceGroups = [{
@@ -58,7 +58,7 @@ export default function Home() {
         type="application/ld+json"
       />
       <NoiseStudio
-        brand={{ name: site.shortName, tagline: "calming sound machine" }}
+        brand={{ name: site.shortName, tagline: noiseTagline }}
         headerActions={
           <ThemeMenuButton aria-label="Appearance" className="header-appearance" />
         }

@@ -14,12 +14,13 @@ export function SleepylandSiteFooter({
   if (pathname === "/noise") return null;
 
   return <HranessSiteFooter
+    attribution={false}
     mailingList={mailingList}
     support={{
       id: "sleepyland",
       name: "Sleepyland",
       updates: true,
-      valueProposition: "Support evidence-led sleep research and the private browser sound machine.",
+      valueProposition: "Support a free sound machine and the sourced sleep guides beside it.",
     }}
   />;
 }

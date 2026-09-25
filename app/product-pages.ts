@@ -1,4 +1,10 @@
-import { analyticsSummary, repositoryUrl, researchContributionUrl } from "./site";
+import {
+  analyticsSummary,
+  publicationDescription,
+  repositoryUrl,
+  researchContributionUrl,
+  siteIntroduction,
+} from "./site";
 
 export type ProductPageInline =
   | string
@@ -24,7 +30,7 @@ export type ProductPageDefinition = Readonly<{
   updatedAt: string;
 }>;
 
-export const PRODUCT_PAGE_UPDATED_AT = "2026-08-30";
+export const PRODUCT_PAGE_UPDATED_AT = "2026-09-25";
 export const SUPPORT_EMAIL = "ben@substrate.run";
 export const LAUNCH_DEMO_PATH = "/sleepyland-mode-tune-play.mp4";
 export const LAUNCH_DEMO_SHA256 =
@@ -51,11 +57,10 @@ export const PRODUCT_PAGES = [
     path: "/about",
     heading: "About Sleepyland",
     title: "About | Sleepyland",
-    description:
-      "Sleepyland is a free, open-source sound machine that generates noise and ocean waves in your browser, plus sourced guides to sleep and sound.",
+    description: publicationDescription,
     updatedAt: PRODUCT_PAGE_UPDATED_AT,
     intro: [
-      "Sleepyland is a free sound machine that runs in your browser. It generates brown, pink, or white noise, ocean waves, and an airplane-like rumble in the page as you listen. It uses no recordings, needs no account, and makes no sound on a server.",
+      siteIntroduction,
     ],
     sections: [
       {

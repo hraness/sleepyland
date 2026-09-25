@@ -6,5 +6,6 @@ export function sleepylandMailingListConfig(): HranessMailingListConfig {
   return {
     audience: SLEEPYLAND_MAILING_AUDIENCE,
     kind: "signup",
+    name: "Sleepyland",
   };
 }

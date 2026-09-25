@@ -3,7 +3,7 @@ import {
   socialImageContentType,
   socialImageSize,
 } from "@hraness/web-discovery/social-image";
-import { noiseDescription, noiseTitle, site, socialImageAlt } from "./site";
+import { noiseDescription, noiseTagline, site, socialImageAlt } from "./site";
 import { SleepylandMark } from "./social-mark";
 
 export const alt = socialImageAlt;
@@ -22,6 +22,6 @@ export default function Image() {
       foreground: "#F0D5B3",
       muted: "#A88D70",
     },
-    title: noiseTitle,
+    title: noiseTagline,
   });
 }

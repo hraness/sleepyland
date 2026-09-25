@@ -36,7 +36,7 @@ describe("Sleepyland sound-machine route", () => {
     const markup = renderToStaticMarkup(createElement(NoisePage));
 
     expect(markup).toContain(
-      'Sleepyland<span class="wordmark__tagline"> calming sound machine</span></h1>',
+      'Sleepyland<span class="wordmark__tagline"> Steady sound for sleep, made in your browser</span></h1>',
     );
     expect(markup.match(/<h1[\s>]/gu)).toHaveLength(1);
     expect(markup).toContain('<h1 class="wordmark">');

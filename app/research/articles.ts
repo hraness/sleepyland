@@ -2055,7 +2055,7 @@ export const researchArticles = [
     slug: "sound-masking-vs-earplugs-vs-noise-cancelling",
     title: "Sound Masking vs Earplugs vs Noise Cancellation for Sleep",
     dek:
-      "Masking adds sound, earplugs reduce sound at the ear, and active cancellation creates an opposing signal near the ear. Choosing well starts by naming the operation—not buying three products that solve different problems.",
+      "Masking adds sound, earplugs reduce sound at the ear, and active cancellation creates an opposing signal near the ear. Choosing well starts by naming the operation you need, not by buying three products that solve different problems.",
     seoDescription:
       "Compare sound masking, earplugs, passive isolation, and active noise cancellation for sleep by mechanism, frequency, comfort, alarms, and evidence.",
     focusPhrase: "sound masking vs earplugs vs noise cancellation",
@@ -2069,7 +2069,7 @@ export const researchArticles = [
     tags: ["sleep", "sound"],
     evidenceLabel: "Mechanisms clear; direct sleep comparisons limited",
     publishedAt: "2026-07-24",
-    updatedAt: "2026-07-24",
+    updatedAt: "2026-09-25",
     sourceIds: [
       "basner2026",
       "noiseAidReview2020",
@@ -2574,7 +2574,7 @@ export const researchArticles = [
   },
   {
     slug: "ocean-waves-for-sleep",
-    title: "Why Ocean Waves Feel Calming—and What Sleep Research Can Prove",
+    title: "Why Ocean Waves Feel Calming, and What Sleep Research Can Prove",
     dek:
       "Ocean sound combines masking, slow energy changes, natural variation, and learned meaning. Those mechanisms are plausible; direct proof of better sleep in healthy adults is still limited.",
     seoDescription:
@@ -2589,7 +2589,7 @@ export const researchArticles = [
     tags: ["sleep", "sound"],
     evidenceLabel: "Relaxation evidence stronger than sleep evidence",
     publishedAt: "2026-07-24",
-    updatedAt: "2026-07-24",
+    updatedAt: "2026-09-25",
     sourceIds: [
       "naturalStress2024",
       "naturalHealth2021",
@@ -2716,7 +2716,7 @@ export const researchArticles = [
     slug: "why-car-rides-make-you-sleepy",
     title: "Why Car Rides Make You Sleepy: Rocking, Vibration, and Sopite Syndrome",
     dek:
-      "The sleepy passenger effect has names: motion-induced drowsiness, vestibular stimulation, whole-body vibration, and—in a stronger form—sopite syndrome. Sound is only one part of it.",
+      "The sleepy passenger effect has names: motion-induced drowsiness, vestibular stimulation, whole-body vibration, and, in a stronger form, sopite syndrome. Sound is only one part of it.",
     seoDescription:
       "Why do car rides make you sleepy? Learn about sopite syndrome, vestibular motion, vibration, rocking research, road noise, and conditioned sleep cues.",
     focusPhrase: "why car rides make you sleepy",
@@ -2730,7 +2730,7 @@ export const researchArticles = [
     tags: ["sleep", "environment"],
     evidenceLabel: "Physical-motion mechanism supported",
     publishedAt: "2026-07-24",
-    updatedAt: "2026-07-24",
+    updatedAt: "2026-09-25",
     sourceIds: [
       "sopite2020",
       "vehicleVibration2018",

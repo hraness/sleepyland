@@ -11,7 +11,7 @@ import {
   serializeJsonLd,
   webApplicationJsonLd,
 } from "../seo";
-import { noiseDescription, noiseTitle, site } from "../site";
+import { noiseDescription, noiseTagline, noiseTitle, site } from "../site";
 import { featuredResearchResources } from "./research-resources";
 
 const studioResourceGroups = [
@@ -61,7 +61,7 @@ export default function NoisePage() {
         type="application/ld+json"
       />
       <NoiseStudio
-        brand={{ name: site.shortName, tagline: "calming sound machine" }}
+        brand={{ name: site.shortName, tagline: noiseTagline }}
         resourceGroups={studioResourceGroups}
       />
     </>

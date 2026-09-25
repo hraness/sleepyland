@@ -32,7 +32,7 @@ export function ResearchShell({
             <nav aria-label="Research navigation" className="plain-nav">
               <a href={repositoryUrl}>GitHub</a>
               <Link className="plain-header__primary-action" href="/noise">
-                Open sound machine
+                Open the sound machine
               </Link>
             </nav>
             <ThemeMenuButton

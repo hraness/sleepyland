@@ -5,7 +5,6 @@ import {
   MarketingSection,
   MarketingTrustBoundary,
 } from "@hraness/design-kit/react/server";
-import { hranessAttribution } from "@hraness/site-footer";
 import Link from "next/link";
 
 import { NOISE_DOCUMENT_PARAGRAPHS } from "./agent-access";
@@ -24,9 +23,9 @@ import { SOUND_MODES, type SoundModeId } from "./sound-modes";
  * by `@hraness/site-footer`; this layer never carries a personal credit.
  */
 
-export const HOME_INFORMATION_HEADING = "A sound machine that runs in your browser";
+export const HOME_INFORMATION_HEADING = "Steady sound for sleep, made in your browser.";
 export const HOME_INFORMATION_LEAD =
-  "Sleepyland generates brown, pink, and white noise, ocean waves, and an airplane-like rumble in your browser as you listen. It uses no recordings and needs no account.";
+  "Press play for deep brown noise and slow ocean waves, made on your device as you listen. Free, no account, and every guide links its sources.";
 
 export const HOME_LISTENING_NOTE =
   "Start quietly, especially with headphones, and set the mix that feels most comfortable to you.";
@@ -46,7 +45,7 @@ export const HOME_PILLARS = SOUND_MODES.map((mode) => ({
 export const HOME_TRUST_ITEMS = [
   {
     label: "Made on your device",
-    detail: "Noise, waves, and the airplane-like rumble are generated in the page as you listen.",
+    detail: "Brown, pink, or white noise and ocean waves are generated in the page as you listen.",
   },
   {
     label: "No recordings",
@@ -81,7 +80,7 @@ export function HomeInformation({
         heading={HOME_INFORMATION_HEADING}
         headingId="home-information-title"
         id="about"
-        label="Sleepyland"
+        label="Sleep sound machine"
         summary={HOME_INFORMATION_LEAD}
       >
         <p>{NOISE_DOCUMENT_PARAGRAPHS[2]}</p>
@@ -132,7 +131,7 @@ export function HomeInformation({
         </ul>
         <p className="sleepyland-home-research__actions">
           <Link className="hraness-marketing-action" data-emphasis="secondary" href="/research">
-            Browse all research
+            Read the guides
           </Link>
         </p>
       </MarketingSection>
@@ -192,18 +191,13 @@ export function HomeInformation({
           {
             question: "Who made it?",
             answer: (
-              <>
-                <p>
-                  {hranessAttribution.title}. {hranessAttribution.subtitle}{" "}
-                  <a href={HOME_PUBLISHER_URL}>hraness.com</a> lists sleepy.land among its
-                  public projects.
-                </p>
-                <p>
-                  Sleepyland is <a href={repositoryUrl}>open source on GitHub</a> under the
-                  MIT License, and{" "}
-                  <a href={researchContributionUrl}>research contributions are welcome</a>.
-                </p>
-              </>
+              <p>
+                Sleepyland is built by <a href={HOME_PUBLISHER_URL}>Hraness</a>. It is
+                free to use, needs no account, and is{" "}
+                <a href={repositoryUrl}>open source on GitHub</a> under the MIT License,
+                and{" "}
+                <a href={researchContributionUrl}>corrections to the guides are welcome</a>.
+              </p>
             ),
           },
         ]}

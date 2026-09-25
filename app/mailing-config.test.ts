@@ -7,6 +7,7 @@ describe("Sleepyland mailing configuration", () => {
     expect(sleepylandMailingListConfig()).toEqual({
       audience: "sleepyland",
       kind: "signup",
+      name: "Sleepyland",
     });
   });
 });
